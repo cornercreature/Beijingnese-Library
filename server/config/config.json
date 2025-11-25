@@ -1,0 +1,26 @@
+{
+  "development": {
+    "username": "nicolesun",
+    "password": null,
+    "database": "beijingnese_library",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "nicolesun",
+    "password": null,
+    "database": "beijingnese_library_test",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "production": {
+    "use_env_variable": "DATABASE_URL",
+    "dialect": "postgres",
+    "dialectOptions": {
+      "ssl": {
+        "require": true,
+        "rejectUnauthorized": false
+      }
+    }
+  }
+}
