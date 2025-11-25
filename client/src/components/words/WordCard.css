@@ -1,0 +1,81 @@
+.word-card {
+  display: block;
+  background: white;
+  border: 2px solid #f0f0f0;
+  border-radius: 12px;
+  padding: 2rem;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.word-card:hover {
+  border-color: #2c5aa0;
+  box-shadow: 0 4px 12px rgba(44, 90, 160, 0.1);
+  transform: translateY(-2px);
+}
+
+.word-card-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.word-card-details {
+  text-align: center;
+  width: 100%;
+}
+
+.english-def {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #333;
+  margin: 0 0 0.5rem 0;
+}
+
+.putonghua-def {
+  font-size: 0.95rem;
+  color: #666;
+  margin: 0 0 0.75rem 0;
+}
+
+.grammar-tag {
+  display: inline-block;
+  padding: 0.3rem 0.8rem;
+  background: #e8f0fe;
+  color: #2c5aa0;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.audio-indicator {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 1.2rem;
+  opacity: 0.5;
+  transition: opacity 0.2s;
+}
+
+.word-card:hover .audio-indicator {
+  opacity: 1;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .word-card {
+    padding: 1.5rem;
+  }
+
+  .english-def {
+    font-size: 1rem;
+  }
+
+  .putonghua-def {
+    font-size: 0.9rem;
+  }
+}

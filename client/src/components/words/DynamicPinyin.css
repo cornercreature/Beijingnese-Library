@@ -1,0 +1,90 @@
+/*
+ * DynamicPinyin Styles
+ * The magic that makes light-tone characters appear smaller!
+ */
+
+.dynamic-pinyin {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.characters {
+  display: flex;
+  align-items: baseline;
+  gap: 0.2rem;
+  font-family: 'Noto Sans SC', 'Source Han Sans', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  font-size: 4rem;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.character {
+  display: inline-block;
+  transition: all 0.2s ease;
+}
+
+/* THE KEY FEATURE: Light tone characters appear smaller! */
+.character.tone-0 {
+  font-size: 0.65em; /* 65% of parent size */
+  vertical-align: baseline;
+  transform: translateY(0.1em); /* Slight downward shift */
+  opacity: 0.9; /* Slightly dimmed */
+}
+
+/* Standard tones remain normal size */
+.character.tone-1,
+.character.tone-2,
+.character.tone-3,
+.character.tone-4 {
+  font-size: 1em;
+}
+
+/* Pinyin display */
+.pinyin-line {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-family: 'Arial', 'Helvetica', sans-serif;
+  font-size: 1.2rem;
+  color: #666;
+  letter-spacing: 0.05em;
+}
+
+.pinyin-syllable {
+  display: inline-block;
+}
+
+/* Smaller pinyin for light-tone syllables */
+.pinyin-syllable.tone-0 {
+  font-size: 0.85em;
+  opacity: 0.8;
+}
+
+/* Hover effect to highlight tone */
+.character:hover {
+  color: #2c5aa0;
+  cursor: default;
+}
+
+/* Responsive sizing */
+@media (max-width: 768px) {
+  .characters {
+    font-size: 3rem;
+  }
+
+  .pinyin-line {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .characters {
+    font-size: 2.5rem;
+  }
+
+  .pinyin-line {
+    font-size: 0.9rem;
+  }
+}
