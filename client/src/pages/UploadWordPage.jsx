@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import AudioRecorder from '../components/AudioRecorder';
 
 const UploadWordPage = () => {
   const navigate = useNavigate();
@@ -13,6 +14,7 @@ const UploadWordPage = () => {
     exampleSentence: '',
     exampleTranslation: ''
   });
+  const [audioBlob, setAudioBlob] = useState(null);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -52,6 +54,14 @@ const UploadWordPage = () => {
     }
   };
 
+  const handleRecordingComplete = (blob) => {
+    setAudioBlob(blob);
+  };
+
+  const handleRecordingClear = () => {
+    setAudioBlob(null);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
@@ -85,23 +95,37 @@ const UploadWordPage = () => {
     const pinyin = validCharacters.map(input => input.syllable).join(' ');
 
     try {
+      // Create FormData for multipart upload
+      const formDataToSend = new FormData();
+
+      // Add audio blob if present
+      if (audioBlob) {
+        // Convert blob to file with proper filename
+        const audioFile = new File([audioBlob], `${chinese_characters}-${Date.now()}.webm`, {
+          type: 'audio/webm'
+        });
+        formDataToSend.append('audio', audioFile);
+      }
+
+      // Add word data as JSON string
+      formDataToSend.append('chinese_characters', chinese_characters);
+      formDataToSend.append('pinyin', pinyin);
+      formDataToSend.append('grammar_category', formData.grammarCategory);
+      formDataToSend.append('putonghua_definition', formData.chineseDefinition);
+      formDataToSend.append('english_definition', formData.englishDefinition);
+      formDataToSend.append('syllables', JSON.stringify(validCharacters));
+
+      if (formData.exampleSentence) {
+        formDataToSend.append('example', JSON.stringify({
+          chinese_sentence: formData.exampleSentence,
+          english_translation: formData.exampleTranslation
+        }));
+      }
+
       const response = await fetch('http://localhost:3001/api/words', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          chinese_characters,
-          pinyin,
-          grammar_category: formData.grammarCategory,
-          putonghua_definition: formData.chineseDefinition,
-          english_definition: formData.englishDefinition,
-          syllables: validCharacters,
-          example: formData.exampleSentence ? {
-            chinese_sentence: formData.exampleSentence,
-            english_translation: formData.exampleTranslation
-          } : null
-        })
+        body: formDataToSend
+        // Note: Don't set Content-Type header - browser will set it with boundary for FormData
       });
 
       if (!response.ok) {
@@ -119,6 +143,7 @@ const UploadWordPage = () => {
         exampleSentence: '',
         exampleTranslation: ''
       });
+      setAudioBlob(null);
 
       // Redirect after 2 seconds
       setTimeout(() => {
@@ -361,6 +386,12 @@ const UploadWordPage = () => {
             style={{ width: '100%', padding: '0.5rem', fontSize: '1rem' }}
           />
         </div>
+
+        {/* Audio Recording (Optional) */}
+        <AudioRecorder
+          onRecordingComplete={handleRecordingComplete}
+          onRecordingClear={handleRecordingClear}
+        />
 
         {/* Submit Button */}
         <div style={{ display: 'flex', gap: '1rem' }}>

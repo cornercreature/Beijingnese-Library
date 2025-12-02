@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import DynamicPinyin from './DynamicPinyin';
 import './WordCard.css';
@@ -8,6 +8,22 @@ import './WordCard.css';
  * Displays a word in the gallery grid
  */
 const WordCard = ({ word }) => {
+  const audioRef = useRef(null);
+
+  const handleAudioClick = (e) => {
+    e.preventDefault(); // Prevent navigation to detail page
+    e.stopPropagation();
+
+    if (audioRef.current) {
+      if (audioRef.current.paused) {
+        audioRef.current.play();
+      } else {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0; // Reset to beginning
+      }
+    }
+  };
+
   return (
     <Link to={`/words/${word.id}`} className="word-card">
       <div className="word-card-content">
@@ -20,9 +36,27 @@ const WordCard = ({ word }) => {
         </div>
 
         {word.audio_file_path && (
-          <div className="audio-indicator">
-            🔊
-          </div>
+          <>
+            <button
+              className="audio-indicator"
+              onClick={handleAudioClick}
+              title="Click to play audio"
+              style={{
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                fontSize: 'inherit',
+                padding: 0
+              }}
+            >
+              🔊
+            </button>
+            <audio
+              ref={audioRef}
+              src={`http://localhost:3001${word.audio_file_path}`}
+              preload="none"
+            />
+          </>
         )}
       </div>
     </Link>

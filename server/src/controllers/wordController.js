@@ -106,16 +106,32 @@ exports.createWord = async (req, res) => {
   const transaction = await db.sequelize.transaction();
 
   try {
-    const {
-      chinese_characters,
-      pinyin,
-      english_definition,
-      putonghua_definition,
-      grammar_category,
-      syllables,
-      example,
-      examples = []
-    } = req.body;
+    // Parse data from FormData (multipart) or JSON
+    let chinese_characters, pinyin, english_definition, putonghua_definition, grammar_category, syllables, example, examples;
+
+    if (req.body.syllables && typeof req.body.syllables === 'string') {
+      // Data came from FormData - need to parse JSON strings
+      chinese_characters = req.body.chinese_characters;
+      pinyin = req.body.pinyin;
+      english_definition = req.body.english_definition;
+      putonghua_definition = req.body.putonghua_definition;
+      grammar_category = req.body.grammar_category;
+      syllables = JSON.parse(req.body.syllables);
+      example = req.body.example ? JSON.parse(req.body.example) : null;
+      examples = [];
+    } else {
+      // Data came as JSON (backward compatibility)
+      ({
+        chinese_characters,
+        pinyin,
+        english_definition,
+        putonghua_definition,
+        grammar_category,
+        syllables,
+        example,
+        examples = []
+      } = req.body);
+    }
 
     // Create the word
     const word = await db.Word.create({
