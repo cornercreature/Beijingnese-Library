@@ -1,0 +1,222 @@
+import React, { useState, useEffect, useRef } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import wordService from '../services/wordService';
+import './WordDetailPage.css';
+
+const WordDetailPage = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [word, setWord] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [showSecondPage, setShowSecondPage] = useState(false);
+  const [isPlayingAudio, setIsPlayingAudio] = useState(false);
+  const audioRef = useRef(null);
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    const fetchWord = async () => {
+      try {
+        setLoading(true);
+        const response = await wordService.getWordById(id);
+        // API returns { success: true, data: {...} }
+        const wordData = response.data || response;
+        setWord(wordData);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchWord();
+  }, [id]);
+
+  const togglePage = () => {
+    setShowSecondPage(!showSecondPage);
+  };
+
+  const handleAudioPlay = () => {
+    if (audioRef.current) {
+      if (audioRef.current.paused) {
+        audioRef.current.play();
+        setIsPlayingAudio(true);
+      } else {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+        setIsPlayingAudio(false);
+      }
+    }
+  };
+
+  const handleAudioEnded = () => {
+    setIsPlayingAudio(false);
+  };
+
+  // Build pinyin display with tone marks
+  const renderPinyin = () => {
+    if (!word || !word.syllables || word.syllables.length === 0) {
+      return word?.pinyin || '';
+    }
+
+    return word.syllables.map((syl, idx) => (
+      <span key={idx} className="pinyin-syllable">
+        {syl.syllable}
+        {idx < word.syllables.length - 1 ? ' ' : ''}
+      </span>
+    ));
+  };
+
+  if (loading) {
+    return (
+      <div className="word-detail-page">
+        <div className="loading">Loading...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="word-detail-page">
+        <div className="error">Error: {error}</div>
+        <button onClick={() => navigate('/')}>← Back to Gallery</button>
+      </div>
+    );
+  }
+
+  if (!word) {
+    return (
+      <div className="word-detail-page">
+        <div className="error">Word not found</div>
+        <button onClick={() => navigate('/')}>← Back to Gallery</button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="word-detail-page">
+      {/* Navigation buttons */}
+      <div className="nav-buttons">
+        <button onClick={() => navigate('/')} className="back-button">
+          ← Back
+        </button>
+        <button onClick={togglePage} className="toggle-page-button">
+          {showSecondPage ? '← Previous' : 'Next →'}
+        </button>
+      </div>
+
+      {/* Two-page sliding container */}
+      <div
+        ref={containerRef}
+        className={`pages-container ${showSecondPage ? 'show-second' : ''}`}
+      >
+        {/* First Page - Main Word Display */}
+        <div className="page page-one">
+          <div className="word-content">
+            {/* Chinese Characters - Large */}
+            <div className="chinese-characters">
+              {word.chinese_characters}
+            </div>
+
+            {/* Pinyin */}
+            <div className="pinyin-display">
+              {renderPinyin()}
+            </div>
+
+            {/* Audio Button */}
+            {word.audio_file_path && (
+              <div className="audio-section">
+                <button
+                  onClick={handleAudioPlay}
+                  className={`audio-play-button ${isPlayingAudio ? 'playing' : ''}`}
+                >
+                  {isPlayingAudio ? '⏸' : '🔊'}
+                </button>
+                <audio
+                  ref={audioRef}
+                  src={`http://localhost:3001${word.audio_file_path}`}
+                  onEnded={handleAudioEnded}
+                  preload="metadata"
+                />
+              </div>
+            )}
+
+            {/* Definitions */}
+            <div className="definitions">
+              <div className="definition-item">
+                <div className="definition-label">English</div>
+                <div className="definition-text english">
+                  {word.english_definition}
+                </div>
+              </div>
+
+              <div className="definition-item">
+                <div className="definition-label">普通话</div>
+                <div className="definition-text putonghua">
+                  {word.putonghua_definition}
+                </div>
+              </div>
+            </div>
+
+            {/* Grammar Category Tag */}
+            <div className="grammar-tag-large">
+              {word.grammar_category}
+            </div>
+          </div>
+        </div>
+
+        {/* Second Page - Examples and Additional Info */}
+        <div className="page page-two">
+          <div className="word-content">
+            <h2>Examples & Usage</h2>
+
+            {word.examples && word.examples.length > 0 ? (
+              <div className="examples-section">
+                {word.examples.map((example, idx) => (
+                  <div key={idx} className="example-item">
+                    <div className="example-chinese">
+                      {example.chinese_sentence}
+                    </div>
+                    {example.english_translation && (
+                      <div className="example-english">
+                        {example.english_translation}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="no-examples">
+                No example sentences available yet.
+              </div>
+            )}
+
+            {/* Syllable Breakdown */}
+            {word.syllables && word.syllables.length > 0 && (
+              <div className="syllables-breakdown">
+                <h3>Syllable Breakdown</h3>
+                <div className="syllables-grid">
+                  {word.syllables.map((syl, idx) => (
+                    <div key={idx} className="syllable-card">
+                      <div className="syllable-character">{syl.character}</div>
+                      <div className="syllable-pinyin">{syl.syllable}</div>
+                      <div className="syllable-tone">Tone {syl.tone_number === 0 ? '轻' : syl.tone_number}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Page indicator dots */}
+      <div className="page-indicators">
+        <div className={`indicator ${!showSecondPage ? 'active' : ''}`} onClick={() => setShowSecondPage(false)} />
+        <div className={`indicator ${showSecondPage ? 'active' : ''}`} onClick={() => setShowSecondPage(true)} />
+      </div>
+    </div>
+  );
+};
+
+export default WordDetailPage;
