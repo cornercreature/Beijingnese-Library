@@ -112,6 +112,8 @@ exports.createWord = async (req, res) => {
       english_definition,
       putonghua_definition,
       grammar_category,
+      syllables,
+      example,
       examples = []
     } = req.body;
 
@@ -127,27 +129,47 @@ exports.createWord = async (req, res) => {
       audio_mime_type: req.file ? req.file.mimetype : null
     }, { transaction });
 
-    // Parse pinyin and create syllables
-    const syllables = parsePinyin(pinyin, chinese_characters);
-
-    if (syllables.length > 0) {
-      const syllableData = syllables.map(syl => ({
+    // Handle syllables - accept from frontend or auto-generate
+    let syllablesToCreate;
+    if (syllables && syllables.length > 0) {
+      // Use syllables provided by frontend
+      syllablesToCreate = syllables.map(syl => ({
+        word_id: word.id,
+        syllable: syl.syllable,
+        character: syl.character,
+        tone_number: syl.toneNumber !== undefined ? syl.toneNumber : syl.tone_number,
+        position: syl.position
+      }));
+    } else {
+      // Fallback to auto-parsing (for backward compatibility)
+      const parsedSyllables = parsePinyin(pinyin, chinese_characters);
+      syllablesToCreate = parsedSyllables.map(syl => ({
         word_id: word.id,
         syllable: syl.syllable,
         character: syl.character,
         tone_number: syl.tone_number,
         position: syl.position
       }));
-
-      await db.PinyinSyllable.bulkCreate(syllableData, { transaction });
     }
 
-    // Create example sentences
+    if (syllablesToCreate.length > 0) {
+      await db.PinyinSyllable.bulkCreate(syllablesToCreate, { transaction });
+    }
+
+    // Create example sentences - handle both single example and array
+    const examplesArray = [];
+    if (example && example.chinese_sentence) {
+      examplesArray.push(example);
+    }
     if (examples && examples.length > 0) {
-      const exampleData = examples.map(ex => ({
+      examplesArray.push(...examples);
+    }
+
+    if (examplesArray.length > 0) {
+      const exampleData = examplesArray.map(ex => ({
         word_id: word.id,
         chinese_sentence: ex.chinese_sentence,
-        english_translation: ex.english_translation
+        english_translation: ex.english_translation || null
       }));
 
       await db.ExampleSentence.bulkCreate(exampleData, { transaction });
