@@ -3,21 +3,22 @@ import { useNavigate } from 'react-router-dom';
 
 const UploadWordPage = () => {
   const navigate = useNavigate();
+  const [characterInputs, setCharacterInputs] = useState([
+    { character: '', syllable: '', toneNumber: 1, position: 0 }
+  ]);
   const [formData, setFormData] = useState({
-    chineseCharacters: '',
-    pinyin: '',
     grammarCategory: 'Noun',
     chineseDefinition: '',
     englishDefinition: '',
     exampleSentence: '',
     exampleTranslation: ''
   });
-  const [syllables, setSyllables] = useState([]);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const grammarCategories = ['Noun', 'Verb', 'Adjective', 'Sayings'];
+  const MAX_CHARACTERS = 8;
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -27,49 +28,28 @@ const UploadWordPage = () => {
     }));
   };
 
-  const generateSyllables = () => {
-    // Auto-generate syllables from pinyin and characters
-    const chars = Array.from(formData.chineseCharacters);
-    const pinyinParts = formData.pinyin.trim().split(/\s+/);
-
-    if (chars.length !== pinyinParts.length) {
-      setError(`Mismatch: ${chars.length} characters but ${pinyinParts.length} pinyin syllables. Please adjust.`);
-      return;
-    }
-
-    const generatedSyllables = chars.map((char, index) => ({
-      character: char,
-      syllable: pinyinParts[index],
-      toneNumber: detectTone(pinyinParts[index]),
-      position: index
-    }));
-
-    setSyllables(generatedSyllables);
-    setError(null);
-  };
-
-  const detectTone = (syllable) => {
-    const toneMap = {
-      'ā': 1, 'á': 2, 'ǎ': 3, 'à': 4,
-      'ē': 1, 'é': 2, 'ě': 3, 'è': 4,
-      'ī': 1, 'í': 2, 'ǐ': 3, 'ì': 4,
-      'ō': 1, 'ó': 2, 'ǒ': 3, 'ò': 4,
-      'ū': 1, 'ú': 2, 'ǔ': 3, 'ù': 4,
-      'ǖ': 1, 'ǘ': 2, 'ǚ': 3, 'ǜ': 4
-    };
-
-    for (const char of syllable) {
-      if (toneMap[char]) {
-        return toneMap[char];
-      }
-    }
-    return 0; // Neutral/light tone
-  };
-
-  const handleSyllableChange = (index, field, value) => {
-    setSyllables(prev => prev.map((syl, i) =>
-      i === index ? { ...syl, [field]: value } : syl
+  const handleCharacterChange = (index, field, value) => {
+    setCharacterInputs(prev => prev.map((input, i) =>
+      i === index ? { ...input, [field]: value } : input
     ));
+  };
+
+  const addCharacterInput = () => {
+    if (characterInputs.length < MAX_CHARACTERS) {
+      setCharacterInputs(prev => [
+        ...prev,
+        { character: '', syllable: '', toneNumber: 1, position: prev.length }
+      ]);
+    }
+  };
+
+  const removeCharacterInput = (index) => {
+    if (characterInputs.length > 1) {
+      setCharacterInputs(prev =>
+        prev.filter((_, i) => i !== index)
+          .map((input, i) => ({ ...input, position: i }))
+      );
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -77,18 +57,32 @@ const UploadWordPage = () => {
     setError(null);
     setLoading(true);
 
+    // Validate character inputs
+    const validCharacters = characterInputs.filter(input => input.character.trim() !== '');
+    if (validCharacters.length === 0) {
+      setError('Please enter at least one character');
+      setLoading(false);
+      return;
+    }
+
+    // Check that all valid characters have pinyin
+    const missingPinyin = validCharacters.some(input => !input.syllable.trim());
+    if (missingPinyin) {
+      setError('Please enter pinyin for all characters');
+      setLoading(false);
+      return;
+    }
+
     // Validate required fields
-    if (!formData.chineseCharacters || !formData.pinyin || !formData.chineseDefinition || !formData.englishDefinition) {
+    if (!formData.chineseDefinition || !formData.englishDefinition) {
       setError('Please fill in all required fields');
       setLoading(false);
       return;
     }
 
-    if (syllables.length === 0) {
-      setError('Please generate syllables before submitting');
-      setLoading(false);
-      return;
-    }
+    // Build chinese_characters and pinyin strings
+    const chinese_characters = validCharacters.map(input => input.character).join('');
+    const pinyin = validCharacters.map(input => input.syllable).join(' ');
 
     try {
       const response = await fetch('http://localhost:3001/api/words', {
@@ -97,12 +91,12 @@ const UploadWordPage = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          chinese_characters: formData.chineseCharacters,
-          pinyin: formData.pinyin,
+          chinese_characters,
+          pinyin,
           grammar_category: formData.grammarCategory,
           putonghua_definition: formData.chineseDefinition,
           english_definition: formData.englishDefinition,
-          syllables: syllables,
+          syllables: validCharacters,
           example: formData.exampleSentence ? {
             chinese_sentence: formData.exampleSentence,
             english_translation: formData.exampleTranslation
@@ -117,16 +111,14 @@ const UploadWordPage = () => {
 
       setSuccess(true);
       // Reset form
+      setCharacterInputs([{ character: '', syllable: '', toneNumber: 1, position: 0 }]);
       setFormData({
-        chineseCharacters: '',
-        pinyin: '',
         grammarCategory: 'Noun',
         chineseDefinition: '',
         englishDefinition: '',
         exampleSentence: '',
         exampleTranslation: ''
       });
-      setSyllables([]);
 
       // Redirect after 2 seconds
       setTimeout(() => {
@@ -141,12 +133,13 @@ const UploadWordPage = () => {
   };
 
   return (
-    <div style={{ padding: '2rem', maxWidth: '800px', margin: '0 auto' }}>
+    <div style={{ padding: '2rem', maxWidth: '1200px', margin: '0 auto' }}>
       <button onClick={() => navigate('/')} style={{ marginBottom: '1rem', cursor: 'pointer' }}>
         ← Back to Gallery
       </button>
 
-      <h1>Add New Word</h1>
+      <h1 style={{ textAlign: 'center', marginBottom: '0.5rem' }}>上传</h1>
+      <h2 style={{ textAlign: 'center', marginBottom: '2rem', fontWeight: 'normal' }}>Upload</h2>
 
       {success && (
         <div style={{ padding: '1rem', backgroundColor: '#d4edda', color: '#155724', borderRadius: '4px', marginBottom: '1rem' }}>
@@ -160,87 +153,134 @@ const UploadWordPage = () => {
         </div>
       )}
 
-      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-        {/* Chinese Characters */}
-        <div>
-          <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>
-            Chinese Characters (北京话) *
-          </label>
-          <input
-            type="text"
-            name="chineseCharacters"
-            value={formData.chineseCharacters}
-            onChange={handleInputChange}
-            placeholder="e.g., 倍儿"
-            required
-            style={{ width: '100%', padding: '0.5rem', fontSize: '1rem' }}
-          />
-        </div>
+      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+        {/* Character Input Container */}
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '1rem',
+          width: '100%',
+          overflowX: 'auto',
+          padding: '1rem 0'
+        }}>
+          {characterInputs.map((input, index) => (
+            <div
+              key={index}
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: '0.5rem',
+                minWidth: '150px'
+              }}
+            >
+              {/* Character Input Box */}
+              <div style={{
+                width: '150px',
+                height: '150px',
+                border: '2px solid #333',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: '#fff'
+              }}>
+                <input
+                  type="text"
+                  value={input.character}
+                  onChange={(e) => handleCharacterChange(index, 'character', e.target.value)}
+                  maxLength={1}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    border: 'none',
+                    fontSize: '4rem',
+                    textAlign: 'center',
+                    outline: 'none',
+                    fontFamily: 'serif'
+                  }}
+                  placeholder="+"
+                />
+              </div>
 
-        {/* Pinyin */}
-        <div>
-          <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>
-            Pinyin (with tone marks, space-separated) *
-          </label>
-          <input
-            type="text"
-            name="pinyin"
-            value={formData.pinyin}
-            onChange={handleInputChange}
-            placeholder="e.g., bèi r (for 儿化音, put 儿 as separate syllable 'r')"
-            required
-            style={{ width: '100%', padding: '0.5rem', fontSize: '1rem' }}
-          />
-          <small style={{ color: '#666', display: 'block', marginTop: '0.25rem' }}>
-            For 儿化音: Each character gets its own syllable. 儿 should be entered as "r" with tone 0.
-          </small>
-          <button
-            type="button"
-            onClick={generateSyllables}
-            style={{ marginTop: '0.5rem', padding: '0.5rem 1rem', cursor: 'pointer' }}
-          >
-            Generate Syllables
-          </button>
-        </div>
+              {/* Tone Selection - 声调 */}
+              <div style={{
+                display: 'flex',
+                gap: '0.5rem',
+                fontSize: '0.9rem'
+              }}>
+                <span style={{ marginRight: '0.25rem' }}>声调</span>
+                {[1, 2, 3, 4, 0].map((tone) => (
+                  <label key={tone} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                    <input
+                      type="radio"
+                      name={`tone-${index}`}
+                      value={tone}
+                      checked={input.toneNumber === tone}
+                      onChange={(e) => handleCharacterChange(index, 'toneNumber', parseInt(e.target.value))}
+                    />
+                    <span>{tone === 0 ? '轻' : tone}</span>
+                  </label>
+                ))}
+              </div>
 
-        {/* Syllables Preview */}
-        {syllables.length > 0 && (
-          <div style={{ padding: '1rem', backgroundColor: '#f8f9fa', borderRadius: '4px' }}>
-            <h3>Syllables Preview (Editable)</h3>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-              {syllables.map((syl, index) => (
-                <div key={index} style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                  <span style={{ minWidth: '30px' }}>#{index + 1}</span>
-                  <input
-                    type="text"
-                    value={syl.character}
-                    onChange={(e) => handleSyllableChange(index, 'character', e.target.value)}
-                    style={{ width: '60px', padding: '0.25rem' }}
-                    placeholder="字"
-                  />
-                  <input
-                    type="text"
-                    value={syl.syllable}
-                    onChange={(e) => handleSyllableChange(index, 'syllable', e.target.value)}
-                    style={{ width: '100px', padding: '0.25rem' }}
-                    placeholder="pinyin"
-                  />
-                  <select
-                    value={syl.toneNumber}
-                    onChange={(e) => handleSyllableChange(index, 'toneNumber', parseInt(e.target.value))}
-                    style={{ padding: '0.25rem' }}
-                  >
-                    <option value={0}>Tone 0 (light)</option>
-                    <option value={1}>Tone 1 (ā)</option>
-                    <option value={2}>Tone 2 (á)</option>
-                    <option value={3}>Tone 3 (ǎ)</option>
-                    <option value={4}>Tone 4 (à)</option>
-                  </select>
-                </div>
-              ))}
+              {/* Pinyin Input */}
+              <input
+                type="text"
+                value={input.syllable}
+                onChange={(e) => handleCharacterChange(index, 'syllable', e.target.value)}
+                placeholder="pinyin"
+                style={{
+                  width: '140px',
+                  padding: '0.5rem',
+                  border: '1px solid #ccc',
+                  borderRadius: '4px',
+                  textAlign: 'center'
+                }}
+              />
+
+              {/* Remove button (only show if more than 1) */}
+              {characterInputs.length > 1 && (
+                <button
+                  type="button"
+                  onClick={() => removeCharacterInput(index)}
+                  style={{
+                    fontSize: '0.75rem',
+                    padding: '0.25rem 0.5rem',
+                    cursor: 'pointer',
+                    backgroundColor: '#dc3545',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '4px'
+                  }}
+                >
+                  Remove
+                </button>
+              )}
             </div>
-          </div>
-        )}
+          ))}
+
+          {/* Add Character Button */}
+          {characterInputs.length < MAX_CHARACTERS && (
+            <button
+              type="button"
+              onClick={addCharacterInput}
+              style={{
+                width: '60px',
+                height: '60px',
+                border: '2px solid #333',
+                backgroundColor: '#fff',
+                cursor: 'pointer',
+                fontSize: '2rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexShrink: 0
+              }}
+            >
+              +
+            </button>
+          )}
+        </div>
 
         {/* Grammar Category */}
         <div>
@@ -326,15 +366,15 @@ const UploadWordPage = () => {
         <div style={{ display: 'flex', gap: '1rem' }}>
           <button
             type="submit"
-            disabled={loading || syllables.length === 0}
+            disabled={loading}
             style={{
               padding: '0.75rem 2rem',
               fontSize: '1rem',
-              backgroundColor: loading || syllables.length === 0 ? '#ccc' : '#007bff',
+              backgroundColor: loading ? '#ccc' : '#007bff',
               color: 'white',
               border: 'none',
               borderRadius: '4px',
-              cursor: loading || syllables.length === 0 ? 'not-allowed' : 'pointer'
+              cursor: loading ? 'not-allowed' : 'pointer'
             }}
           >
             {loading ? 'Creating...' : 'Create Word'}
