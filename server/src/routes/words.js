@@ -38,6 +38,12 @@ router.post(
 );
 
 /**
+ * POST /api/words/:id/examples
+ * Add an example sentence to a word
+ */
+router.post('/:id/examples', wordController.addExample);
+
+/**
  * DELETE /api/words/:id
  * Delete a word (also deletes associated syllables and examples via CASCADE)
  */

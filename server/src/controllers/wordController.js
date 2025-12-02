@@ -226,6 +226,53 @@ exports.createWord = async (req, res) => {
 };
 
 /**
+ * Add an example sentence to a word
+ * POST /api/words/:id/examples
+ */
+exports.addExample = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { chinese_sentence, english_translation } = req.body;
+
+    // Validate word exists
+    const word = await db.Word.findByPk(id);
+    if (!word) {
+      return res.status(404).json({
+        success: false,
+        error: 'Word not found'
+      });
+    }
+
+    // Validate required field
+    if (!chinese_sentence || !chinese_sentence.trim()) {
+      return res.status(400).json({
+        success: false,
+        error: 'Chinese sentence is required'
+      });
+    }
+
+    // Create the example
+    const example = await db.ExampleSentence.create({
+      word_id: id,
+      chinese_sentence: chinese_sentence.trim(),
+      english_translation: english_translation ? english_translation.trim() : null
+    });
+
+    res.status(201).json({
+      success: true,
+      message: 'Example added successfully',
+      data: example
+    });
+  } catch (error) {
+    console.error('Error adding example:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to add example'
+    });
+  }
+};
+
+/**
  * Delete a word
  * DELETE /api/words/:id
  */

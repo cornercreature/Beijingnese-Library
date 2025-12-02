@@ -165,15 +165,15 @@ const WordDetailPage = () => {
           </div>
         </div>
 
-        {/* Second Page - Examples and Additional Info */}
+        {/* Second Page - Examples */}
         <div className="page page-two">
-          <div className="word-content">
-            <h2>Examples & Usage</h2>
+          <div className="examples-page-content">
+            <h2 className="examples-title">Example Usage</h2>
 
-            {word.examples && word.examples.length > 0 ? (
-              <div className="examples-section">
-                {word.examples.map((example, idx) => (
-                  <div key={idx} className="example-item">
+            <div className="examples-list">
+              {word.examples && word.examples.length > 0 ? (
+                word.examples.map((example, idx) => (
+                  <div key={idx} className="example-box">
                     <div className="example-chinese">
                       {example.chinese_sentence}
                     </div>
@@ -183,29 +183,20 @@ const WordDetailPage = () => {
                       </div>
                     )}
                   </div>
-                ))}
-              </div>
-            ) : (
-              <div className="no-examples">
-                No example sentences available yet.
-              </div>
-            )}
-
-            {/* Syllable Breakdown */}
-            {word.syllables && word.syllables.length > 0 && (
-              <div className="syllables-breakdown">
-                <h3>Syllable Breakdown</h3>
-                <div className="syllables-grid">
-                  {word.syllables.map((syl, idx) => (
-                    <div key={idx} className="syllable-card">
-                      <div className="syllable-character">{syl.character}</div>
-                      <div className="syllable-pinyin">{syl.syllable}</div>
-                      <div className="syllable-tone">Tone {syl.tone_number === 0 ? '轻' : syl.tone_number}</div>
-                    </div>
-                  ))}
+                ))
+              ) : (
+                <div className="no-examples-message">
+                  No example sentences yet.
                 </div>
-              </div>
-            )}
+              )}
+            </div>
+
+            <button
+              onClick={() => navigate(`/words/${word.id}/add-example`)}
+              className="add-example-link"
+            >
+              + Add Another Example
+            </button>
           </div>
         </div>
       </div>

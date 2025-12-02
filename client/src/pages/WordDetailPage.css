@@ -191,101 +191,87 @@
 }
 
 /* Page Two - Examples */
-.page-two h2 {
-  font-size: 2.5rem;
-  margin-bottom: 2rem;
-  color: #333;
-  text-align: center;
-}
-
-.examples-section {
+.examples-page-content {
   width: 100%;
+  max-width: 600px;
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 2rem;
 }
 
-.example-item {
+.examples-title {
+  font-size: 2.5rem;
+  color: #333;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.examples-list {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.example-box {
+  width: 100%;
   background-color: #f9f9f9;
-  padding: 1.5rem;
-  border-radius: 8px;
-  border-left: 4px solid #333;
+  padding: 2rem;
+  border-radius: 12px;
+  border: 2px solid #e0e0e0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.example-box:hover {
+  border-color: #333;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
 }
 
 .example-chinese {
   font-size: 1.5rem;
   font-family: 'Noto Sans SC', sans-serif;
   color: #333;
-  margin-bottom: 0.75rem;
-  line-height: 1.6;
+  margin-bottom: 1rem;
+  line-height: 1.8;
+  text-align: center;
 }
 
 .example-english {
   font-size: 1.1rem;
   color: #666;
   font-style: italic;
-  line-height: 1.5;
+  line-height: 1.6;
+  text-align: center;
 }
 
-.no-examples {
+.no-examples-message {
   font-size: 1.2rem;
   color: #999;
   text-align: center;
   padding: 3rem;
 }
 
-/* Syllables Breakdown */
-.syllables-breakdown {
-  width: 100%;
-  margin-top: 2rem;
-}
-
-.syllables-breakdown h3 {
-  font-size: 1.5rem;
-  margin-bottom: 1.5rem;
-  color: #333;
-  text-align: center;
-}
-
-.syllables-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  justify-content: center;
-}
-
-.syllable-card {
-  background-color: white;
-  border: 2px solid #e0e0e0;
-  border-radius: 8px;
-  padding: 1rem;
-  min-width: 100px;
-  text-align: center;
-  transition: transform 0.2s ease;
-}
-
-.syllable-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-}
-
-.syllable-character {
-  font-size: 2.5rem;
-  font-weight: bold;
-  font-family: 'Noto Serif SC', serif;
-  color: #333;
-  margin-bottom: 0.5rem;
-}
-
-.syllable-pinyin {
+.add-example-link {
+  margin-top: 1rem;
+  padding: 1rem 2rem;
   font-size: 1.1rem;
-  color: #666;
-  margin-bottom: 0.25rem;
+  background-color: white;
+  color: #333;
+  border: 2px solid #333;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
 }
 
-.syllable-tone {
-  font-size: 0.9rem;
-  color: #999;
+.add-example-link:hover {
+  background-color: #333;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 /* Page Indicators */
@@ -359,15 +345,24 @@
     font-size: 1.5rem;
   }
 
-  .page-two h2 {
+  .examples-title {
     font-size: 2rem;
+  }
+
+  .example-box {
+    padding: 1.5rem;
   }
 
   .example-chinese {
     font-size: 1.2rem;
   }
 
-  .syllable-character {
-    font-size: 2rem;
+  .example-english {
+    font-size: 1rem;
+  }
+
+  .add-example-link {
+    font-size: 1rem;
+    padding: 0.75rem 1.5rem;
   }
 }
