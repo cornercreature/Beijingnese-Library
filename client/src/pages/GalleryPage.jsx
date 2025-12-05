@@ -11,7 +11,7 @@ const GalleryPage = () => {
   const [error, setError] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
 
-  const categories = ['Noun', 'Verb', 'Adjective', 'Sayings'];
+  const categories = ['Noun', 'Verb', 'Adjective', 'Sayings', 'Images'];
 
   useEffect(() => {
     fetchWords();
@@ -38,18 +38,28 @@ const GalleryPage = () => {
       <header className="gallery-header">
         <h1>北京话词库</h1>
         <h2>Beijingnese Library</h2>
-        {/* TODO: Style this button later */}
-        <button
-          onClick={() => navigate('/upload')}
-          style={{
-            marginTop: '1rem',
-            padding: '0.5rem 1rem',
-            fontSize: '1rem',
-            cursor: 'pointer'
-          }}
-        >
-          + Add New Word
-        </button>
+        <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
+          <button
+            onClick={() => navigate('/upload')}
+            style={{
+              padding: '0.5rem 1rem',
+              fontSize: '1rem',
+              cursor: 'pointer'
+            }}
+          >
+            + Add New Word
+          </button>
+          <button
+            onClick={() => navigate('/upload-image')}
+            style={{
+              padding: '0.5rem 1rem',
+              fontSize: '1rem',
+              cursor: 'pointer'
+            }}
+          >
+            + Add New Image
+          </button>
+        </div>
       </header>
 
       <div className="gallery-container">
