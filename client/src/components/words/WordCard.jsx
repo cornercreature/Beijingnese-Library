@@ -29,12 +29,6 @@ const WordCard = ({ word }) => {
       <div className="word-card-content">
         <DynamicPinyin word={word} />
 
-        <div className="word-card-details">
-          <p className="english-def">{word.english_definition}</p>
-          <p className="putonghua-def">{word.putonghua_definition}</p>
-          <span className="grammar-tag">{word.grammar_category}</span>
-        </div>
-
         {word.audio_file_path && (
           <>
             <button
