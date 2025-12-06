@@ -2,6 +2,7 @@
   min-height: 100vh;
   background: #F4F4F4;
   position: relative;
+  padding-top: 200px;
 }
 
 /* Scroll Sidebars */
@@ -82,52 +83,6 @@
 
 .scroll-sidebar-right .scroll-indicator {
   right: 0.5rem;
-}
-
-.gallery-header {
-  text-align: center;
-  padding: 3rem 2rem;
-  background: white;
-  border-bottom: 2px solid #f0f0f0;
-}
-
-.gallery-header h1 {
-  font-size: 2.5rem;
-  margin: 0 0 0.5rem 0;
-  color: #2c5aa0;
-}
-
-.gallery-header h2 {
-  font-size: 1.5rem;
-  margin: 0;
-  color: #666;
-  font-weight: 400;
-}
-
-.header-buttons {
-  display: flex;
-  gap: 1rem;
-  margin-top: 1rem;
-  justify-content: center;
-}
-
-.add-word-button,
-.add-image-button {
-  padding: 0.5rem 1rem;
-  font-size: 1rem;
-  cursor: pointer;
-  border: 2px solid #2c5aa0;
-  background: white;
-  color: #2c5aa0;
-  border-radius: 8px;
-  transition: all 0.2s;
-  font-weight: 500;
-}
-
-.add-word-button:hover,
-.add-image-button:hover {
-  background: #2c5aa0;
-  color: white;
 }
 
 .gallery-content {
