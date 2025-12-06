@@ -1,7 +1,7 @@
 .word-card {
   display: block;
-  background: white;
-  border: 2px solid #f0f0f0;
+  background: transparent;
+  border: none;
   border-radius: 12px;
   padding: 2rem;
   text-decoration: none;
@@ -12,8 +12,6 @@
 }
 
 .word-card:hover {
-  border-color: #2c5aa0;
-  box-shadow: 0 4px 12px rgba(44, 90, 160, 0.1);
   transform: translateY(-2px);
 }
 
