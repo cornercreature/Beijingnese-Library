@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AudioRecorder from '../components/AudioRecorder';
+import './UploadWordPage.css';
 
 const UploadWordPage = () => {
   const navigate = useNavigate();
@@ -158,84 +159,48 @@ const UploadWordPage = () => {
   };
 
   return (
-    <div style={{ padding: '2rem', maxWidth: '1200px', margin: '0 auto' }}>
-      <button onClick={() => navigate('/')} style={{ marginBottom: '1rem', cursor: 'pointer' }}>
+    <div className="upload-word-page">
+      <button onClick={() => navigate('/')} className="back-to-gallery-button">
         ← Back to Gallery
       </button>
 
-      <h1 style={{ textAlign: 'center', marginBottom: '0.5rem' }}>上传</h1>
-      <h2 style={{ textAlign: 'center', marginBottom: '2rem', fontWeight: 'normal' }}>Upload</h2>
+      <h1>上传</h1>
+      <h2>Upload</h2>
 
       {success && (
-        <div style={{ padding: '1rem', backgroundColor: '#d4edda', color: '#155724', borderRadius: '4px', marginBottom: '1rem' }}>
+        <div className="success-message">
           Word created successfully! Redirecting to gallery...
         </div>
       )}
 
       {error && (
-        <div style={{ padding: '1rem', backgroundColor: '#f8d7da', color: '#721c24', borderRadius: '4px', marginBottom: '1rem' }}>
+        <div className="error-message">
           {error}
         </div>
       )}
 
-      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+      <form onSubmit={handleSubmit} className="upload-word-form">
         {/* Character Input Container */}
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '1rem',
-          width: '100%',
-          overflowX: 'auto',
-          padding: '1rem 0'
-        }}>
+        <div className="character-input-container">
           {characterInputs.map((input, index) => (
-            <div
-              key={index}
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                gap: '0.5rem',
-                minWidth: '150px'
-              }}
-            >
+            <div key={index} className="character-input-group">
               {/* Character Input Box */}
-              <div style={{
-                width: '150px',
-                height: '150px',
-                border: '2px solid #333',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                backgroundColor: '#fff'
-              }}>
+              <div className="character-box">
                 <input
                   type="text"
                   value={input.character}
                   onChange={(e) => handleCharacterChange(index, 'character', e.target.value)}
                   maxLength={1}
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    border: 'none',
-                    fontSize: '4rem',
-                    textAlign: 'center',
-                    outline: 'none',
-                    fontFamily: 'serif'
-                  }}
+                  className="character-input"
                   placeholder="+"
                 />
               </div>
 
               {/* Tone Selection - 声调 */}
-              <div style={{
-                display: 'flex',
-                gap: '0.5rem',
-                fontSize: '0.9rem'
-              }}>
-                <span style={{ marginRight: '0.25rem' }}>声调</span>
+              <div className="tone-selection">
+                <span>声调</span>
                 {[1, 2, 3, 4, 0].map((tone) => (
-                  <label key={tone} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                  <label key={tone} className="tone-label">
                     <input
                       type="radio"
                       name={`tone-${index}`}
@@ -254,13 +219,7 @@ const UploadWordPage = () => {
                 value={input.syllable}
                 onChange={(e) => handleCharacterChange(index, 'syllable', e.target.value)}
                 placeholder="pinyin"
-                style={{
-                  width: '140px',
-                  padding: '0.5rem',
-                  border: '1px solid #ccc',
-                  borderRadius: '4px',
-                  textAlign: 'center'
-                }}
+                className="pinyin-input"
               />
 
               {/* Remove button (only show if more than 1) */}
@@ -268,15 +227,7 @@ const UploadWordPage = () => {
                 <button
                   type="button"
                   onClick={() => removeCharacterInput(index)}
-                  style={{
-                    fontSize: '0.75rem',
-                    padding: '0.25rem 0.5rem',
-                    cursor: 'pointer',
-                    backgroundColor: '#dc3545',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '4px'
-                  }}
+                  className="remove-character-button"
                 >
                   Remove
                 </button>
@@ -289,18 +240,7 @@ const UploadWordPage = () => {
             <button
               type="button"
               onClick={addCharacterInput}
-              style={{
-                width: '60px',
-                height: '60px',
-                border: '2px solid #333',
-                backgroundColor: '#fff',
-                cursor: 'pointer',
-                fontSize: '2rem',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                flexShrink: 0
-              }}
+              className="add-character-button"
             >
               +
             </button>
@@ -308,16 +248,13 @@ const UploadWordPage = () => {
         </div>
 
         {/* Grammar Category */}
-        <div>
-          <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>
-            Grammar Category *
-          </label>
+        <div className="form-group">
+          <label>Grammar Category *</label>
           <select
             name="grammarCategory"
             value={formData.grammarCategory}
             onChange={handleInputChange}
             required
-            style={{ width: '100%', padding: '0.5rem', fontSize: '1rem' }}
           >
             {grammarCategories.map(cat => (
               <option key={cat} value={cat}>{cat}</option>
@@ -326,10 +263,8 @@ const UploadWordPage = () => {
         </div>
 
         {/* Chinese Definition */}
-        <div>
-          <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>
-            Chinese/Putonghua Definition *
-          </label>
+        <div className="form-group">
+          <label>Chinese/Putonghua Definition *</label>
           <textarea
             name="chineseDefinition"
             value={formData.chineseDefinition}
@@ -337,15 +272,12 @@ const UploadWordPage = () => {
             placeholder="普通话定义"
             required
             rows={3}
-            style={{ width: '100%', padding: '0.5rem', fontSize: '1rem' }}
           />
         </div>
 
         {/* English Definition */}
-        <div>
-          <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>
-            English Definition *
-          </label>
+        <div className="form-group">
+          <label>English Definition *</label>
           <textarea
             name="englishDefinition"
             value={formData.englishDefinition}
@@ -353,37 +285,30 @@ const UploadWordPage = () => {
             placeholder="English definition"
             required
             rows={3}
-            style={{ width: '100%', padding: '0.5rem', fontSize: '1rem' }}
           />
         </div>
 
         {/* Example Sentence (Optional) */}
-        <div>
-          <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>
-            Example Sentence (Optional)
-          </label>
+        <div className="form-group">
+          <label>Example Sentence (Optional)</label>
           <textarea
             name="exampleSentence"
             value={formData.exampleSentence}
             onChange={handleInputChange}
             placeholder="例句"
             rows={2}
-            style={{ width: '100%', padding: '0.5rem', fontSize: '1rem' }}
           />
         </div>
 
         {/* Example Translation (Optional) */}
-        <div>
-          <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>
-            Example Translation (Optional)
-          </label>
+        <div className="form-group">
+          <label>Example Translation (Optional)</label>
           <textarea
             name="exampleTranslation"
             value={formData.exampleTranslation}
             onChange={handleInputChange}
             placeholder="Example translation"
             rows={2}
-            style={{ width: '100%', padding: '0.5rem', fontSize: '1rem' }}
           />
         </div>
 
@@ -394,34 +319,18 @@ const UploadWordPage = () => {
         />
 
         {/* Submit Button */}
-        <div style={{ display: 'flex', gap: '1rem' }}>
+        <div className="form-buttons">
           <button
             type="submit"
             disabled={loading}
-            style={{
-              padding: '0.75rem 2rem',
-              fontSize: '1rem',
-              backgroundColor: loading ? '#ccc' : '#007bff',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: loading ? 'not-allowed' : 'pointer'
-            }}
+            className="submit-button"
           >
             {loading ? 'Creating...' : 'Create Word'}
           </button>
           <button
             type="button"
             onClick={() => navigate('/')}
-            style={{
-              padding: '0.75rem 2rem',
-              fontSize: '1rem',
-              backgroundColor: '#6c757d',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer'
-            }}
+            className="cancel-button"
           >
             Cancel
           </button>

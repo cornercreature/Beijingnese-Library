@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import './AudioRecorder.css';
 
 /**
  * AudioRecorder Component
@@ -105,47 +106,23 @@ const AudioRecorder = ({ onRecordingComplete, onRecordingClear }) => {
   };
 
   return (
-    <div style={{
-      padding: '1rem',
-      border: '2px dashed #ccc',
-      borderRadius: '8px',
-      backgroundColor: '#f9f9f9'
-    }}>
-      <h3 style={{ marginTop: 0, marginBottom: '1rem' }}>🎤 Audio Recording</h3>
+    <div className="audio-recorder">
+      <h3>🎤 Audio Recording</h3>
 
       {/* Recording Status */}
       {isRecording && (
-        <div style={{
-          padding: '0.5rem',
-          backgroundColor: '#ffebee',
-          color: '#c62828',
-          borderRadius: '4px',
-          marginBottom: '1rem',
-          textAlign: 'center',
-          fontWeight: 'bold'
-        }}>
+        <div className="recording-status">
           ⏺ Recording... {formatTime(recordingTime)}
         </div>
       )}
 
       {/* Controls */}
-      <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', justifyContent: 'center' }}>
+      <div className="audio-controls">
         {!isRecording && !recordedAudio && (
           <button
             type="button"
             onClick={startRecording}
-            style={{
-              padding: '0.75rem 1.5rem',
-              fontSize: '1rem',
-              backgroundColor: '#d32f2f',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.5rem'
-            }}
+            className="audio-button start-recording-button"
           >
             🎤 Start Recording
           </button>
@@ -155,18 +132,7 @@ const AudioRecorder = ({ onRecordingComplete, onRecordingClear }) => {
           <button
             type="button"
             onClick={stopRecording}
-            style={{
-              padding: '0.75rem 1.5rem',
-              fontSize: '1rem',
-              backgroundColor: '#424242',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.5rem'
-            }}
+            className="audio-button stop-recording-button"
           >
             ⏹ Stop Recording
           </button>
@@ -177,18 +143,7 @@ const AudioRecorder = ({ onRecordingComplete, onRecordingClear }) => {
             <button
               type="button"
               onClick={togglePlayback}
-              style={{
-                padding: '0.75rem 1.5rem',
-                fontSize: '1rem',
-                backgroundColor: '#1976d2',
-                color: 'white',
-                border: 'none',
-                borderRadius: '4px',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.5rem'
-              }}
+              className="audio-button play-button"
             >
               {isPlaying ? '⏸ Pause' : '▶ Play Recording'}
             </button>
@@ -196,18 +151,7 @@ const AudioRecorder = ({ onRecordingComplete, onRecordingClear }) => {
             <button
               type="button"
               onClick={clearRecording}
-              style={{
-                padding: '0.75rem 1.5rem',
-                fontSize: '1rem',
-                backgroundColor: '#f57c00',
-                color: 'white',
-                border: 'none',
-                borderRadius: '4px',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.5rem'
-              }}
+              className="audio-button delete-button"
             >
               🗑️ Delete & Re-record
             </button>
@@ -221,33 +165,20 @@ const AudioRecorder = ({ onRecordingComplete, onRecordingClear }) => {
           ref={audioElementRef}
           src={recordedAudio.url}
           onEnded={() => setIsPlaying(false)}
-          style={{ display: 'none' }}
+          className="audio-player-hidden"
         />
       )}
 
       {/* Recording Info */}
       {recordedAudio && (
-        <div style={{
-          marginTop: '1rem',
-          padding: '0.75rem',
-          backgroundColor: '#e8f5e9',
-          color: '#2e7d32',
-          borderRadius: '4px',
-          textAlign: 'center'
-        }}>
+        <div className="recording-info">
           ✓ Recording saved ({formatTime(recordingTime)})
         </div>
       )}
 
       {/* Help Text */}
       {!isRecording && !recordedAudio && (
-        <p style={{
-          marginTop: '1rem',
-          marginBottom: 0,
-          fontSize: '0.9rem',
-          color: '#666',
-          textAlign: 'center'
-        }}>
+        <p className="help-text">
           Click "Start Recording" to record audio pronunciation
         </p>
       )}

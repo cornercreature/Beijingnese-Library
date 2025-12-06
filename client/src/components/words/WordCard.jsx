@@ -35,13 +35,6 @@ const WordCard = ({ word }) => {
               className="audio-indicator"
               onClick={handleAudioClick}
               title="Click to play audio"
-              style={{
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                fontSize: 'inherit',
-                padding: 0
-              }}
             >
               🔊
             </button>
