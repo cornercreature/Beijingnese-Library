@@ -38,14 +38,22 @@ const GalleryPage = () => {
 
       setActiveSection(currentSection);
 
-      const scrollPercentage = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
-      const indicatorPosition = scrollPercentage * (window.innerHeight - 40);
+      const galleryContent = document.querySelector('.gallery-content');
+      const header = document.querySelector('.gallery-header');
 
-      if (leftIndicatorRef.current) {
-        leftIndicatorRef.current.style.top = `${indicatorPosition}px`;
-      }
-      if (rightIndicatorRef.current) {
-        rightIndicatorRef.current.style.top = `${indicatorPosition}px`;
+      if (galleryContent && header) {
+        const contentStart = header.offsetHeight;
+        const contentHeight = galleryContent.offsetHeight;
+        const totalScrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const scrollPercentage = window.scrollY / totalScrollableHeight;
+        const indicatorPosition = contentStart + (scrollPercentage * contentHeight);
+
+        if (leftIndicatorRef.current) {
+          leftIndicatorRef.current.style.top = `${indicatorPosition}px`;
+        }
+        if (rightIndicatorRef.current) {
+          rightIndicatorRef.current.style.top = `${indicatorPosition}px`;
+        }
       }
     };
 
