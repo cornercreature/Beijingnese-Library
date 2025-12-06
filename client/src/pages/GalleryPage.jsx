@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import WordCard from '../components/words/WordCard';
 import wordService from '../services/wordService';
@@ -9,12 +9,51 @@ const GalleryPage = () => {
   const [allWords, setAllWords] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [activeSection, setActiveSection] = useState('all-words');
+
+  const leftIndicatorRef = useRef(null);
+  const rightIndicatorRef = useRef(null);
 
   const categories = ['Noun', 'Verb', 'Adjective', 'Sayings', 'Images'];
 
   useEffect(() => {
     fetchAllWords();
   }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = ['all-words', ...categories.map(c => c.toLowerCase())];
+      const scrollPosition = window.scrollY + window.innerHeight / 3;
+
+      let currentSection = 'all-words';
+      for (const sectionId of sections) {
+        const element = document.getElementById(sectionId);
+        if (element) {
+          const { offsetTop } = element;
+          if (scrollPosition >= offsetTop) {
+            currentSection = sectionId;
+          }
+        }
+      }
+
+      setActiveSection(currentSection);
+
+      const scrollPercentage = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
+      const indicatorPosition = scrollPercentage * (window.innerHeight - 40);
+
+      if (leftIndicatorRef.current) {
+        leftIndicatorRef.current.style.top = `${indicatorPosition}px`;
+      }
+      if (rightIndicatorRef.current) {
+        rightIndicatorRef.current.style.top = `${indicatorPosition}px`;
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    handleScroll();
+
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [categories]);
 
   const fetchAllWords = async () => {
     try {
@@ -58,8 +97,76 @@ const GalleryPage = () => {
     );
   }
 
+  const categoryLabels = {
+    'all-words': { chinese: '全部', english: 'All' },
+    'Noun': { chinese: '名词', english: 'Nouns' },
+    'Verb': { chinese: '动词', english: 'Verbs' },
+    'Adjective': { chinese: '形容词', english: 'Adjectives' },
+    'Sayings': { chinese: '说法', english: 'Sayings' },
+    'Images': { chinese: '图片', english: 'Pictures' }
+  };
+
+  const scrollToSection = (sectionId) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
   return (
     <div className="gallery-page">
+      {/* Left Sidebar - Chinese */}
+      <aside className="scroll-sidebar scroll-sidebar-left">
+        <nav className="sidebar-nav">
+          <button
+            onClick={() => scrollToSection('all-words')}
+            className={`sidebar-nav-item ${activeSection === 'all-words' ? 'active' : ''}`}
+          >
+            {categoryLabels['all-words'].chinese}
+          </button>
+          {categories.map(category => {
+            const categoryWords = filterWordsByCategory(category);
+            if (categoryWords.length === 0) return null;
+            return (
+              <button
+                key={category}
+                onClick={() => scrollToSection(category.toLowerCase())}
+                className={`sidebar-nav-item ${activeSection === category.toLowerCase() ? 'active' : ''}`}
+              >
+                {categoryLabels[category].chinese}
+              </button>
+            );
+          })}
+        </nav>
+        <div ref={leftIndicatorRef} className="scroll-indicator"></div>
+      </aside>
+
+      {/* Right Sidebar - English */}
+      <aside className="scroll-sidebar scroll-sidebar-right">
+        <nav className="sidebar-nav">
+          <button
+            onClick={() => scrollToSection('all-words')}
+            className={`sidebar-nav-item ${activeSection === 'all-words' ? 'active' : ''}`}
+          >
+            {categoryLabels['all-words'].english}
+          </button>
+          {categories.map(category => {
+            const categoryWords = filterWordsByCategory(category);
+            if (categoryWords.length === 0) return null;
+            return (
+              <button
+                key={category}
+                onClick={() => scrollToSection(category.toLowerCase())}
+                className={`sidebar-nav-item ${activeSection === category.toLowerCase() ? 'active' : ''}`}
+              >
+                {categoryLabels[category].english}
+              </button>
+            );
+          })}
+        </nav>
+        <div ref={rightIndicatorRef} className="scroll-indicator"></div>
+      </aside>
+
       <header className="gallery-header">
         <h1>北京话词库</h1>
         <h2>Beijingnese Library</h2>
