@@ -1,31 +1,16 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Header.css';
 
 const Header = () => {
   const navigate = useNavigate();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const dropdownRef = useRef(null);
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsDropdownOpen(false);
-      }
-    };
-
-    if (isDropdownOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [isDropdownOpen]);
+  // No need for click-outside listener since we have a backdrop
 
   const handleNavigation = (path) => {
     navigate(path);
@@ -33,14 +18,10 @@ const Header = () => {
   };
 
   return (
-    <header className={`app-header ${isDropdownOpen ? 'expanded' : ''}`}>
-      <h1>北京话词库</h1>
-      <h2>Beijingnese Library</h2>
-      <div className="header-dropdown" ref={dropdownRef}>
-        <button onClick={toggleDropdown} className="add-button">
-          Add
-        </button>
-        <div className={`dropdown-menu ${isDropdownOpen ? 'open' : ''}`}>
+    <>
+      {isDropdownOpen && <div className="header-backdrop" onClick={() => setIsDropdownOpen(false)} />}
+      <header className={`app-header ${isDropdownOpen ? 'expanded' : ''}`}>
+        <div className="dropdown-menu">
           <button
             onClick={() => handleNavigation('/upload')}
             className="dropdown-item"
@@ -54,8 +35,16 @@ const Header = () => {
             + Add New Image
           </button>
         </div>
-      </div>
-    </header>
+
+        <div className="header-content">
+          <h1>北京话词库</h1>
+          <h2>Beijingnese Library</h2>
+          <button onClick={toggleDropdown} className="add-button">
+            Add
+          </button>
+        </div>
+      </header>
+    </>
   );
 };
 

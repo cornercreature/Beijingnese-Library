@@ -1,25 +1,39 @@
-.app-header {
+.header-backdrop {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  z-index: 1000;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 999;
+  cursor: pointer;
+}
+
+.app-header {
+  position: fixed;
+  top: -100vh;
+  left: 0;
+  right: 0;
+  z-index: 1001;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
   text-align: center;
-  padding: 3rem 2rem;
+  padding: 10px 10px;
   background: white;
   border-bottom: 2px solid #f0f0f0;
-  height: auto;
-  min-height: auto;
-  transition: all 0.6s ease;
+  height: 120vh;
+  transition: top 0.6s ease;
+  pointer-events: none;
+}
+
+.app-header > * {
+  pointer-events: auto;
 }
 
 .app-header.expanded {
-  height: 100vh;
-  justify-content: center;
+  top: 0;
 }
 
 .app-header h1 {
@@ -37,9 +51,28 @@
   font-family: 'EB Garamond', serif;
 }
 
-.header-dropdown {
-  position: relative;
-  margin-top: 1rem;
+.dropdown-menu {
+  position: absolute;
+  top: 50vh;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.header-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+  height: 20vh;
+  justify-content: center;
 }
 
 .add-button {
@@ -53,29 +86,12 @@
   transition: all 0.2s;
   font-weight: 500;
   font-family: 'EB Garamond', serif;
+  margin-top: 0.5rem;
 }
 
 .add-button:hover {
   background: #2c5aa0;
   color: white;
-}
-
-.dropdown-menu {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  margin-top: 3rem;
-  opacity: 0;
-  visibility: hidden;
-  max-height: 0;
-  overflow: hidden;
-  transition: all 0.6s ease;
-}
-
-.dropdown-menu.open {
-  opacity: 1;
-  visibility: visible;
-  max-height: 500px;
 }
 
 .dropdown-item {
