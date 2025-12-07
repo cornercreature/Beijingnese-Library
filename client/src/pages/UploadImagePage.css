@@ -40,7 +40,7 @@
 .form-group input[type="text"],
 .form-group input[type="file"] {
   padding: 0.75rem;
-  border: 1px solid #ddd;
+  border: 2px solid #ddd;
   border-radius: 4px;
   font-size: 1rem;
   font-family: inherit;
@@ -113,6 +113,6 @@
   color: #721c24;
   padding: 1rem;
   border-radius: 4px;
-  border: 1px solid #f5c6cb;
+  border: 2px solid #f5c6cb;
   margin-bottom: 1rem;
 }

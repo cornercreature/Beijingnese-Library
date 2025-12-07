@@ -113,7 +113,7 @@
 .pinyin-input {
   width: 140px;
   padding: 0.5rem;
-  border: 1px solid #ccc;
+  border: 2px solid #ccc;
   border-radius: 4px;
   text-align: center;
 }
@@ -167,7 +167,7 @@
   width: 100%;
   padding: 0.5rem;
   font-size: 1rem;
-  border: 1px solid #ccc;
+  border: 2px solid #ccc;
   border-radius: 4px;
   font-family: inherit;
 }
