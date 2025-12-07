@@ -1,27 +1,59 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Header.css';
 
 const Header = () => {
   const navigate = useNavigate();
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    if (isDropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isDropdownOpen]);
+
+  const handleNavigation = (path) => {
+    navigate(path);
+    setIsDropdownOpen(false);
+  };
 
   return (
-    <header className="app-header">
+    <header className={`app-header ${isDropdownOpen ? 'expanded' : ''}`}>
       <h1>北京话词库</h1>
       <h2>Beijingnese Library</h2>
-      <div className="header-buttons">
-        <button
-          onClick={() => navigate('/upload')}
-          className="add-word-button"
-        >
-          + Add New Word
+      <div className="header-dropdown" ref={dropdownRef}>
+        <button onClick={toggleDropdown} className="add-button">
+          Add
         </button>
-        <button
-          onClick={() => navigate('/upload-image')}
-          className="add-image-button"
-        >
-          + Add New Image
-        </button>
+        <div className={`dropdown-menu ${isDropdownOpen ? 'open' : ''}`}>
+          <button
+            onClick={() => handleNavigation('/upload')}
+            className="dropdown-item"
+          >
+            + Add New Word
+          </button>
+          <button
+            onClick={() => handleNavigation('/upload-image')}
+            className="dropdown-item"
+          >
+            + Add New Image
+          </button>
+        </div>
       </div>
     </header>
   );

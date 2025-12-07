@@ -49,10 +49,9 @@
   display: inline-block;
 }
 
-/* Hover effect to highlight tone */
-.character:hover {
+/* Hover effect - triggered by word card hover */
+.word-card:hover .character {
   color: #2c5aa0;
-  cursor: default;
 }
 
 /* Responsive sizing */
