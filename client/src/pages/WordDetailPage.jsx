@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import wordService from '../services/wordService';
+import Header from '../components/Header';
 import './WordDetailPage.css';
 
 const WordDetailPage = () => {
@@ -94,9 +95,11 @@ const WordDetailPage = () => {
   }
 
   return (
-    <div className="word-detail-page">
-      {/* Navigation buttons */}
-      <div className="nav-buttons">
+    <>
+      <Header />
+      <div className="word-detail-page">
+        {/* Navigation buttons */}
+        <div className="nav-buttons">
         <button onClick={() => navigate('/')} className="back-button">
           ← Back
         </button>
@@ -206,7 +209,8 @@ const WordDetailPage = () => {
         <div className={`indicator ${!showSecondPage ? 'active' : ''}`} onClick={() => setShowSecondPage(false)} />
         <div className={`indicator ${showSecondPage ? 'active' : ''}`} onClick={() => setShowSecondPage(true)} />
       </div>
-    </div>
+      </div>
+    </>
   );
 };
 
