@@ -203,10 +203,10 @@ const WordDetailPage = () => {
         {/* Second Page - Examples */}
         <div className="page page-two">
           <div className="examples-page-content">
-            <h2 className="examples-title">
+            {/* <h2 className="examples-title">
               <div>例句</div>
               <div>Example Usage</div>
-            </h2>
+            </h2> */}
 
             <div className="examples-list">
               {word.examples && word.examples.length > 0 ? (
@@ -234,7 +234,7 @@ const WordDetailPage = () => {
               onClick={() => navigate(`/words/${word.id}/add-example`)}
               className="add-example-link"
             >
-              + Add Another Example
+              add another example
             </button>
           </div>
         </div>

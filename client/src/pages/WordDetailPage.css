@@ -312,22 +312,19 @@
 }
 
 .example-box {
-  width: 100%;
-  background-color: #f9f9f9;
+  width: 60vw;
   padding: 2rem;
-  border-radius: 12px;
-  border: 2px solid #e0e0e0;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border-radius: 0px;
+  border: 0px;
   transition: all 0.3s ease;
 }
 
 .example-box:hover {
-  border-color: #333;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  border: 1px solid #000;
 }
 
 .example-chinese {
-  font-size: 1.5rem;
+  font-size: 50px;
   font-family: 'NZGR Kangxi', serif;
   color: #000000;
   margin-bottom: 1rem;
@@ -352,22 +349,23 @@
 
 .add-example-link {
   margin-top: 1rem;
-  padding: 1rem 2rem;
-  font-size: 1.1rem;
-  background-color: white;
-  color: #000000;
-  border: 2px solid #000000;
-  border-radius: 8px;
+  padding:0rem 2rem 5px 2rem;
+  font-size: 30px;
+  background-color: #000000;
+  color: #f4f4f4;
+  border: 0px solid #000000;
+  border-radius: 0px;
   cursor: pointer;
+  font-family: 'EB Garamond', serif;
+  font-variant: small-caps;
   font-weight: 600;
+  width: 60vw;
   transition: all 0.3s ease;
 }
 
 .add-example-link:hover {
-  background-color: #000000;
+  background-color: #6F0000;
   color: white;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 /* Page Indicators */
