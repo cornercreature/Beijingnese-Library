@@ -26,11 +26,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     english_translation: {
       type: DataTypes.TEXT,
-      allowNull: false,
-      validate: {
-        notEmpty: true,
-        len: [1, 500]
-      }
+      allowNull: true,
+      defaultValue: ''
     }
   }, {
     tableName: 'example_sentences',
