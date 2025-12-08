@@ -68,9 +68,10 @@
 
 .button-chinese {
   font-family: 'Noto Serif SC', serif;
-  font-size: 32px;
+  font-size: 30px;
   -webkit-text-stroke: 0.4px #F4F4F4;
   padding: 0px 0px 0px 0px;
+  letter-spacing: 5px;
 }
 
 .button-english {
@@ -242,18 +243,19 @@
 }
 
 .definition-text {
-  font-size: 30px;
   line-height: 1;
   color: #000000;
   -webkit-text-stroke: 1px #000000;
 }
 
 .definition-text.english {
+  font-size: 40px;
   font-family: 'EB Garamond', serif;
   margin-top: 40px;
 }
 
 .definition-text.putonghua {
+  font-size: 30px;
   font-family: 'Noto Serif SC', serif;
   margin-bottom: 70px;
 }

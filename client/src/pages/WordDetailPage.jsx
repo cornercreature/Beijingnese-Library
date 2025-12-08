@@ -122,13 +122,13 @@ const WordDetailPage = () => {
         <button onClick={togglePage} className={`toggle-page-button ${showSecondPage ? 'switched' : ''}`}>
           {showSecondPage ? (
             <>
-              <span className="button-chinese">看看例子</span>
-              <span className="button-english">examples</span>
+              <span className="button-chinese">看看词</span>
+              <span className="button-english">term</span>
             </>
           ) : (
             <>
-              <span className="button-english">term</span>
-              <span className="button-chinese">看看词</span>
+              <span className="button-english">examples</span>
+              <span className="button-chinese">看看例子</span>
             </>
           )}
         </button>
@@ -203,7 +203,10 @@ const WordDetailPage = () => {
         {/* Second Page - Examples */}
         <div className="page page-two">
           <div className="examples-page-content">
-            <h2 className="examples-title">Example Usage</h2>
+            <h2 className="examples-title">
+              <div>例句</div>
+              <div>Example Usage</div>
+            </h2>
 
             <div className="examples-list">
               {word.examples && word.examples.length > 0 ? (
@@ -221,7 +224,8 @@ const WordDetailPage = () => {
                 ))
               ) : (
                 <div className="no-examples-message">
-                  No example sentences yet.
+                  <div>暂无例句</div>
+                  <div>No example sentences yet.</div>
                 </div>
               )}
             </div>
