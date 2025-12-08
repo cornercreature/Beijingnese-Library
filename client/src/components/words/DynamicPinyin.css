@@ -58,7 +58,7 @@
 
 /* Hover effect - triggered by word card hover */
 .word-card:hover .character {
-  color: #2c5aa0;
+  color: #9F0000;
 }
 
 .word-card:hover .pinyin-line {
