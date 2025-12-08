@@ -12,6 +12,7 @@ const WordDetailPage = () => {
   const [error, setError] = useState(null);
   const [showSecondPage, setShowSecondPage] = useState(false);
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
+  const [playAnimation, setPlayAnimation] = useState(false);
   const audioRef = useRef(null);
   const containerRef = useRef(null);
 
@@ -38,6 +39,8 @@ const WordDetailPage = () => {
         // API returns { success: true, data: {...} }
         const wordData = response.data || response;
         setWord(wordData);
+        // Trigger animation on initial load
+        setTimeout(() => setPlayAnimation(true), 100);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -47,6 +50,11 @@ const WordDetailPage = () => {
 
     fetchWord();
   }, [id]);
+
+  const handleCharactersClick = () => {
+    setPlayAnimation(false);
+    setTimeout(() => setPlayAnimation(true), 50);
+  };
 
   const togglePage = () => {
     setShowSecondPage(!showSecondPage);
@@ -157,8 +165,29 @@ const WordDetailPage = () => {
             </div>
 
             {/* Chinese Characters - Large */}
-            <div className="chinese-characters">
-              {word.chinese_characters}
+            <div
+              className="chinese-characters"
+              onClick={handleCharactersClick}
+              style={{ cursor: 'pointer' }}
+            >
+              {word.syllables && word.syllables.length > 0 ? (
+                word.syllables
+                  .sort((a, b) => a.position - b.position)
+                  .map((syl, idx) => (
+                    <span
+                      key={idx}
+                      className={`character-detail tone-${syl.tone_number} ${playAnimation ? 'animate-shrink' : ''}`}
+                      style={{
+                        fontSize: syl.tone_number === 0 ? '0.65em' : '1em',
+                        display: 'inline-block'
+                      }}
+                    >
+                      {syl.character}
+                    </span>
+                  ))
+              ) : (
+                word.chinese_characters
+              )}
             </div>
 
             {/* Pinyin */}

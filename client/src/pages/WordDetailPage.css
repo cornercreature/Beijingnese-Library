@@ -157,8 +157,41 @@
   margin: 0;
   padding: 0;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
+}
+
+.character-detail {
+  display: inline-block;
+  transition: font-size 0.3s ease;
+}
+
+/* Shrink animation */
+.character-detail.animate-shrink {
+  animation: shrinkToSize 0.8s ease-out forwards;
+}
+
+@keyframes shrinkToSize {
+  0% {
+    font-size: 240px;
+  }
+  100% {
+    font-size: 1em;
+  }
+}
+
+/* Light tone characters shrink animation */
+.character-detail.tone-0.animate-shrink {
+  animation: shrinkToLightTone 0.8s ease-out forwards;
+}
+
+@keyframes shrinkToLightTone {
+  0% {
+    font-size: 240px;
+  }
+  100% {
+    font-size: 120px;
+  }
 }
 
 /* Pinyin Display */
