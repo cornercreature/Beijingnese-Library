@@ -15,6 +15,21 @@ const WordDetailPage = () => {
   const audioRef = useRef(null);
   const containerRef = useRef(null);
 
+  // Grammar category mapping - English to Chinese
+  const grammarCategoryMap = {
+    'Noun': '名词',
+    'Verb': '动词',
+    'Adjective': '形容词',
+    'Adverb': '副词',
+    'Pronoun': '代词',
+    'Preposition': '介词',
+    'Conjunction': '连词',
+    'Interjection': '感叹词',
+    'Particle': '助词',
+    'Measure Word': '量词',
+    'Number': '数词'
+  };
+
   useEffect(() => {
     const fetchWord = async () => {
       try {
@@ -102,18 +117,18 @@ const WordDetailPage = () => {
         <div className="nav-buttons">
         <button onClick={() => navigate('/')} className={`back-button ${showSecondPage ? 'switched' : ''}`}>
           <span className="button-chinese">返回</span>
-          <span className="button-english">Back</span>
+          <span className="button-english">back</span>
         </button>
         <button onClick={togglePage} className={`toggle-page-button ${showSecondPage ? 'switched' : ''}`}>
           {showSecondPage ? (
             <>
-              <span className="button-chinese">上一页</span>
-              <span className="button-english">previous</span>
+              <span className="button-chinese">看看例子</span>
+              <span className="button-english">examples</span>
             </>
           ) : (
             <>
-              <span className="button-english">next</span>
-              <span className="button-chinese">下一页</span>
+              <span className="button-english">term</span>
+              <span className="button-chinese">看看词</span>
             </>
           )}
         </button>
@@ -127,6 +142,13 @@ const WordDetailPage = () => {
         {/* First Page - Main Word Display */}
         <div className="page page-one">
           <div className="word-content">
+            {/* Grammar Category in Chinese */}
+            {word.grammar_category && (
+              <div className="grammar-tag-chinese">
+                {grammarCategoryMap[word.grammar_category] || word.grammar_category}
+              </div>
+            )}
+
             {/* Chinese (Putonghua) Definition */}
             <div className="definition-item definition-item-chinese">
               <div className="definition-text putonghua">
