@@ -2,15 +2,15 @@
   min-height: 100vh;
   background: #F4F4F4;
   position: relative;
-  padding-top: 83.7px;
+  padding-top: 74px;
 }
 
 /* Scroll Sidebars */
 .scroll-sidebar {
   position: fixed;
-  top: 10px;
-  padding:0px 0px 40px 0px;
-  height: 80vh;
+  top: 200px;
+  padding:0px 0px 0px 0px;
+  height: 70vh;
   display: flex;
   align-items: center;
   z-index: 100;
@@ -19,28 +19,30 @@
 
 .scroll-sidebar-left {
   left: 0;
-  padding-left: 1rem;
+  padding-left: 10px;
 }
 
 .scroll-sidebar-right {
   right: 0;
-  padding-right: 1rem;
+  padding-right: 10px;
 }
 
 .sidebar-nav {
-  padding:0px 10px 80px 10px;
+  padding:0px 0px 0px 0px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   pointer-events: auto;
-  height: 100vh;
+  height: 60vh;
+  position: relative;
+  z-index: 2;
 }
 
 .sidebar-nav-item {
   background: none;
   border: none;
-  font-size: 8px;
-  color: #666;
+  font-size: 14px;
+  color: #000000;
   cursor: pointer;
   padding: 0;
   transition: color 0.2s;
@@ -48,33 +50,89 @@
   letter-spacing: 0.05em;
   writing-mode: vertical-rl;
   text-orientation: mixed;
+  position: relative;
+  z-index: 2;
 }
 
 .scroll-sidebar-left .sidebar-nav-item {
   font-family: 'Noto Serif SC', serif;
+  font-size: 14px;
 }
 
 .scroll-sidebar-right .sidebar-nav-item {
   font-family: 'EB Garamond', serif;
+  font-size: 12px;
+}
+
+/* Individual English category adjustments */
+.sidebar-nav-item.english-all {
+  padding: 0;
+}
+
+.sidebar-nav-item.english-noun {
+  padding-top: 14px;
+}
+
+.sidebar-nav-item.english-verb {
+  padding-top: 14px;
+}
+
+.sidebar-nav-item.english-adjective {
+  padding-top:8px;
+}
+
+.sidebar-nav-item.english-saying {
+  padding-top:24px;
+}
+
+.sidebar-nav-item.english-images {
+  padding: 0;
+}
+
+/* Individual Chinese category adjustments */
+.sidebar-nav-item.chinese-all {
+  padding: 0;
+}
+
+.sidebar-nav-item.chinese-noun {
+  padding: 0px;
+}
+
+.sidebar-nav-item.chinese-verb {
+  padding: 0;
+}
+
+.sidebar-nav-item.chinese-adjective {
+  padding: 0;
+}
+
+.sidebar-nav-item.chinese-saying {
+  padding: 0;
+}
+
+.sidebar-nav-item.chinese-picture {
+  padding: 0;
 }
 
 .sidebar-nav-item:hover {
-  color: #2c5aa0;
+  color: #6F0000;
 }
 
 .sidebar-nav-item.active {
-  color: #2c5aa0;
+  color: #F4F4F4;
   font-weight: 600;
 }
 
 .scroll-indicator {
   position: absolute;
-  width: 2px;
-  height: 40px;
+  width: 25px;
+  height: 90px;
   background-color: #000;
   top: 0;
-  transition: top 0.1s ease-out;
+  transform: translateY(17px); /* Adjust this value to offset the indicator position */
+  transition: top 0.1s ease-out, height 0.1s ease-out;
   pointer-events: none;
+  z-index: 1;
 }
 
 .scroll-sidebar-left .scroll-indicator {
@@ -89,11 +147,12 @@
   max-width: 1400px;
   margin: 0 auto;
   padding: 2rem;
+  padding-bottom: 80vh;
 }
 
 .category-section {
   margin-bottom: 4rem;
-  scroll-margin-top: 113.3px;
+  scroll-margin-top: 105.8px;
 }
 
 .category-title {

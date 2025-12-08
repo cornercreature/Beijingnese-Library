@@ -37,21 +37,24 @@ const GalleryPage = () => {
 
       setActiveSection(currentSection);
 
-      const galleryContent = document.querySelector('.gallery-content');
-      const header = document.querySelector('.gallery-header');
+      // Position indicator at the active category button
+      const activeIndex = sections.indexOf(currentSection);
 
-      if (galleryContent && header) {
-        const contentStart = header.offsetHeight;
-        const contentHeight = galleryContent.offsetHeight;
-        const totalScrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
-        const scrollPercentage = window.scrollY / totalScrollableHeight;
-        const indicatorPosition = contentStart + (scrollPercentage * contentHeight);
+      if (activeIndex !== -1) {
+        const sidebarNav = document.querySelector('.sidebar-nav');
+        if (sidebarNav) {
+          const navItems = sidebarNav.querySelectorAll('.sidebar-nav-item');
+          if (navItems[activeIndex]) {
+            const activeButton = navItems[activeIndex];
+            const buttonOffsetTop = activeButton.offsetTop;
 
-        if (leftIndicatorRef.current) {
-          leftIndicatorRef.current.style.top = `${indicatorPosition}px`;
-        }
-        if (rightIndicatorRef.current) {
-          rightIndicatorRef.current.style.top = `${indicatorPosition}px`;
+            if (leftIndicatorRef.current) {
+              leftIndicatorRef.current.style.top = `${buttonOffsetTop}px`;
+            }
+            if (rightIndicatorRef.current) {
+              rightIndicatorRef.current.style.top = `${buttonOffsetTop}px`;
+            }
+          }
         }
       }
     };
@@ -127,7 +130,7 @@ const GalleryPage = () => {
           <nav className="sidebar-nav">
             <button
               onClick={() => scrollToSection('all-words')}
-              className={`sidebar-nav-item ${activeSection === 'all-words' ? 'active' : ''}`}
+              className={`sidebar-nav-item chinese-all ${activeSection === 'all-words' ? 'active' : ''}`}
             >
               {categoryLabels['all-words'].chinese}
             </button>
@@ -138,7 +141,7 @@ const GalleryPage = () => {
                 <button
                   key={category}
                   onClick={() => scrollToSection(category.toLowerCase())}
-                  className={`sidebar-nav-item ${activeSection === category.toLowerCase() ? 'active' : ''}`}
+                  className={`sidebar-nav-item chinese-${category.toLowerCase()} ${activeSection === category.toLowerCase() ? 'active' : ''}`}
                 >
                   {categoryLabels[category].chinese}
                 </button>
@@ -153,7 +156,7 @@ const GalleryPage = () => {
           <nav className="sidebar-nav">
             <button
               onClick={() => scrollToSection('all-words')}
-              className={`sidebar-nav-item ${activeSection === 'all-words' ? 'active' : ''}`}
+              className={`sidebar-nav-item english-all ${activeSection === 'all-words' ? 'active' : ''}`}
             >
               {categoryLabels['all-words'].english}
             </button>
@@ -164,7 +167,7 @@ const GalleryPage = () => {
                 <button
                   key={category}
                   onClick={() => scrollToSection(category.toLowerCase())}
-                  className={`sidebar-nav-item ${activeSection === category.toLowerCase() ? 'active' : ''}`}
+                  className={`sidebar-nav-item english-${category.toLowerCase()} ${activeSection === category.toLowerCase() ? 'active' : ''}`}
                 >
                   {categoryLabels[category].english}
                 </button>

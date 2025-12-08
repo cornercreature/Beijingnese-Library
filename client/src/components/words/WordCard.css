@@ -1,9 +1,9 @@
 .word-card {
   display: block;
   background: transparent;
-  border: none;
-  border-radius: 12px;
-  padding: 2rem;
+  border: 1px solid transparent;
+  border-radius: 0px;
+  padding: 24px 20px 40px 20px;
   text-decoration: none;
   color: inherit;
   transition: all 0.3s ease;
@@ -13,6 +13,7 @@
 
 .word-card:hover {
   transform: translateY(-2px);
+  border: 1px solid #6F0000;
 }
 
 .word-card-content {

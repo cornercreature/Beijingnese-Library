@@ -45,11 +45,11 @@
   font-size: 30px;
   font-variant: small-caps;
   font-weight: 500;
-  color: #000000;
+  color: #6F0000;
   letter-spacing: 0.05em;
   opacity: 0;
   transition: opacity 0.3s ease;
-  -webkit-text-stroke: 0.5px #000000;
+  -webkit-text-stroke: 0.5px #6F0000;
 }
 
 .pinyin-syllable {
