@@ -52,6 +52,7 @@
   text-orientation: mixed;
   position: relative;
   z-index: 2;
+  -webkit-text-stroke: 0.4px #000000;
 }
 
 .scroll-sidebar-left .sidebar-nav-item {
@@ -121,6 +122,7 @@
 .sidebar-nav-item.active {
   color: #F4F4F4;
   font-weight: 600;
+  -webkit-text-stroke: 0.4px #f4f4f4;
 }
 
 .scroll-indicator {
