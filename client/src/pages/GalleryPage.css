@@ -2,7 +2,7 @@
   min-height: 100vh;
   background: #F4F4F4;
   position: relative;
-  padding-top: 10vh;
+  padding-top: 83.7px;
 }
 
 /* Scroll Sidebars */
@@ -97,14 +97,15 @@
 }
 
 .category-title {
-  font-size: 2rem;
+  font-size:18px;
   font-weight: 600;
   color: #F4F4F4;
   background-color: #000000;
-  margin: 0 0 0px 0;
-  padding: 8px;
+  margin: 0 -16px 20px -16px;
+  padding: 8px 0px 6px 0px;
   border-bottom: 1px solid #000000;
   line-height: 0.8;
+  -webkit-text-stroke: 0.4px #F4F4F4;
 }
 
 .category-title {
@@ -112,7 +113,7 @@
 }
 
 .category-english {
-  font-size: 1.2em;
+  font-size: 16px;
   font-family: 'EB Garamond', serif;
   font-variant: small-caps;
   font-weight: 500;
