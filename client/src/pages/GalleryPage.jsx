@@ -103,12 +103,12 @@ const GalleryPage = () => {
   }
 
   const categoryLabels = {
-    'all-words': { chinese: '全部', english: 'All' },
-    'Noun': { chinese: '名词', english: 'Nouns' },
-    'Verb': { chinese: '动词', english: 'Verbs' },
-    'Adjective': { chinese: '形容词', english: 'Adjectives' },
-    'Sayings': { chinese: '说法', english: 'Sayings' },
-    'Images': { chinese: '图片', english: 'Pictures' }
+    'all-words': { chinese: '全部', english: 'all' },
+    'Noun': { chinese: '名词', english: 'noun' },
+    'Verb': { chinese: '动词', english: 'verb' },
+    'Adjective': { chinese: '形容词', english: 'adjective' },
+    'Sayings': { chinese: '说法', english: 'saying' },
+    'Images': { chinese: '图片', english: 'picture' }
   };
 
   const scrollToSection = (sectionId) => {
@@ -178,7 +178,8 @@ const GalleryPage = () => {
         {/* All Words Section */}
         <section className="category-section" id="all-words">
           <h2 className="category-title">
-            {categoryLabels['all-words'].chinese}<br/>{categoryLabels['all-words'].english}
+            <span className="category-chinese">{categoryLabels['all-words'].chinese}</span><br/>
+            <span className="category-english">{categoryLabels['all-words'].english}</span>
           </h2>
           <div className="words-grid">
             {allWords.map(word => (
@@ -195,7 +196,8 @@ const GalleryPage = () => {
           return (
             <section key={category} className="category-section" id={category.toLowerCase()}>
               <h2 className="category-title">
-                {categoryLabels[category].chinese}<br/>{categoryLabels[category].english}
+                <span className="category-chinese">{categoryLabels[category].chinese}</span><br/>
+                <span className="category-english">{categoryLabels[category].english}</span>
               </h2>
               <div className="words-grid">
                 {categoryWords.map(word => (

@@ -96,13 +96,18 @@
   font-family: 'Noto Serif SC', serif;
 }
 
+.small p {
+  font-size: 18px;
+  -webkit-text-stroke: 0.8px black;
+}
+
 .app-header p {
-  margin: 0px;
+  margin: -5px;
 }
 
 .add-button {
   padding: 0px;
-  font-size: 1rem;
+  font-size: 18px;
   cursor: pointer;
   border: none;
   background: transparent;

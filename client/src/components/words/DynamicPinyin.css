@@ -13,7 +13,7 @@
 .characters {
   display: flex;
   align-items: baseline;
-  gap: 0.2rem;
+  gap: 0px;
   font-family: 'NZGR Kangxi', serif;
   font-size: 74px;
   font-weight: 500;
@@ -36,13 +36,17 @@
 
 /* Pinyin display */
 .pinyin-line {
+  margin:-15px;
+  padding:0px 0px;
   display: flex;
   align-items: center;
-  gap: 0.3rem;
+  gap: 0px 0px;
   font-family: 'EB Garamond', serif;
-  font-size: 1.2rem;
-  color: #666;
+  font-size: 30px;
+  color: #000000;
   letter-spacing: 0.05em;
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 .pinyin-syllable {
@@ -52,6 +56,10 @@
 /* Hover effect - triggered by word card hover */
 .word-card:hover .character {
   color: #2c5aa0;
+}
+
+.word-card:hover .pinyin-line {
+  opacity: 1;
 }
 
 /* Responsive sizing */
