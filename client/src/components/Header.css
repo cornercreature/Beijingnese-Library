@@ -11,7 +11,7 @@
 
 .app-header {
   position: fixed;
-  top: -100vh;
+  top: -110vh;
   left: 0;
   right: 0;
   z-index: 1001;
@@ -36,19 +36,10 @@
   top: 0;
 }
 
-.app-header h1 {
-  font-size: 2.5rem;
+.header-logo {
+  max-width: 200px;
+  height: auto;
   margin: 0 0 0.5rem 0;
-  color: #2c5aa0;
-  font-family: 'Noto Serif SC', serif;
-}
-
-.app-header h2 {
-  font-size: 1.5rem;
-  margin: 0;
-  color: #666;
-  font-weight: 400;
-  font-family: 'EB Garamond', serif;
 }
 
 .dropdown-menu {
@@ -63,16 +54,17 @@
 }
 
 .header-content {
+  margin: 0px 20px;
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  display: flex;
-  flex-direction: column;
+  display: inline-flex;
+  flex-direction: row;
   align-items: center;
   padding: 10px;
-  height: 20vh;
-  justify-content: center;
+  height: 9vh;
+  justify-content: space-between;
 }
 
 .add-button {

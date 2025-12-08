@@ -116,6 +116,14 @@ const WordDetailPage = () => {
         {/* First Page - Main Word Display */}
         <div className="page page-one">
           <div className="word-content">
+            {/* Chinese (Putonghua) Definition */}
+            <div className="definition-item definition-item-chinese">
+              <div className="definition-label">普通话</div>
+              <div className="definition-text putonghua">
+                {word.putonghua_definition}
+              </div>
+            </div>
+
             {/* Chinese Characters - Large */}
             <div className="chinese-characters">
               {word.chinese_characters}
@@ -144,19 +152,12 @@ const WordDetailPage = () => {
               </div>
             )}
 
-            {/* Definitions */}
+            {/* English Definition */}
             <div className="definitions">
-              <div className="definition-item">
+              <div className="definition-item definition-item-english">
                 <div className="definition-label">English</div>
                 <div className="definition-text english">
                   {word.english_definition}
-                </div>
-              </div>
-
-              <div className="definition-item">
-                <div className="definition-label">普通话</div>
-                <div className="definition-text putonghua">
-                  {word.putonghua_definition}
                 </div>
               </div>
             </div>

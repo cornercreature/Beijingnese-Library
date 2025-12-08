@@ -37,8 +37,7 @@ const Header = () => {
         </div>
 
         <div className="header-content">
-          <h1>北京话词库</h1>
-          <h2>Beijingnese Library</h2>
+          <img src="/images/logo-2.png" alt="北京话词库 Beijingnese Library" className="header-logo" />
           <button onClick={toggleDropdown} className="add-button">
             Add
           </button>

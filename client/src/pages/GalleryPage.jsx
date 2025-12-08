@@ -177,7 +177,9 @@ const GalleryPage = () => {
       <div className="gallery-content">
         {/* All Words Section */}
         <section className="category-section" id="all-words">
-          <h2 className="category-title">All Words</h2>
+          <h2 className="category-title">
+            {categoryLabels['all-words'].chinese}<br/>{categoryLabels['all-words'].english}
+          </h2>
           <div className="words-grid">
             {allWords.map(word => (
               <WordCard key={word.id} word={word} />
@@ -192,7 +194,9 @@ const GalleryPage = () => {
 
           return (
             <section key={category} className="category-section" id={category.toLowerCase()}>
-              <h2 className="category-title">{category}</h2>
+              <h2 className="category-title">
+                {categoryLabels[category].chinese}<br/>{categoryLabels[category].english}
+              </h2>
               <div className="words-grid">
                 {categoryWords.map(word => (
                   <WordCard key={word.id} word={word} />

@@ -4,6 +4,7 @@
 body {
   margin: 0;
   font-family: 'EB Garamond', serif;
+  font-variant: small-caps;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: #F4F4F4;
