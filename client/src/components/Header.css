@@ -74,7 +74,7 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: 10px;
+  padding: 10px 10px 10px 10px;
   height: 9vh;
   justify-content: space-between;
 }
@@ -82,7 +82,7 @@
 .header-logo {
   position: fixed;
   left: 50%;
-  top: 20px;
+  top: 15px;
   transform: translateX(-50%);
   z-index: 1002;
 }

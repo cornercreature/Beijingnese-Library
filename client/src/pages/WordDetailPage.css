@@ -9,30 +9,73 @@
   align-items: center;
 }
 
-/* Navigation Buttons */
+/* Navigation Buttons - Side Positioned */
 .nav-buttons {
-  width: 100%;
-  max-width: 800px;
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 2rem;
+  display: visible;
 }
 
 .back-button,
 .toggle-page-button {
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
-  border: 2px solid #333;
-  background-color: white;
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 1rem 0.5rem;
+  background-color: #000000;
+  color: #F4F4F4;
+  border: none;
   cursor: pointer;
-  border-radius: 8px;
-  transition: all 0.3s ease;
+  transition: all 0.2s;
+  z-index: 100;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  height: 200px;
+}
+
+.back-button {
+  left: 0;
+  padding:5px 0px 5px 0px;
+}
+
+.toggle-page-button {
+  right: 0;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Switch button positions on second page */
+.back-button.switched {
+  left: auto;
+  right: 0;
+}
+
+.toggle-page-button.switched {
+  right: auto;
+  left: 0;
 }
 
 .back-button:hover,
 .toggle-page-button:hover {
-  background-color: #333;
-  color: white;
+  background-color: #6F0000;
+}
+
+.button-chinese {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 32px;
+  -webkit-text-stroke: 0.4px #F4F4F4;
+  padding: 0px 0px 0px 0px;
+  margin:0px -5px 0px -5px;
+}
+
+.button-english {
+  font-family: 'EB Garamond', serif;
+  font-size: 20px;
+  font-variant: small-caps;
+  -webkit-text-stroke: 0.4px #F4F4F4;
+  padding: 0;
 }
 
 /* Two-page sliding container */

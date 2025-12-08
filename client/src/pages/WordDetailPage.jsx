@@ -80,7 +80,7 @@ const WordDetailPage = () => {
     return (
       <div className="word-detail-page">
         <div className="error">Error: {error}</div>
-        <button onClick={() => navigate('/')}>← Back to Gallery</button>
+        <button onClick={() => navigate('/')}>← back to gallery</button>
       </div>
     );
   }
@@ -89,7 +89,7 @@ const WordDetailPage = () => {
     return (
       <div className="word-detail-page">
         <div className="error">Word not found</div>
-        <button onClick={() => navigate('/')}>← Back to Gallery</button>
+        <button onClick={() => navigate('/')}>← back to gallery</button>
       </div>
     );
   }
@@ -100,11 +100,22 @@ const WordDetailPage = () => {
       <div className="word-detail-page">
         {/* Navigation buttons */}
         <div className="nav-buttons">
-        <button onClick={() => navigate('/')} className="back-button">
-          ← Back
+        <button onClick={() => navigate('/')} className={`back-button ${showSecondPage ? 'switched' : ''}`}>
+          <span className="button-chinese">返回</span>
+          <span className="button-english">Back</span>
         </button>
-        <button onClick={togglePage} className="toggle-page-button">
-          {showSecondPage ? '← Previous' : 'Next →'}
+        <button onClick={togglePage} className={`toggle-page-button ${showSecondPage ? 'switched' : ''}`}>
+          {showSecondPage ? (
+            <>
+              <span className="button-chinese">上一页</span>
+              <span className="button-english">previous</span>
+            </>
+          ) : (
+            <>
+              <span className="button-english">next</span>
+              <span className="button-chinese">下一页</span>
+            </>
+          )}
         </button>
       </div>
 
@@ -118,7 +129,6 @@ const WordDetailPage = () => {
           <div className="word-content">
             {/* Chinese (Putonghua) Definition */}
             <div className="definition-item definition-item-chinese">
-              <div className="definition-label">普通话</div>
               <div className="definition-text putonghua">
                 {word.putonghua_definition}
               </div>
@@ -155,7 +165,6 @@ const WordDetailPage = () => {
             {/* English Definition */}
             <div className="definitions">
               <div className="definition-item definition-item-english">
-                <div className="definition-label">English</div>
                 <div className="definition-text english">
                   {word.english_definition}
                 </div>
