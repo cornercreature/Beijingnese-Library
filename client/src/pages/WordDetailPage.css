@@ -180,6 +180,7 @@
   color: #888;
   margin-bottom: 0.5rem;
   letter-spacing: 0.1em;
+  font-family: 'Noto Serif SC', serif;
 }
 
 .definition-text {
@@ -224,6 +225,7 @@
   color: #333;
   text-align: center;
   margin-bottom: 1rem;
+  font-family: 'Noto Serif SC', serif;
 }
 
 .examples-list {

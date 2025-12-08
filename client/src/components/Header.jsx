@@ -37,10 +37,14 @@ const Header = () => {
         </div>
 
         <div className="header-content">
+          <div className="small"id="aboutus"><p>关于我们</p><p>about us</p></div>
           <img src="/images/logo-2.png" alt="北京话词库 Beijingnese Library" className="header-logo" />
-          <button onClick={toggleDropdown} className="add-button">
-            Add
-          </button>
+          <div className="directinteraction">
+          <div onClick={toggleDropdown} className="small add-button" id="addword">
+            <p>添加</p><p>add</p>
+          </div>
+          <div className="small" id="share"><p>分享</p><p>share</p></div>
+          </div>
         </div>
       </header>
     </>
