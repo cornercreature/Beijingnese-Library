@@ -127,18 +127,179 @@
 .dropdown-item {
   padding: 1rem 2rem;
   font-size: 1.5rem;
-  font-weight: 500;
-  font-family: 'EB Garamond', serif;
-  background: white;
-  color: #6f0000;
-  border: 2px solid #6f0000;
-  border-radius: 8px;
+  background: #000000;
+  color: #f4f4f4;
+  border: none;
+  border-radius: 0px;
   cursor: pointer;
-  transition: all 0.2s;
   white-space: nowrap;
 }
 
-.dropdown-item:hover {
-  background: #6f0000;
-  color: white;
+.dropdown-item div:first-child {
+  font-family: 'Noto Serif SC', serif;
+  font-weight: 400;
+}
+
+.dropdown-item div:last-child {
+  font-family: 'EB Garamond', serif;
+  font-variant: small-caps;
+  font-weight: 500;
+}
+
+/* About Us Panel */
+.about-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 998;
+  cursor: pointer;
+}
+
+.about-panel {
+  position: fixed;
+  top: -100vh;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #f4f4f4;
+  z-index: 999;
+  transition: top 0.5s ease;
+}
+
+.about-panel.open {
+  top: 0;
+}
+
+.about-content {
+  padding: 3rem;
+  position: relative;
+}
+
+.close-about {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: transparent;
+  border: none;
+  font-size: 3rem;
+  cursor: pointer;
+  color: #000000;
+  line-height: 1;
+  padding: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.close-about:hover {
+  opacity: 0.7;
+}
+
+.about-content h2 {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  color: #000000;
+  text-align: center;
+}
+
+.about-content p {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 1.2rem;
+  line-height: 1.8;
+  margin-bottom: 1rem;
+  color: #000000;
+  text-align: center;
+}
+
+#aboutus {
+  cursor: pointer;
+}
+
+#aboutus:hover {
+  opacity: 0.7;
+}
+
+/* Share Panel */
+.share-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 998;
+  cursor: pointer;
+}
+
+.share-panel {
+  position: fixed;
+  top: -100vh;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #f4f4f4;
+  z-index: 999;
+  transition: top 0.5s ease;
+}
+
+.share-panel.open {
+  top: 0;
+}
+
+.share-content {
+  padding: 3rem;
+  position: relative;
+}
+
+.close-share {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: transparent;
+  border: none;
+  font-size: 3rem;
+  cursor: pointer;
+  color: #000000;
+  line-height: 1;
+  padding: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.close-share:hover {
+  opacity: 0.7;
+}
+
+.share-content h2 {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  color: #000000;
+  text-align: center;
+}
+
+.share-content p {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 1.2rem;
+  line-height: 1.8;
+  margin-bottom: 1rem;
+  color: #000000;
+  text-align: center;
+}
+
+#share {
+  cursor: pointer;
+}
+
+#share:hover {
+  opacity: 0.7;
 }
