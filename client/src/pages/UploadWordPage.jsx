@@ -167,12 +167,6 @@ const UploadWordPage = () => {
       <h1>上传</h1>
       <h2>Upload</h2>
 
-      {success && (
-        <div className="success-message">
-          Word created successfully! Redirecting to gallery...
-        </div>
-      )}
-
       {error && (
         <div className="error-message">
           {error}
@@ -218,7 +212,7 @@ const UploadWordPage = () => {
                 type="text"
                 value={input.syllable}
                 onChange={(e) => handleCharacterChange(index, 'syllable', e.target.value)}
-                placeholder="pinyin"
+                placeholder="拼音"
                 className="pinyin-input"
               />
 
@@ -249,7 +243,7 @@ const UploadWordPage = () => {
 
         {/* Grammar Category */}
         <div className="form-group">
-          <label>Grammar Category *</label>
+          <label>词性 / Grammar Category *</label>
           <select
             name="grammarCategory"
             value={formData.grammarCategory}
@@ -264,12 +258,12 @@ const UploadWordPage = () => {
 
         {/* Chinese Definition */}
         <div className="form-group">
-          <label>Chinese/Putonghua Definition *</label>
+          <label>解释下意思 *</label>
           <textarea
             name="chineseDefinition"
             value={formData.chineseDefinition}
             onChange={handleInputChange}
-            placeholder="普通话定义"
+            placeholder="意思写这儿"
             required
             rows={3}
           />
@@ -277,12 +271,12 @@ const UploadWordPage = () => {
 
         {/* English Definition */}
         <div className="form-group">
-          <label>English Definition *</label>
+          <label>给个英文定义</label>
           <textarea
             name="englishDefinition"
             value={formData.englishDefinition}
             onChange={handleInputChange}
-            placeholder="English definition"
+            placeholder="英文写这儿"
             required
             rows={3}
           />
@@ -290,24 +284,24 @@ const UploadWordPage = () => {
 
         {/* Example Sentence (Optional) */}
         <div className="form-group">
-          <label>Example Sentence (Optional)</label>
+          <label>再给个例子</label>
           <textarea
             name="exampleSentence"
             value={formData.exampleSentence}
             onChange={handleInputChange}
-            placeholder="例句"
+            placeholder="例子放这儿"
             rows={2}
           />
         </div>
 
         {/* Example Translation (Optional) */}
         <div className="form-group">
-          <label>Example Translation (Optional)</label>
+          <label>最后来给例子翻译一下</label>
           <textarea
             name="exampleTranslation"
             value={formData.exampleTranslation}
             onChange={handleInputChange}
-            placeholder="Example translation"
+            placeholder="英文翻译放这儿"
             rows={2}
           />
         </div>
@@ -325,14 +319,14 @@ const UploadWordPage = () => {
             disabled={loading}
             className="submit-button"
           >
-            {loading ? 'Creating...' : 'Create Word'}
+            {loading ? '创建中...' : '确认添加'}
           </button>
           <button
             type="button"
             onClick={() => navigate('/')}
             className="cancel-button"
           >
-            Cancel
+            取消
           </button>
         </div>
       </form>
