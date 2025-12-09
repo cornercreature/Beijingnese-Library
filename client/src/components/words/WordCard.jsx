@@ -31,13 +31,6 @@ const WordCard = ({ word }) => {
 
         {word.audio_file_path && (
           <>
-            <button
-              className="audio-indicator"
-              onClick={handleAudioClick}
-              title="Click to play audio"
-            >
-              🔊
-            </button>
             <audio
               ref={audioRef}
               src={`http://localhost:3001${word.audio_file_path}`}
