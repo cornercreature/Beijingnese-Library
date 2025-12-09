@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import wordService from '../services/wordService';
 import Header from '../components/Header';
+import html2canvas from 'html2canvas';
 import './WordDetailPage.css';
 
 const WordDetailPage = () => {
@@ -75,6 +76,32 @@ const WordDetailPage = () => {
 
   const handleAudioEnded = () => {
     setIsPlayingAudio(false);
+  };
+
+  const handleExportToPng = async (elementId, filename) => {
+    const element = document.getElementById(elementId);
+    if (!element) return;
+
+    try {
+      const canvas = await html2canvas(element, {
+        backgroundColor: '#ffffff',
+        scale: 2, // Higher quality
+        logging: false,
+        useCORS: true
+      });
+
+      // Convert canvas to blob and download
+      canvas.toBlob((blob) => {
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = filename;
+        link.click();
+        URL.revokeObjectURL(url);
+      }, 'image/png');
+    } catch (error) {
+      console.error('Error exporting to PNG:', error);
+    }
   };
 
   // Build pinyin display with tone marks
@@ -240,15 +267,26 @@ const WordDetailPage = () => {
             <div className="examples-list">
               {word.examples && word.examples.length > 0 ? (
                 word.examples.map((example, idx) => (
-                  <div key={idx} className="example-box">
-                    <div className="example-chinese">
-                      {example.chinese_sentence}
-                    </div>
-                    {example.english_translation && (
-                      <div className="example-english">
-                        {example.english_translation}
+                  <div key={idx} className="example-wrapper">
+                    <div id={`example-card-${idx}`} className="example-box">
+                      <button
+                        onClick={() => handleExportToPng(
+                          `example-card-${idx}`,
+                          `${word.chinese_characters}-example-${idx + 1}.png`
+                        )}
+                        className="export-button"
+                      >
+                        Export as PNG
+                      </button>
+                      <div className="example-chinese">
+                        {example.chinese_sentence}
                       </div>
-                    )}
+                      {example.english_translation && (
+                        <div className="example-english">
+                          {example.english_translation}
+                        </div>
+                      )}
+                    </div>
                   </div>
                 ))
               ) : (
