@@ -303,3 +303,37 @@
 #share:hover {
   opacity: 0.7;
 }
+
+/* Download Envelope Button */
+.download-envelope-button {
+  display: inline-block;
+  margin-top: 2rem;
+  padding: 0.75rem 2rem;
+  font-size: 1.1rem;
+  background: #000000 !important;
+  color: #f4f4f4 !important;
+  border: none;
+  border-radius: 0px !important;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s;
+  box-shadow: none !important;
+}
+
+.download-envelope-button div:first-child {
+  font-family: 'Noto Serif SC', serif;
+  font-weight: 400;
+  -webkit-text-stroke: 0.5px #f4f4f4;
+}
+
+.download-envelope-button div:last-child {
+  font-family: 'EB Garamond', serif;
+  font-variant: small-caps;
+  font-weight: 500;
+  -webkit-text-stroke: 0.5px #f4f4f4;
+}
+
+.download-envelope-button:hover {
+  background: #6F0000 !important;
+  box-shadow: none !important;
+}

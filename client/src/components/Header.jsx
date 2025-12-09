@@ -61,6 +61,15 @@ const Header = () => {
           <p>
             Share the Beijingnese Library to help more people learn about the Beijing dialect.
           </p>
+
+          <a
+            href="/envelope template.pdf"
+            download="beijingnese-envelope-template.pdf"
+            className="download-envelope-button"
+          >
+            <div>下载信封模板</div>
+            <div>download envelope template</div>
+          </a>
         </div>
       </div>
 
