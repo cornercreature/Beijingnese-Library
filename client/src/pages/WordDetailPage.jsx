@@ -251,6 +251,14 @@ const WordDetailPage = () => {
       >
         {/* First Page - Main Word Display */}
         <div className="page page-one">
+          {/* Sound Icon - Top Right */}
+          <img
+            src="/soundicon.png"
+            alt="Play sound"
+            className={`sound-icon ${!word.audio_file_path ? 'disabled' : ''}`}
+            onClick={word.audio_file_path ? handleAudioPlay : null}
+          />
+
           <div className="word-content">
             {/* Grammar Category in Chinese */}
             {word.grammar_category && (
