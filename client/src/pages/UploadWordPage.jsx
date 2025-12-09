@@ -17,7 +17,6 @@ const UploadWordPage = () => {
   });
   const [audioBlob, setAudioBlob] = useState(null);
   const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const grammarCategories = ['Noun', 'Verb', 'Adjective', 'Sayings'];
@@ -134,7 +133,6 @@ const UploadWordPage = () => {
         throw new Error(errorData.message || 'Failed to create word');
       }
 
-      setSuccess(true);
       // Reset form
       setCharacterInputs([{ character: '', syllable: '', toneNumber: 1, position: 0 }]);
       setFormData({
@@ -160,8 +158,9 @@ const UploadWordPage = () => {
 
   return (
     <div className="upload-word-page">
-      <button onClick={() => navigate('/')} className="back-to-gallery-button">
-        ← Back to Gallery
+      <button onClick={() => navigate('/')} className="back-button">
+        <span className="button-chinese">返回</span>
+        <span className="button-english">back</span>
       </button>
 
       <h1>上传</h1>

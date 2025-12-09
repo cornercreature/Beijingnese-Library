@@ -107,12 +107,12 @@ const AudioRecorder = ({ onRecordingComplete, onRecordingClear }) => {
 
   return (
     <div className="audio-recorder">
-      <h3>🎤 Audio Recording</h3>
+      <h3>录音</h3>
 
       {/* Recording Status */}
       {isRecording && (
         <div className="recording-status">
-          ⏺ Recording... {formatTime(recordingTime)}
+          录音中... {formatTime(recordingTime)}
         </div>
       )}
 
@@ -124,7 +124,7 @@ const AudioRecorder = ({ onRecordingComplete, onRecordingClear }) => {
             onClick={startRecording}
             className="audio-button start-recording-button"
           >
-            🎤 Start Recording
+            开始录音
           </button>
         )}
 
@@ -134,7 +134,7 @@ const AudioRecorder = ({ onRecordingComplete, onRecordingClear }) => {
             onClick={stopRecording}
             className="audio-button stop-recording-button"
           >
-            ⏹ Stop Recording
+            停止录音
           </button>
         )}
 
@@ -145,7 +145,7 @@ const AudioRecorder = ({ onRecordingComplete, onRecordingClear }) => {
               onClick={togglePlayback}
               className="audio-button play-button"
             >
-              {isPlaying ? '⏸ Pause' : '▶ Play Recording'}
+              {isPlaying ? '暂停' : '播放录音'}
             </button>
 
             <button
@@ -153,7 +153,7 @@ const AudioRecorder = ({ onRecordingComplete, onRecordingClear }) => {
               onClick={clearRecording}
               className="audio-button delete-button"
             >
-              🗑️ Delete & Re-record
+              删除并重录
             </button>
           </>
         )}
@@ -172,14 +172,14 @@ const AudioRecorder = ({ onRecordingComplete, onRecordingClear }) => {
       {/* Recording Info */}
       {recordedAudio && (
         <div className="recording-info">
-          ✓ Recording saved ({formatTime(recordingTime)})
+          录音已保存 ({formatTime(recordingTime)})
         </div>
       )}
 
       {/* Help Text */}
       {!isRecording && !recordedAudio && (
         <p className="help-text">
-          Click "Start Recording" to record audio pronunciation
+          点击"开始录音"来录制发音
         </p>
       )}
     </div>
