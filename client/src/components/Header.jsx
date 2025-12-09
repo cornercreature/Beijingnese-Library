@@ -40,12 +40,22 @@ const Header = () => {
       <div className={`about-panel ${isAboutOpen ? 'open' : ''}`}>
         <div className="about-content">
           <button className="close-about" onClick={toggleAbout}>×</button>
-          <h2>关于我们 / About Us</h2>
+          <h2>关于我们<br></br>about us</h2>
           <p>
-            北京话词库是一个致力于保护和推广北京话的在线平台。
+            北京话库 
+是一个收集和记录北京话的双语项目。<br></br>
+我们希望通过我们的网站让更多国内 <br></br>
+以及国外的人听到北京话。
+<br></br><br></br>
+希望这次阅读能为您带来些北京的气息。
+
           </p>
           <p>
-            The Beijingnese Library is an online platform dedicated to preserving and promoting the Beijing dialect.
+            běi jīng huà kù 
+is a bilingual initiative for<br></br>the collection and documentation of <br></br>beijing hua, the beijing local dialect. 
+<br></br><br></br>
+we hope this brings you closer to beijing. 
+
           </p>
         </div>
       </div>
@@ -56,10 +66,10 @@ const Header = () => {
           <button className="close-share" onClick={toggleShare}>×</button>
           <h2>分享 / Share</h2>
           <p>
-            分享北京话词库，让更多人了解和学习北京话。
+            下载信封，把北京话发给身边的人。
           </p>
           <p>
-            Share the Beijingnese Library to help more people learn about the Beijing dialect.
+            put together a package to share beijing hua!
           </p>
 
           <a
