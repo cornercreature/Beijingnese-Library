@@ -125,6 +125,42 @@ router.post(
 
 /**
  * @swagger
+ * /api/words/{id}/audio:
+ *   post:
+ *     summary: Upload audio for an existing word
+ *     tags: [Words]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Word ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - audio
+ *             properties:
+ *               audio:
+ *                 type: string
+ *                 format: binary
+ *     responses:
+ *       200:
+ *         description: Audio uploaded successfully
+ */
+router.post(
+  '/:id/audio',
+  uploadLimiter,
+  uploadAudio.single('audio'),
+  wordController.uploadAudio
+);
+
+/**
+ * @swagger
  * /api/words/{id}/examples:
  *   post:
  *     summary: Add an example sentence to a word

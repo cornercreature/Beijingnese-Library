@@ -24,6 +24,7 @@ app.use(
   helmet({
     contentSecurityPolicy: false, // Disable CSP for Swagger UI to work
     hsts: false, // Disable HSTS for local development (prevents forced HTTPS)
+    crossOriginResourcePolicy: { policy: "cross-origin" } // Allow audio/video resources to be loaded
   })
 );
 app.use(xssClean()); // Sanitize user input

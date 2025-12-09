@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import wordService from '../services/wordService';
 import Header from '../components/Header';
+import AudioRecorder from '../components/AudioRecorder';
 import html2canvas from 'html2canvas';
 import './WordDetailPage.css';
 
@@ -12,7 +13,6 @@ const WordDetailPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showSecondPage, setShowSecondPage] = useState(false);
-  const [isPlayingAudio, setIsPlayingAudio] = useState(false);
   const [playAnimation, setPlayAnimation] = useState(false);
   const [isAddExampleOpen, setIsAddExampleOpen] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -22,6 +22,9 @@ const WordDetailPage = () => {
     chineseSentence: '',
     englishTranslation: ''
   });
+  const [isRecordingAudio, setIsRecordingAudio] = useState(false);
+  const [recordedAudioBlob, setRecordedAudioBlob] = useState(null);
+  const [isPlayingAudio, setIsPlayingAudio] = useState(false);
   const audioRef = useRef(null);
   const containerRef = useRef(null);
 
@@ -60,6 +63,14 @@ const WordDetailPage = () => {
     fetchWord();
   }, [id]);
 
+  // Reload audio element when audio_file_path changes
+  useEffect(() => {
+    if (audioRef.current && word?.audio_file_path) {
+      audioRef.current.load();
+      setIsPlayingAudio(false); // Reset playing state when new audio is loaded
+    }
+  }, [word?.audio_file_path]);
+
   const handleCharactersClick = () => {
     setPlayAnimation(false);
     setTimeout(() => setPlayAnimation(true), 50);
@@ -71,13 +82,26 @@ const WordDetailPage = () => {
 
   const handleAudioPlay = () => {
     if (audioRef.current) {
-      if (audioRef.current.paused) {
-        audioRef.current.play();
-        setIsPlayingAudio(true);
-      } else {
+      if (isPlayingAudio) {
         audioRef.current.pause();
-        audioRef.current.currentTime = 0;
         setIsPlayingAudio(false);
+      } else {
+        // Ensure audio is loaded before playing
+        const playPromise = audioRef.current.play();
+        if (playPromise !== undefined) {
+          playPromise
+            .then(() => {
+              setIsPlayingAudio(true);
+            })
+            .catch(err => {
+              console.error('Error playing audio:', err);
+              // Try loading and playing again
+              audioRef.current.load();
+              audioRef.current.play()
+                .then(() => setIsPlayingAudio(true))
+                .catch(err2 => console.error('Retry failed:', err2));
+            });
+        }
       }
     }
   };
@@ -150,6 +174,73 @@ const WordDetailPage = () => {
     } catch (err) {
       setSubmitError(err.message);
       setSubmitting(false);
+    }
+  };
+
+  const toggleRecordingPanel = () => {
+    setIsRecordingAudio(!isRecordingAudio);
+    setRecordedAudioBlob(null);
+  };
+
+  const handleRecordingComplete = (audioBlob) => {
+    setRecordedAudioBlob(audioBlob);
+  };
+
+  const handleRecordingClear = () => {
+    setRecordedAudioBlob(null);
+  };
+
+  const handleAudioUpload = async () => {
+    if (!recordedAudioBlob) return;
+
+    try {
+      console.log('Starting audio upload...');
+      console.log('Audio blob type:', recordedAudioBlob.type);
+      console.log('Audio blob size:', recordedAudioBlob.size);
+
+      // Determine file extension based on MIME type
+      let extension = 'webm';
+      if (recordedAudioBlob.type.includes('mp4')) {
+        extension = 'mp4';
+      } else if (recordedAudioBlob.type.includes('ogg')) {
+        extension = 'ogg';
+      }
+
+      const formData = new FormData();
+      formData.append('audio', recordedAudioBlob, `recording.${extension}`);
+
+      const response = await fetch(`http://localhost:3001/api/words/${id}/audio`, {
+        method: 'POST',
+        body: formData
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to upload audio');
+      }
+
+      const result = await response.json();
+      console.log('Upload result:', result);
+
+      // Update word with new audio path
+      setWord(prev => {
+        const updated = {
+          ...prev,
+          audio_file_path: result.data.audio_file_path,
+          audio_file_size: result.data.audio_file_size,
+          audio_mime_type: result.data.audio_mime_type
+        };
+        console.log('Updated word state:', updated);
+        return updated;
+      });
+
+      // Close recording panel
+      setIsRecordingAudio(false);
+      setRecordedAudioBlob(null);
+
+      console.log('Audio upload complete, panel closed');
+    } catch (err) {
+      console.error('Error uploading audio:', err);
+      alert('Failed to upload audio recording');
     }
   };
 
@@ -259,6 +350,40 @@ const WordDetailPage = () => {
             onClick={word.audio_file_path ? handleAudioPlay : null}
           />
 
+          {/* Record Audio Button - Always visible */}
+          <button
+            onClick={toggleRecordingPanel}
+            className="record-audio-button"
+          >
+            <div>录音</div>
+            <div>record</div>
+          </button>
+
+          {/* Recording Panel */}
+          <div className={`recording-panel ${isRecordingAudio ? 'open' : ''}`}>
+            <div className="recording-panel-content">
+              <button className="close-recording" onClick={toggleRecordingPanel}>×</button>
+              <h3>
+                <div>录制发音</div>
+                <div>Record Pronunciation</div>
+              </h3>
+
+              <AudioRecorder
+                onRecordingComplete={handleRecordingComplete}
+                onRecordingClear={handleRecordingClear}
+              />
+
+              {recordedAudioBlob && (
+                <button
+                  onClick={handleAudioUpload}
+                  className="upload-audio-button"
+                >
+                  保存录音 / Save Recording
+                </button>
+              )}
+            </div>
+          </div>
+
           <div className="word-content">
             {/* Grammar Category in Chinese */}
             {word.grammar_category && (
@@ -305,22 +430,27 @@ const WordDetailPage = () => {
               {renderPinyin()}
             </div>
 
-            {/* Audio Button */}
+            {/* Audio Element - Always rendered but hidden */}
             {word.audio_file_path && (
-              <div className="audio-section">
-                <button
-                  onClick={handleAudioPlay}
-                  className={`audio-play-button ${isPlayingAudio ? 'playing' : ''}`}
-                >
-                  {isPlayingAudio ? '⏸' : '🔊'}
-                </button>
-                <audio
-                  ref={audioRef}
-                  src={`http://localhost:3001${word.audio_file_path}`}
-                  onEnded={handleAudioEnded}
-                  preload="metadata"
-                />
-              </div>
+              <audio
+                ref={audioRef}
+                src={`http://localhost:3001${word.audio_file_path}`}
+                preload="metadata"
+                style={{ display: 'none' }}
+                onEnded={handleAudioEnded}
+                onError={(e) => {
+                  console.error('Audio element error:', e);
+                  console.error('Audio error code:', e.target.error?.code);
+                  console.error('Audio error message:', e.target.error?.message);
+                  console.error('Audio src:', `http://localhost:3001${word.audio_file_path}`);
+                  console.error('Full word object:', word);
+                }}
+                onCanPlay={() => console.log('Audio can play')}
+                onLoadedData={() => {
+                  console.log('Audio loaded data');
+                  console.log('Audio src:', `http://localhost:3001${word.audio_file_path}`);
+                }}
+              />
             )}
 
             {/* English Definition */}

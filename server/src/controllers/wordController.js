@@ -306,6 +306,57 @@ exports.deleteWord = async (req, res) => {
 };
 
 /**
+ * Upload audio for an existing word
+ * POST /api/words/:id/audio
+ */
+exports.uploadAudio = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Check if audio file was uploaded
+    if (!req.file) {
+      return res.status(400).json({
+        success: false,
+        error: 'No audio file provided'
+      });
+    }
+
+    // Find the word
+    const word = await db.Word.findByPk(id);
+
+    if (!word) {
+      return res.status(404).json({
+        success: false,
+        error: 'Word not found'
+      });
+    }
+
+    // Update word with audio file information
+    await word.update({
+      audio_file_path: `/uploads/audio/${req.file.filename}`,
+      audio_file_size: req.file.size,
+      audio_mime_type: req.file.mimetype
+    });
+
+    res.json({
+      success: true,
+      message: 'Audio uploaded successfully',
+      data: {
+        audio_file_path: word.audio_file_path,
+        audio_file_size: word.audio_file_size,
+        audio_mime_type: word.audio_mime_type
+      }
+    });
+  } catch (error) {
+    console.error('Error uploading audio:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to upload audio'
+    });
+  }
+};
+
+/**
  * Get word statistics
  * GET /api/words/stats
  */

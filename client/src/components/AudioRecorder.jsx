@@ -21,13 +21,43 @@ const AudioRecorder = ({ onRecordingComplete, onRecordingClear }) => {
       // Request microphone permission
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
 
+      // Determine the best supported MIME type for recording
+      // Prioritize WebM because it works best across Chrome/Firefox for both recording AND playback
+      let mimeType = 'audio/webm;codecs=opus'; // Default for Chrome/Firefox
+      let blobType = 'audio/webm';
+
+      // Check browser support in order of preference: WebM > OGG > MP4
+      if (MediaRecorder.isTypeSupported('audio/webm;codecs=opus')) {
+        mimeType = 'audio/webm;codecs=opus';
+        blobType = 'audio/webm';
+      } else if (MediaRecorder.isTypeSupported('audio/webm')) {
+        mimeType = 'audio/webm';
+        blobType = 'audio/webm';
+      } else if (MediaRecorder.isTypeSupported('audio/ogg;codecs=opus')) {
+        mimeType = 'audio/ogg;codecs=opus';
+        blobType = 'audio/ogg';
+      } else if (MediaRecorder.isTypeSupported('audio/mp4')) {
+        // MP4 is last resort because browser support for playback is inconsistent
+        mimeType = 'audio/mp4';
+        blobType = 'audio/mp4';
+      } else {
+        // Use default without specifying MIME type
+        mimeType = undefined;
+        blobType = 'audio/webm'; // Fallback
+      }
+
+      console.log('Using MIME type for recording:', mimeType);
+
       // Create MediaRecorder instance
-      const mediaRecorder = new MediaRecorder(stream, {
-        mimeType: 'audio/webm;codecs=opus'
-      });
+      const mediaRecorder = mimeType
+        ? new MediaRecorder(stream, { mimeType })
+        : new MediaRecorder(stream);
 
       mediaRecorderRef.current = mediaRecorder;
       audioChunksRef.current = [];
+
+      // Store the blob type for later use
+      mediaRecorder._blobType = blobType;
 
       // Collect audio data chunks
       mediaRecorder.ondataavailable = (event) => {
@@ -38,8 +68,11 @@ const AudioRecorder = ({ onRecordingComplete, onRecordingClear }) => {
 
       // Handle recording stop
       mediaRecorder.onstop = () => {
-        const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
+        const audioBlob = new Blob(audioChunksRef.current, { type: mediaRecorder._blobType });
         const audioUrl = URL.createObjectURL(audioBlob);
+
+        console.log('Recording stopped, blob type:', mediaRecorder._blobType);
+        console.log('Blob size:', audioBlob.size);
 
         setRecordedAudio({ blob: audioBlob, url: audioUrl });
         onRecordingComplete(audioBlob);
