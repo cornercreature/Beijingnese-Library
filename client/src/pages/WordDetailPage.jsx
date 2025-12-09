@@ -14,6 +14,14 @@ const WordDetailPage = () => {
   const [showSecondPage, setShowSecondPage] = useState(false);
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
   const [playAnimation, setPlayAnimation] = useState(false);
+  const [isAddExampleOpen, setIsAddExampleOpen] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState(null);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [exampleData, setExampleData] = useState({
+    chineseSentence: '',
+    englishTranslation: ''
+  });
   const audioRef = useRef(null);
   const containerRef = useRef(null);
 
@@ -76,6 +84,73 @@ const WordDetailPage = () => {
 
   const handleAudioEnded = () => {
     setIsPlayingAudio(false);
+  };
+
+  const toggleAddExample = () => {
+    setIsAddExampleOpen(!isAddExampleOpen);
+    setExampleData({ chineseSentence: '', englishTranslation: '' });
+    setSubmitError(null);
+    setSubmitSuccess(false);
+  };
+
+  const handleExampleInputChange = (e) => {
+    const { name, value } = e.target;
+    setExampleData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleExampleSubmit = async (e) => {
+    e.preventDefault();
+    setSubmitError(null);
+    setSubmitting(true);
+
+    if (!exampleData.chineseSentence.trim()) {
+      setSubmitError('Please enter a Chinese example sentence');
+      setSubmitting(false);
+      return;
+    }
+
+    try {
+      const response = await fetch(`http://localhost:3001/api/words/${id}/examples`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          chinese_sentence: exampleData.chineseSentence,
+          english_translation: exampleData.englishTranslation || null
+        })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to add example');
+      }
+
+      const newExample = await response.json();
+
+      setSubmitSuccess(true);
+
+      // Update the word's examples list
+      setWord(prev => ({
+        ...prev,
+        examples: [...(prev.examples || []), newExample.data]
+      }));
+
+      // Close panel after 1.5 seconds
+      setTimeout(() => {
+        setIsAddExampleOpen(false);
+        setExampleData({ chineseSentence: '', englishTranslation: '' });
+        setSubmitSuccess(false);
+        setSubmitting(false);
+      }, 1500);
+
+    } catch (err) {
+      setSubmitError(err.message);
+      setSubmitting(false);
+    }
   };
 
   const handleExportToPng = async (elementId, filename) => {
@@ -297,11 +372,102 @@ const WordDetailPage = () => {
               )}
             </div>
 
-            <button
-              onClick={() => navigate(`/words/${word.id}/add-example`)}
-              className="add-example-link"
+            {/* Add Example Panel */}
+            <div
+              className={`add-example-panel ${isAddExampleOpen ? 'open' : ''}`}
+              onClick={(e) => {
+                // Close if clicking the panel background (not the content)
+                if (e.target === e.currentTarget) {
+                  toggleAddExample();
+                }
+              }}
             >
-              add another example
+              <div
+                className="add-example-content"
+                onClick={(e) => {
+                  // Check if click is outside form elements
+                  const target = e.target;
+                  const isFormElement = target.tagName === 'INPUT' ||
+                                       target.tagName === 'TEXTAREA' ||
+                                       target.tagName === 'BUTTON' ||
+                                       target.closest('button') ||
+                                       target.closest('textarea') ||
+                                       target.closest('input');
+
+                  if (!isFormElement) {
+                    toggleAddExample();
+                  }
+                }}
+              >
+                <h2>
+                  <div>加个例子</div>
+                </h2>
+
+                {submitSuccess && (
+                  <div className="success-message">
+                    Example added successfully!
+                  </div>
+                )}
+
+                {submitError && (
+                  <div className="error-message">
+                    {submitError}
+                  </div>
+                )}
+
+                <form onSubmit={handleExampleSubmit} className="example-form">
+                  <div className="form-group">
+                    <textarea
+                      id="chineseSentence"
+                      name="chineseSentence"
+                      value={exampleData.chineseSentence}
+                      onChange={handleExampleInputChange}
+                      placeholder="例子放这儿"
+                      required
+                      rows={4}
+                      disabled={submitting || submitSuccess}
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <textarea
+                      id="englishTranslation"
+                      name="englishTranslation"
+                      value={exampleData.englishTranslation}
+                      onChange={handleExampleInputChange}
+                      placeholder="给个英文翻译（不想给的话留白就好）"
+                      rows={4}
+                      disabled={submitting || submitSuccess}
+                    />
+                  </div>
+
+                  <div className="button-group">
+                    <button
+                      type="submit"
+                      disabled={submitting || submitSuccess}
+                      className="submit-button"
+                    >
+                      {submitting ? 'Adding...' : '确认添加'}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={toggleAddExample}
+                      disabled={submitting}
+                      className="cancel-button"
+                    >
+                      取消
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <button
+              onClick={toggleAddExample}
+              className={`add-example-link ${isAddExampleOpen ? 'hidden' : ''}`}
+            >
+              <div>加个例子</div>
+              <div>add another example</div>
             </button>
           </div>
         </div>

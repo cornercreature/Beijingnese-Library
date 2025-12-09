@@ -421,9 +421,9 @@
 }
 
 .add-example-link {
-  margin-top: 1rem;
-  padding:0rem 2rem 5px 2rem;
-  font-size: 30px;
+  margin-top: 100px;
+  padding:0rem 2rem 8px 2rem;
+  font-size: 16px;
   background-color: #000000;
   color: #f4f4f4;
   border: 0px solid #000000;
@@ -434,11 +434,184 @@
   font-weight: 600;
   width: 60vw;
   transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  align-items: center;
+  opacity: 1;
+  visibility: visible;
+}
+
+.add-example-link.hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.add-example-link div:first-child {
+  font-size: 18px;
+  font-family: 'Noto Serif SC', serif;
+  font-variant: normal;
+  -webkit-text-stroke: 0.3px #f4f4f4;
+  margin-top:5px;
+  margin-bottom: -5px;
 }
 
 .add-example-link:hover {
   background-color: #6F0000;
   color: white;
+}
+
+/* Add Example Panel */
+.add-example-panel {
+  width: 50vw;
+  max-height: 0;
+  overflow: hidden;
+  background: #f4f4f4;
+  margin: 0px 0px 0px 0px;
+  transition: max-height 0.5s ease, padding 0.5s ease;
+  border: 0px solid #000000;
+}
+
+.add-example-panel.open {
+  max-height: 600px;
+  padding: 2rem 0px;
+  border: 1px solid #000000;
+}
+
+.add-example-content {
+  padding: 0 3rem;
+  position: relative;
+}
+
+.add-example-content h2 {
+  font-family: 'Noto Serif SC', serif;
+  font-weight: 400;
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  color: #000000;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  -webkit-text-stroke: 2px black;
+  margin-top: -10px;
+}
+
+.add-example-content .success-message {
+  background: #d4edda;
+  color: #155724;
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  text-align: center;
+  font-family: 'Noto Serif SC', serif;
+}
+
+.add-example-content .error-message {
+  background: #f8d7da;
+  color: #721c24;
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  text-align: center;
+  font-family: 'Noto Serif SC', serif;
+}
+
+.add-example-content .example-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.add-example-content .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-right: 25px;
+}
+
+.add-example-content .form-group label {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 1.1rem;
+  color: #000000;
+  font-weight: 500;
+}
+
+.add-example-content .form-group textarea {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 1rem;
+  padding: 0.75rem;
+  border: 1px solid #000000;
+  border-radius: 0px;
+  background: #ffffff;
+  color: #000000;
+  resize: vertical;
+}
+
+.add-example-content .form-group textarea::placeholder {
+  color: #000000;
+}
+
+.add-example-content .form-group textarea:focus {
+  outline: none;
+  border-color: #6F0000;
+}
+
+.add-example-content .form-group textarea:disabled {
+  background: #e9ecef;
+  cursor: not-allowed;
+}
+
+.add-example-content .button-group {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.add-example-content .submit-button,
+.add-example-content .cancel-button {
+  padding: 0.75rem 2rem;
+  font-size: 1.1rem;
+  font-family: 'Noto Serif SC', serif !important;
+  font-weight: 400 !important;
+  font-variant: normal !important;
+  -webkit-text-stroke: 0.5px #f4f4f4;
+  border: none;
+  border-radius: 0px;
+  cursor: pointer;
+  flex: 1;
+  box-shadow: none !important;
+}
+
+.add-example-content .submit-button {
+  background: #000000;
+  color: #f4f4f4;
+}
+
+.add-example-content .submit-button:hover:not(:disabled) {
+  background: #6F0000;
+  box-shadow: none !important;
+}
+
+.add-example-content .submit-button:disabled {
+  background: #6c757d;
+  cursor: not-allowed;
+  box-shadow: none !important;
+}
+
+.add-example-content .cancel-button {
+  background: transparent;
+  color: #000000;
+  border: 0.5px solid #000000;
+  -webkit-text-stroke: 0.5px #000000;
+}
+
+.add-example-content .cancel-button:hover:not(:disabled) {
+  background: #000000;
+  color: #f4f4f4;
+  -webkit-text-stroke: 0.5px #f4f4f4;
+  box-shadow: none !important;
 }
 
 /* Page Indicators */
