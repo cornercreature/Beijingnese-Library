@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import EnvelopeDesigner from './envelope/EnvelopeDesigner';
 import './Header.css';
 
 const Header = () => {
@@ -60,32 +61,16 @@ we hope this brings you closer to beijing.
         </div>
       </div>
 
-      {/* Share Dropdown Panel */}
-      <div className={`share-panel ${isShareOpen ? 'open' : ''}`}>
-        <div className="share-content">
-          <button className="close-share" onClick={toggleShare}>×</button>
-          <h2>分享 / Share</h2>
-          <p>
-            下载信封，把北京话发给身边的人。
-          </p>
-          <p>
-            put together a package to share beijing hua!
-          </p>
-
-          <a
-            href="/envelope template.pdf"
-            download="beijingnese-envelope-template.pdf"
-            className="download-envelope-button"
-          >
-            <div>下载信封模板</div>
-            <div>download envelope template</div>
-          </a>
-        </div>
-      </div>
+      {/* Share Dropdown Panel - Envelope Designer */}
+      {isShareOpen && (
+        <EnvelopeDesigner
+          wordData={null}
+          onClose={toggleShare}
+        />
+      )}
 
       {/* Backdrop */}
       {isAboutOpen && <div className="about-backdrop" onClick={toggleAbout} />}
-      {isShareOpen && <div className="share-backdrop" onClick={toggleShare} />}
     </>
   );
 };

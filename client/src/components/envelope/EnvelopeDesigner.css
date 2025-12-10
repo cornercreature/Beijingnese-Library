@@ -1,0 +1,135 @@
+.envelope-designer-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: transparent;
+  z-index: 2000;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  pointer-events: none;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.envelope-designer-content {
+  background: #F4F4F4;
+  width: 100vw;
+  height: 90vh;
+  padding: 2rem;
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 2rem;
+  position: relative;
+  border: 1px solid #000000;
+  border-radius: 0px;
+  margin-top: 0;
+  animation: slideDown 0.4s ease-out;
+  pointer-events: auto;
+}
+
+.close-button {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 40px;
+  height: 40px;
+  background: #000000;
+  color: #F4F4F4;
+  border: none;
+  cursor: pointer;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+  z-index: 10;
+  border-radius: 0px;
+}
+
+.close-button:hover {
+  background-color: #6F0000;
+  color: white;
+}
+
+.envelope-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  overflow-y: auto;
+  padding-right: 1rem;
+}
+
+.envelope-title {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.envelope-title div:first-child {
+  font-size: 24px;
+  font-family: 'Noto Serif SC', serif;
+  font-weight: 600;
+  color: #000000;
+  -webkit-text-stroke: 0.5px #000000;
+}
+
+.envelope-title div:last-child {
+  font-size: 16px;
+  font-family: 'EB Garamond', serif;
+  font-variant: small-caps;
+  font-weight: 600;
+  color: #000000;
+  margin-top: -5px;
+}
+
+.envelope-canvas-area {
+  border: 1px solid #000000;
+  background: #ffffff;
+  overflow: hidden;
+  position: relative;
+  border-radius: 0px;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .envelope-designer-content {
+    grid-template-columns: 1fr 250px;
+    gap: 1rem;
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .envelope-designer-content {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+    width: 100vw;
+    height: 95vh;
+  }
+
+  .envelope-sidebar {
+    max-height: 200px;
+    overflow-y: auto;
+  }
+}

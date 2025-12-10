@@ -1,0 +1,120 @@
+.envelope-canvas {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.envelope-canvas-inner {
+  position: relative;
+  min-width: 800px;
+  min-height: 600px;
+  background: #ffffff;
+}
+
+.envelope-background {
+  width: 120%;
+  margin-left:-95px;
+  height: auto;
+  display: block;
+  user-select: none;
+  pointer-events: none;
+}
+
+.placeholder-message {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  font-family: 'EB Garamond', serif;
+  color: #000000;
+  background: #F4F4F4;
+  padding: 2rem;
+  border: 2px dashed #000000;
+  max-width: 500px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+.placeholder-message code {
+  background: #000000;
+  color: #F4F4F4;
+  padding: 2px 6px;
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+}
+
+.photo-window-boundary {
+  position: absolute;
+  border: 2px dashed #666666;
+  pointer-events: none;
+  z-index: 5;
+  left: calc(100% - 91px - 290px);
+  top: 265px;
+  width: 290px;
+  height: 440px;
+}
+
+.boundary-label {
+  position: absolute;
+  top: -25px;
+  left: 0;
+  font-size: 12px;
+  font-family: 'EB Garamond', serif;
+  font-variant: small-caps;
+  color: #666666;
+  background: #ffffff;
+  padding: 2px 6px;
+}
+
+.photo-item {
+  position: absolute;
+  cursor: move;
+  user-select: none;
+  border: 2px solid transparent;
+  transition: border-color 0.2s;
+}
+
+.photo-item.selected {
+  border-color: #6F0000;
+  box-shadow: 0 0 0 1px #6F0000;
+}
+
+.photo-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  pointer-events: none;
+}
+
+.photo-item:hover {
+  border-color: #000000;
+}
+
+/* Hidden render elements for export */
+.envelope-render-hidden {
+  position: absolute;
+  left: -9999px;
+  width: 816px; /* Standard letter width at 96 DPI: 8.5" × 96 */
+  height: 1056px; /* Standard letter height at 96 DPI: 11" × 96 */
+  background: #ffffff;
+}
+
+.envelope-render-hidden img.envelope-background {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.photo-container-export {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}

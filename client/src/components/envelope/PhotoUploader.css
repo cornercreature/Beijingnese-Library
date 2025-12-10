@@ -1,0 +1,55 @@
+.photo-uploader {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.upload-button {
+  padding: 0.75rem 1.5rem 10px 1.5rem;
+  font-size: 14px;
+  background-color: #000000;
+  color: #f4f4f4;
+  border: 0px solid #000000;
+  border-radius: 0px;
+  cursor: pointer;
+  font-family: 'EB Garamond', serif;
+  font-variant: small-caps;
+  font-weight: 600;
+  width: 100%;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  align-items: center;
+}
+
+.upload-button div:first-child {
+  font-size: 16px;
+  font-family: 'Noto Serif SC', serif;
+  font-variant: normal;
+  -webkit-text-stroke: 0.3px #f4f4f4;
+  margin-top: 3px;
+  margin-bottom: -3px;
+}
+
+.upload-button:hover {
+  background-color: #6F0000;
+  color: white;
+}
+
+.upload-button:active {
+  transform: translateY(1px);
+}
+
+.upload-hint {
+  margin: 0;
+  text-align: center;
+  font-family: 'EB Garamond', serif;
+  font-size: 12px;
+  color: #666666;
+  font-variant: small-caps;
+}
+
+.upload-hint small {
+  font-size: 11px;
+}
