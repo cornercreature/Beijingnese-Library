@@ -3,7 +3,7 @@ const router = express.Router();
 const wordController = require('../controllers/wordController');
 const { validateCreateWord } = require('../middleware/validateRequest');
 const { uploadLimiter } = require('../middleware/rateLimiter');
-const { uploadAudio } = require('../config/upload');
+const { uploadAudio, uploadAudioOptional } = require('../config/upload');
 
 /**
  * @swagger
@@ -118,7 +118,7 @@ router.get('/:id', wordController.getWordById);
 router.post(
   '/',
   uploadLimiter,
-  uploadAudio.single('audio'),
+  uploadAudioOptional, // Use .any() to parse FormData even without files
   validateCreateWord,
   wordController.createWord
 );

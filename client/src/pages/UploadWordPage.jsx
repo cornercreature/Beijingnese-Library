@@ -19,7 +19,12 @@ const UploadWordPage = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const grammarCategories = ['Noun', 'Verb', 'Adjective', 'Sayings'];
+  const grammarCategories = [
+    { value: 'Noun', label: '名词' },
+    { value: 'Verb', label: '动词' },
+    { value: 'Adjective', label: '形容词' },
+    { value: 'Sayings', label: '说法' }
+  ];
   const MAX_CHARACTERS = 8;
 
   const handleInputChange = (e) => {
@@ -116,15 +121,7 @@ const UploadWordPage = () => {
       console.log('Frontend: Sending syllables with tones:', validCharacters);
       formDataToSend.append('syllables', JSON.stringify(validCharacters));
 
-      if (formData.exampleSentence) {
-        const exampleData = {
-          chinese_sentence: formData.exampleSentence,
-          english_translation: formData.exampleTranslation
-        };
-        console.log('Frontend: Sending example sentence:', exampleData);
-        formDataToSend.append('example', JSON.stringify(exampleData));
-      }
-
+      // First request: Create the word with audio
       const response = await fetch('http://localhost:3001/api/words', {
         method: 'POST',
         body: formDataToSend
@@ -134,6 +131,27 @@ const UploadWordPage = () => {
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || 'Failed to create word');
+      }
+
+      const wordData = await response.json();
+      const createdWordId = wordData.data.id;
+
+      // Second request: Add example sentence if provided (same pattern as AddExamplePage)
+      if (formData.exampleSentence && formData.exampleSentence.trim()) {
+        const exampleResponse = await fetch(`http://localhost:3001/api/words/${createdWordId}/examples`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            chinese_sentence: formData.exampleSentence,
+            english_translation: formData.exampleTranslation || null
+          })
+        });
+
+        if (!exampleResponse.ok) {
+          console.error('Failed to add example sentence, but word was created successfully');
+        }
       }
 
       // Reset form
@@ -253,7 +271,7 @@ const UploadWordPage = () => {
             required
           >
             {grammarCategories.map(cat => (
-              <option key={cat} value={cat}>{cat}</option>
+              <option key={cat.value} value={cat.value}>{cat.label}</option>
             ))}
           </select>
         </div>

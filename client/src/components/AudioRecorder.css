@@ -56,11 +56,28 @@
 }
 
 .play-button {
-  background-color: #1976d2;
+  background-color: #000000;
+  color: #F4F4F4;
+  -webkit-text-stroke: 0.4px #F4F4F4;
+  font-family: 'Noto Serif SC', serif;
+}
+
+.play-button:hover {
+  background-color: #6F0000;
 }
 
 .delete-button {
-  background-color: #f57c00;
+  background-color: #F4F4F4;
+  color: #000000;
+  border: 0.5px solid #000000;
+  -webkit-text-stroke: 0.4px #000000;
+  font-family: 'Noto Serif SC', serif;
+}
+
+.delete-button:hover {
+  background-color: #000000;
+  color: #F4F4F4;
+  -webkit-text-stroke: 0.4px #F4F4F4;
 }
 
 .audio-player-hidden {

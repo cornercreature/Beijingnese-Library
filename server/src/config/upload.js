@@ -41,8 +41,14 @@ const imageStorage = multer.diskStorage({
   }
 });
 
-// File filter for audio files
+// File filter for audio files (optional - allows FormData without files)
 const audioFileFilter = (req, file, cb) => {
+  // If no file provided, that's okay (for optional audio uploads)
+  if (!file) {
+    cb(null, true);
+    return;
+  }
+
   const allowedMimes = [
     'audio/webm',
     'audio/wav',
@@ -98,8 +104,18 @@ const uploadImage = multer({
   }
 });
 
+// Optional audio upload - parses FormData even without files
+const uploadAudioOptional = multer({
+  storage: audioStorage,
+  fileFilter: audioFileFilter,
+  limits: {
+    fileSize: 10 * 1024 * 1024 // 10MB limit
+  }
+}).any(); // Use .any() to parse FormData fields even when no files are present
+
 module.exports = {
   uploadAudio,
+  uploadAudioOptional,
   uploadImage,
   uploadDirs
 };

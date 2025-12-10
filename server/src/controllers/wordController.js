@@ -119,7 +119,8 @@ exports.createWord = async (req, res) => {
       console.log('RAW syllables string from FormData:', req.body.syllables);
       syllables = JSON.parse(req.body.syllables);
       console.log('PARSED syllables after JSON.parse:', syllables);
-      example = req.body.example ? JSON.parse(req.body.example) : null;
+      console.log('RAW example from FormData:', req.body.example);
+      example = (req.body.example && req.body.example.trim()) ? JSON.parse(req.body.example) : null;
       console.log('PARSED example:', example);
       examples = [];
     } else {
@@ -137,15 +138,17 @@ exports.createWord = async (req, res) => {
     }
 
     // Create the word
+    // With uploadAudioOptional (.any()), files are in req.files array
+    const audioFile = req.files && req.files.length > 0 ? req.files.find(f => f.fieldname === 'audio') : null;
     const word = await db.Word.create({
       chinese_characters,
       pinyin,
       english_definition,
       putonghua_definition,
       grammar_category,
-      audio_file_path: req.file ? `/uploads/audio/${req.file.filename}` : null,
-      audio_file_size: req.file ? req.file.size : null,
-      audio_mime_type: req.file ? req.file.mimetype : null
+      audio_file_path: audioFile ? `/uploads/audio/${audioFile.filename}` : null,
+      audio_file_size: audioFile ? audioFile.size : null,
+      audio_mime_type: audioFile ? audioFile.mimetype : null
     }, { transaction });
 
     // Handle syllables - accept from frontend or auto-generate
