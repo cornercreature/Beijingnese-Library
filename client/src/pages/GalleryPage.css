@@ -162,7 +162,7 @@
   font-weight: 600;
   color: #F4F4F4;
   background-color: #000000;
-  margin: 0 -16px 40px -16px;
+  margin: 0 -16px 50px -16px;
   padding: 8px 0px 6px 0px;
   border-bottom: 1px solid #000000;
   line-height: 0.8;
@@ -183,7 +183,8 @@
 .words-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1rem;
+  column-gap: 0.5rem;
+  row-gap:50px;
 }
 
 .loading, .error, .empty-state {
@@ -208,6 +209,7 @@
 
   .words-grid {
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 1rem;
+    column-gap: 0.5rem;
+    row-gap: 50px;
   }
 }

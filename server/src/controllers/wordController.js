@@ -116,8 +116,11 @@ exports.createWord = async (req, res) => {
       english_definition = req.body.english_definition;
       putonghua_definition = req.body.putonghua_definition;
       grammar_category = req.body.grammar_category;
+      console.log('RAW syllables string from FormData:', req.body.syllables);
       syllables = JSON.parse(req.body.syllables);
+      console.log('PARSED syllables after JSON.parse:', syllables);
       example = req.body.example ? JSON.parse(req.body.example) : null;
+      console.log('PARSED example:', example);
       examples = [];
     } else {
       // Data came as JSON (backward compatibility)
@@ -146,16 +149,21 @@ exports.createWord = async (req, res) => {
     }, { transaction });
 
     // Handle syllables - accept from frontend or auto-generate
+    console.log('Syllables received from frontend:', syllables);
     let syllablesToCreate;
     if (syllables && syllables.length > 0) {
       // Use syllables provided by frontend
-      syllablesToCreate = syllables.map(syl => ({
-        word_id: word.id,
-        syllable: syl.syllable,
-        character: syl.character,
-        tone_number: syl.toneNumber !== undefined ? syl.toneNumber : syl.tone_number,
-        position: syl.position
-      }));
+      syllablesToCreate = syllables.map(syl => {
+        const toneNum = syl.toneNumber !== undefined ? syl.toneNumber : syl.tone_number;
+        console.log('Processing syllable:', syl, 'tone_number:', toneNum);
+        return {
+          word_id: word.id,
+          syllable: syl.syllable,
+          character: syl.character,
+          tone_number: toneNum,
+          position: syl.position
+        };
+      });
     } else {
       // Fallback to auto-parsing (for backward compatibility)
       const parsedSyllables = parsePinyin(pinyin, chinese_characters);
@@ -173,13 +181,15 @@ exports.createWord = async (req, res) => {
     }
 
     // Create example sentences - handle both single example and array
+    console.log('Example data received:', { example, examples });
     const examplesArray = [];
-    if (example && example.chinese_sentence) {
+    if (example && example.chinese_sentence && example.chinese_sentence.trim()) {
       examplesArray.push(example);
     }
     if (examples && examples.length > 0) {
       examplesArray.push(...examples);
     }
+    console.log('Examples to create:', examplesArray);
 
     if (examplesArray.length > 0) {
       const exampleData = examplesArray.map(ex => ({

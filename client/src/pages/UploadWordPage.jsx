@@ -113,13 +113,16 @@ const UploadWordPage = () => {
       formDataToSend.append('grammar_category', formData.grammarCategory);
       formDataToSend.append('putonghua_definition', formData.chineseDefinition);
       formDataToSend.append('english_definition', formData.englishDefinition);
+      console.log('Frontend: Sending syllables with tones:', validCharacters);
       formDataToSend.append('syllables', JSON.stringify(validCharacters));
 
       if (formData.exampleSentence) {
-        formDataToSend.append('example', JSON.stringify({
+        const exampleData = {
           chinese_sentence: formData.exampleSentence,
           english_translation: formData.exampleTranslation
-        }));
+        };
+        console.log('Frontend: Sending example sentence:', exampleData);
+        formDataToSend.append('example', JSON.stringify(exampleData));
       }
 
       const response = await fetch('http://localhost:3001/api/words', {
