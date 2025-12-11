@@ -11,6 +11,7 @@
 }
 
 .characters {
+  margin-top: 30px;
   display: flex;
   align-items: baseline;
   gap: 0px;
@@ -38,20 +39,20 @@
 
 /* Pinyin display */
 .pinyin-line {
-  margin:-15px;
+  margin-top:-4px;
   padding:0px 0px;
   display: flex;
   align-items: center;
   gap: 0px 0px;
   font-family: 'EB Garamond', serif;
-  font-size: 30px;
+  font-size: 25px;
   font-variant: small-caps;
   font-weight: 500;
-  color: #6F0000;
-  letter-spacing: 0.05em;
+  color: #f4f4f4;
+  letter-spacing: 0.09em;
   opacity: 0;
   transition: opacity 0.3s ease, color 0.3s ease;
-  -webkit-text-stroke: 0.5px #6F0000;
+  -webkit-text-stroke: 0.3px #f4f4f4;
 }
 
 .pinyin-syllable {
