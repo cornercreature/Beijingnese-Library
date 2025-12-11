@@ -501,7 +501,18 @@ const WordDetailPage = () => {
             <div
               className="characters-pinyin-box"
               onClick={handleCharactersClick}
+              id="characters-pinyin-export"
             >
+              {/* Export Button */}
+              <button
+                className="export-button-char-pinyin"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleExportToPng('characters-pinyin-export', `${word.chinese_characters}.png`);
+                }}
+              >
+                <img src="/images/printlogof4.png" alt="Export" />
+              </button>
               {/* Chinese Characters - Large */}
               <div className="chinese-characters">
                 {word.syllables && word.syllables.length > 0 ? (
