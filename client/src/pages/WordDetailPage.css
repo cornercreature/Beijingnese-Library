@@ -596,7 +596,10 @@
   padding:0px 40px;
   font-size: 20px;
   color: #000000;
-  font-style: default;
+  font-family: 'EB Garamond', serif;
+  font-variant: normal;
+  font-weight: 500;
+  font-style: normal;
   line-height: 1;
   text-align: center;
   white-space: pre-line;

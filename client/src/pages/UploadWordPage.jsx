@@ -185,7 +185,7 @@ const UploadWordPage = () => {
       </button>
 
       <h1>上传</h1>
-      <h2>Upload</h2>
+      <h2>upload</h2>
 
       {error && (
         <div className="error-message">
@@ -263,7 +263,7 @@ const UploadWordPage = () => {
 
         {/* Grammar Category */}
         <div className="form-group">
-          <label>词性 / Grammar Category *</label>
+          <label>词性</label>
           <select
             name="grammarCategory"
             value={formData.grammarCategory}
