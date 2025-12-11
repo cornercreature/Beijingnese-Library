@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import EnvelopeCanvas from './EnvelopeCanvas';
 import PhotoUploader from './PhotoUploader';
 import PhotoEditor from './PhotoEditor';
-import ExportControls from './ExportControls';
+import EnvelopeExportButton from './EnvelopeExportButton';
 import './EnvelopeDesigner.css';
 
 const EnvelopeDesigner = ({ wordData, onClose }) => {
@@ -131,6 +131,8 @@ const EnvelopeDesigner = ({ wordData, onClose }) => {
 
           <PhotoUploader onAddPhotos={handleAddPhotos} />
 
+          <EnvelopeExportButton photos={photos} photoWindowBounds={photoWindowBounds} />
+
           {selectedPhoto && (
             <PhotoEditor
               photo={selectedPhoto}
@@ -141,8 +143,6 @@ const EnvelopeDesigner = ({ wordData, onClose }) => {
               windowBounds={photoWindowBounds}
             />
           )}
-
-          <ExportControls photos={photos} photoWindowBounds={photoWindowBounds} />
         </div>
       </div>
     </div>

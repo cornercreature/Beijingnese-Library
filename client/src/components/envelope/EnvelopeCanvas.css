@@ -1,6 +1,6 @@
 .envelope-canvas {
   width: 100%;
-  height: 100%;
+  height: 100vh;
   position: relative;
   overflow: hidden;
 }
@@ -100,8 +100,8 @@
 .envelope-render-hidden {
   position: absolute;
   left: -9999px;
-  width: 816px; /* Standard letter width at 96 DPI: 8.5" × 96 */
-  height: 1056px; /* Standard letter height at 96 DPI: 11" × 96 */
+  width: 1632px; /* Tabloid landscape width at 96 DPI: 17" × 96 */
+  height: 1056px; /* Tabloid landscape height at 96 DPI: 11" × 96 */
   background: #ffffff;
 }
 

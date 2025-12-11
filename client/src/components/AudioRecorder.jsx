@@ -15,6 +15,7 @@ const AudioRecorder = ({ onRecordingComplete, onRecordingClear }) => {
   const audioChunksRef = useRef([]);
   const timerRef = useRef(null);
   const audioElementRef = useRef(null);
+  const fileInputRef = useRef(null);
 
   const startRecording = async () => {
     try {
@@ -138,6 +139,46 @@ const AudioRecorder = ({ onRecordingComplete, onRecordingClear }) => {
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
+  const handleFileUpload = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Validate file type (accept WAV and other audio formats)
+    const validTypes = ['audio/wav', 'audio/wave', 'audio/x-wav', 'audio/webm', 'audio/ogg', 'audio/mp4'];
+    if (!validTypes.includes(file.type)) {
+      alert('请上传音频文件 (.wav, .webm, .ogg, .mp4)');
+      return;
+    }
+
+    // Validate file size (max 10MB)
+    const maxSize = 10 * 1024 * 1024; // 10MB
+    if (file.size > maxSize) {
+      alert('文件过大，请上传小于10MB的文件');
+      return;
+    }
+
+    // Create blob and URL from uploaded file
+    const audioBlob = file;
+    const audioUrl = URL.createObjectURL(audioBlob);
+
+    // Get audio duration using Audio element
+    const tempAudio = new Audio();
+    tempAudio.src = audioUrl;
+    tempAudio.addEventListener('loadedmetadata', () => {
+      const duration = Math.floor(tempAudio.duration);
+      setRecordingTime(duration);
+    });
+
+    setRecordedAudio({ blob: audioBlob, url: audioUrl });
+    onRecordingComplete(audioBlob);
+
+    console.log('File uploaded:', file.name, 'Type:', file.type, 'Size:', file.size);
+  };
+
+  const handleUploadClick = () => {
+    fileInputRef.current?.click();
+  };
+
   return (
     <div className="audio-recorder">
       <h3>录音</h3>
@@ -152,13 +193,31 @@ const AudioRecorder = ({ onRecordingComplete, onRecordingClear }) => {
       {/* Controls */}
       <div className="audio-controls">
         {!isRecording && !recordedAudio && (
-          <button
-            type="button"
-            onClick={startRecording}
-            className="audio-button start-recording-button"
-          >
-            开始录音
-          </button>
+          <>
+            <button
+              type="button"
+              onClick={startRecording}
+              className="audio-button start-recording-button"
+            >
+              开始录音
+            </button>
+
+            <button
+              type="button"
+              onClick={handleUploadClick}
+              className="audio-button upload-button"
+            >
+              上传音频
+            </button>
+
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="audio/wav,audio/wave,audio/x-wav,audio/webm,audio/ogg,audio/mp4,.wav,.webm,.ogg,.mp4"
+              onChange={handleFileUpload}
+              style={{ display: 'none' }}
+            />
+          </>
         )}
 
         {isRecording && (
@@ -212,7 +271,7 @@ const AudioRecorder = ({ onRecordingComplete, onRecordingClear }) => {
       {/* Help Text */}
       {!isRecording && !recordedAudio && (
         <p className="help-text">
-          点击"开始录音"来录制发音
+          点击"开始录音"来录制发音，或点击"上传音频"选择文件 (支持 .wav, .webm, .ogg, .mp4)
         </p>
       )}
     </div>

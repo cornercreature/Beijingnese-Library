@@ -8,6 +8,7 @@ const EnvelopeCanvas = ({
   onSelectPhoto,
   onUpdatePhoto
 }) => {
+  const canvasInnerRef = useRef(null);
   const dragState = useRef({
     isDragging: false,
     photoId: null,
@@ -74,6 +75,38 @@ const EnvelopeCanvas = ({
     }
   };
 
+  // Calculate photo position for export based on proportional scaling
+  // Export render dimensions: 1632 × 1056 (tabloid landscape at 96 DPI)
+  // Visible canvas dimensions: dynamic based on container
+  const getExportPhotoStyle = (photo) => {
+    if (!canvasInnerRef.current) {
+      // Fallback if ref not ready
+      return {
+        left: `${photo.position.x}px`,
+        top: `${photo.position.y}px`,
+        width: `${photo.size.width}px`,
+        height: `${photo.size.height}px`,
+      };
+    }
+
+    const visibleWidth = canvasInnerRef.current.offsetWidth;
+    const visibleHeight = canvasInnerRef.current.offsetHeight;
+    const exportWidth = 1632;
+    const exportHeight = 1056;
+
+    // Calculate scale factors for both dimensions
+    const scaleX = exportWidth / visibleWidth;
+    const scaleY = exportHeight / visibleHeight;
+
+    // Scale all photo properties
+    return {
+      left: `${photo.position.x * scaleX}px`,
+      top: `${photo.position.y * scaleY}px`,
+      width: `${photo.size.width * scaleX}px`,
+      height: `${photo.size.height * scaleY}px`,
+    };
+  };
+
   return (
     <div className="envelope-canvas">
       {/* Hidden render divs for export */}
@@ -81,12 +114,30 @@ const EnvelopeCanvas = ({
         <img
           src="/templatepublic-01.png"
           alt="Envelope Front"
+          className="envelope-background"
           onError={(e) => {
             e.target.style.display = 'none';
             e.target.parentElement.style.background = '#F4F4F4';
             e.target.parentElement.innerHTML += '<p style="text-align:center;padding:50px;font-family:Noto Serif SC;">Please add templatepublic-01.png to public folder</p>';
           }}
         />
+        <div className="photo-container-export">
+          {photos.map(photo => {
+            const style = getExportPhotoStyle(photo);
+            return (
+              <img
+                key={photo.id}
+                src={photo.url}
+                alt="Uploaded"
+                style={{
+                  position: 'absolute',
+                  ...style,
+                  zIndex: photo.zIndex
+                }}
+              />
+            );
+          })}
+        </div>
       </div>
 
       <div id="envelope-back-render" className="envelope-render-hidden">
@@ -99,27 +150,10 @@ const EnvelopeCanvas = ({
             e.target.parentElement.style.background = '#F4F4F4';
           }}
         />
-        <div className="photo-container-export">
-          {photos.map(photo => (
-            <img
-              key={photo.id}
-              src={photo.url}
-              alt="Uploaded"
-              style={{
-                position: 'absolute',
-                left: `${photo.position.x}px`,
-                top: `${photo.position.y}px`,
-                width: `${photo.size.width}px`,
-                height: `${photo.size.height}px`,
-                zIndex: photo.zIndex
-              }}
-            />
-          ))}
-        </div>
       </div>
 
       {/* Visible canvas */}
-      <div className="envelope-canvas-inner" onClick={handleCanvasClick}>
+      <div className="envelope-canvas-inner" ref={canvasInnerRef} onClick={handleCanvasClick}>
         <img
           src="/templatepublic-01.png"
           alt="Envelope Template"

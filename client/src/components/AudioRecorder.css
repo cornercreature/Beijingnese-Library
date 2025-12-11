@@ -55,6 +55,20 @@
   background-color: #424242;
 }
 
+.upload-button {
+  background-color: #F4F4F4;
+  color: #000000;
+  border: 0.5px solid #000000;
+  -webkit-text-stroke: 0.4px #000000;
+  font-family: 'Noto Serif SC', serif;
+}
+
+.upload-button:hover {
+  background-color: #000000;
+  color: #F4F4F4;
+  -webkit-text-stroke: 0.4px #F4F4F4;
+}
+
 .play-button {
   background-color: #000000;
   color: #F4F4F4;

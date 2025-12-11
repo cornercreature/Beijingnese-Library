@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
-import './ExportControls.css';
+import './EnvelopeExportButton.css';
 
-const ExportControls = ({ photos, photoWindowBounds }) => {
-  const [isExportingPDF, setIsExportingPDF] = useState(false);
-  const [isExportingPNG, setIsExportingPNG] = useState(false);
+const EnvelopeExportButton = ({ photos, photoWindowBounds }) => {
+  const [isExporting, setIsExporting] = useState(false);
 
-  const handleExportPDF = async () => {
+  const handleExport = async () => {
     console.log('🚀 Export PDF button clicked!');
-    setIsExportingPDF(true);
+    setIsExporting(true);
 
     try {
       console.log('📄 Creating PDF instance...');
@@ -77,68 +76,30 @@ const ExportControls = ({ photos, photoWindowBounds }) => {
       console.error('❌ Error generating PDF:', error);
       alert('Failed to generate PDF. Please try again. Check console for details.');
     } finally {
-      setIsExportingPDF(false);
-    }
-  };
-
-  const handleExportBackPNG = async () => {
-    setIsExportingPNG(true);
-
-    try {
-      const element = document.getElementById('envelope-back-render');
-      if (!element) {
-        throw new Error('Envelope back element not found');
-      }
-
-      const canvas = await html2canvas(element, {
-        scale: 2,
-        backgroundColor: '#ffffff',
-        logging: false,
-        useCORS: true
-      });
-
-      canvas.toBlob((blob) => {
-        if (blob) {
-          const url = URL.createObjectURL(blob);
-          const link = document.createElement('a');
-          const timestamp = new Date().getTime();
-          link.download = `envelope-back-${timestamp}.png`;
-          link.href = url;
-          link.click();
-          URL.revokeObjectURL(url);
-        }
-        setIsExportingPNG(false);
-      }, 'image/png');
-
-    } catch (error) {
-      console.error('Error exporting PNG:', error);
-      alert('Failed to export PNG. Please try again.');
-      setIsExportingPNG(false);
+      setIsExporting(false);
     }
   };
 
   return (
-    <div className="export-controls">
-      <button
-        type="button"
-        onClick={handleExportPDF}
-        disabled={isExportingPDF}
-        className="export-button export-pdf"
-      >
-        {isExportingPDF ? (
-          <>
-            <div>生成中...</div>
-            <div>generating pdf...</div>
-          </>
-        ) : (
-          <>
-            <div>导出PDF</div>
-            <div>export pdf</div>
-          </>
-        )}
-      </button>
-    </div>
+    <button
+      type="button"
+      onClick={handleExport}
+      disabled={isExporting}
+      className="envelope-export-button"
+    >
+      {isExporting ? (
+        <>
+          <div>生成中...</div>
+          <div>generating pdf...</div>
+        </>
+      ) : (
+        <>
+          <div>导出PDF</div>
+          <div>export pdf</div>
+        </>
+      )}
+    </button>
   );
 };
 
-export default ExportControls;
+export default EnvelopeExportButton;

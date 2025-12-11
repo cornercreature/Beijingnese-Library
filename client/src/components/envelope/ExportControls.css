@@ -4,7 +4,9 @@
   gap: 0.75rem;
   padding-top: 1rem;
   border-top: 1px solid #000000;
-  margin-top: auto;
+  margin-top: 1rem;
+  position: relative;
+  z-index: 5;
 }
 
 .export-title {
@@ -37,7 +39,7 @@
   font-size: 14px;
   background-color: #000000;
   color: #f4f4f4;
-  border: 0px solid #000000;
+  border: none;
   border-radius: 0px;
   cursor: pointer;
   font-family: 'EB Garamond', serif;
