@@ -9,6 +9,7 @@ const GalleryPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activeSection, setActiveSection] = useState('all-words');
+  const [showSplash, setShowSplash] = useState(true);
 
   const leftIndicatorRef = useRef(null);
   const rightIndicatorRef = useRef(null);
@@ -17,6 +18,11 @@ const GalleryPage = () => {
 
   useEffect(() => {
     fetchAllWords();
+    // Hide splash screen after animation completes
+    const timer = setTimeout(() => {
+      setShowSplash(false);
+    }, 4500); // 4.5 seconds total animation time
+    return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
@@ -123,6 +129,18 @@ const GalleryPage = () => {
 
   return (
     <>
+      {/* Splash Screen */}
+      {showSplash && (
+        <div className="splash-screen">
+          <div className="splash-content">
+            <img src="/bei.png" alt="bei" className="splash-char splash-bei" />
+            <img src="/jing.png" alt="jing" className="splash-char splash-jing" />
+            <img src="/hua.png" alt="hua" className="splash-char splash-hua" />
+            <img src="/ku.png" alt="ku" className="splash-char splash-ku" />
+          </div>
+        </div>
+      )}
+
       <Header />
       <div className="gallery-page">
         {/* Left Sidebar - Chinese */}
