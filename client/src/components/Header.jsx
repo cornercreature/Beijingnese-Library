@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import EnvelopeDesigner from './envelope/EnvelopeDesigner';
 import './Header.css';
 
 const Header = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [isAboutOpen, setIsAboutOpen] = useState(false);
   const [isShareOpen, setIsShareOpen] = useState(false);
 
@@ -14,6 +15,14 @@ const Header = () => {
 
   const toggleShare = () => {
     setIsShareOpen(!isShareOpen);
+  };
+
+  const handleAddClick = () => {
+    if (location.pathname === '/upload') {
+      navigate('/');
+    } else {
+      navigate('/upload');
+    }
   };
 
   return (
@@ -32,7 +41,7 @@ const Header = () => {
             style={{ cursor: 'pointer' }}
           />
           <div className="directinteraction">
-          <div onClick={() => navigate('/upload')} className="small add-button" id="addword">
+          <div onClick={handleAddClick} className="small add-button" id="addword">
             <p>添加</p><p>add</p>
           </div>
           <div className="small" id="share" onClick={toggleShare}>

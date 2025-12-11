@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AudioRecorder from '../components/AudioRecorder';
+import Header from '../components/Header';
 import './UploadWordPage.css';
 
 const UploadWordPage = () => {
@@ -65,6 +66,29 @@ const UploadWordPage = () => {
 
   const handleRecordingClear = () => {
     setAudioBlob(null);
+  };
+
+  const handleBackgroundClick = (e) => {
+    const target = e.target;
+    // Check if the click is on an interactive element or its child
+    const isInteractive = target.tagName === 'BUTTON' ||
+                         target.tagName === 'INPUT' ||
+                         target.tagName === 'TEXTAREA' ||
+                         target.tagName === 'SELECT' ||
+                         target.tagName === 'LABEL' ||
+                         target.closest('button') ||
+                         target.closest('input') ||
+                         target.closest('textarea') ||
+                         target.closest('select') ||
+                         target.closest('label') ||
+                         target.closest('.character-input-group') ||
+                         target.closest('.tone-selection') ||
+                         target.closest('.audio-recorder') ||
+                         target.closest('form');
+
+    if (!isInteractive) {
+      navigate('/');
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -178,11 +202,10 @@ const UploadWordPage = () => {
   };
 
   return (
-    <div className="upload-word-page">
-      <button onClick={() => navigate('/')} className="back-button">
-        <span className="button-chinese">返回</span>
-        <span className="button-english">back</span>
-      </button>
+    <>
+      <Header />
+      <div className="upload-word-page-overlay">
+        <div className="upload-word-page" onClick={handleBackgroundClick}>
 
       <h1>上传</h1>
       <h2>upload</h2>
@@ -341,16 +364,11 @@ const UploadWordPage = () => {
           >
             {loading ? '创建中...' : '确认添加'}
           </button>
-          <button
-            type="button"
-            onClick={() => navigate('/')}
-            className="cancel-button"
-          >
-            取消
-          </button>
         </div>
       </form>
+      </div>
     </div>
+    </>
   );
 };
 

@@ -36,6 +36,31 @@ const EnvelopeDesigner = ({ wordData, onClose }) => {
     }
   }, []);
 
+  // Handle background click to close modal
+  const handleBackgroundClick = (e) => {
+    const target = e.target;
+    // Check if the click is on an interactive element or its child
+    const isInteractive = target.tagName === 'BUTTON' ||
+                         target.tagName === 'INPUT' ||
+                         target.tagName === 'TEXTAREA' ||
+                         target.tagName === 'SELECT' ||
+                         target.tagName === 'LABEL' ||
+                         target.closest('button') ||
+                         target.closest('input') ||
+                         target.closest('textarea') ||
+                         target.closest('select') ||
+                         target.closest('label') ||
+                         target.closest('.envelope-sidebar') ||
+                         target.closest('.photo-uploader') ||
+                         target.closest('.photo-editor') ||
+                         target.closest('.draggable-photo') ||
+                         target.classList.contains('envelope-canvas-area');
+
+    if (!isInteractive) {
+      onClose();
+    }
+  };
+
   // Handle ESC key to close modal
   useEffect(() => {
     const handleEscape = (e) => {
@@ -107,12 +132,8 @@ const EnvelopeDesigner = ({ wordData, onClose }) => {
   const selectedPhoto = photos.find(p => p.id === selectedPhotoId);
 
   return (
-    <div className="envelope-designer-modal" onClick={onClose}>
-      <div className="envelope-designer-content" onClick={(e) => e.stopPropagation()}>
-        <button className="close-button" onClick={onClose}>
-          <span>✕</span>
-        </button>
-
+    <div className="envelope-designer-modal">
+      <div className="envelope-designer-content" onClick={handleBackgroundClick}>
         <div className="envelope-canvas-area" ref={canvasRef}>
           <EnvelopeCanvas
             photos={photos}

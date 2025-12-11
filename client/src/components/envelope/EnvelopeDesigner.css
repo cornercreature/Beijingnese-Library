@@ -2,14 +2,16 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 110vh;
   background: transparent;
-  z-index: 2000;
+  z-index: 998;
   display: flex;
   align-items: flex-start;
   justify-content: center;
   pointer-events: none;
+  margin-top: 104.8px;
+  padding-bottom: 30px;
 }
 
 @keyframes fadeIn {
@@ -33,7 +35,7 @@
 .envelope-designer-content {
   background: #F4F4F4;
   width: 100vw;
-  height: 90vh;
+  height: 100vh;
   padding: 2rem;
   display: grid;
   grid-template-columns: 1fr 300px;
@@ -44,30 +46,6 @@
   margin-top: 0;
   animation: slideDown 0.4s ease-out;
   pointer-events: auto;
-}
-
-.close-button {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  width: 40px;
-  height: 40px;
-  background: #000000;
-  color: #F4F4F4;
-  border: none;
-  cursor: pointer;
-  font-size: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color 0.3s ease;
-  z-index: 10;
-  border-radius: 0px;
-}
-
-.close-button:hover {
-  background-color: #6F0000;
-  color: white;
 }
 
 .envelope-sidebar {

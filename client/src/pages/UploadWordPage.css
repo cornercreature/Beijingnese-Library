@@ -1,52 +1,30 @@
-.upload-word-page {
-  padding: 2rem 250px 2rem 250px;
-  max-width: 1200px;
-  margin: 0 auto;
-  background-color: #F4F4F4;
-  min-height: 100vh;
-}
-
-.back-button {
+.upload-word-page-overlay {
   position: fixed;
-  top: 50%;
+  margin-top: -30px;
+  top: 0;
   left: 0;
-  transform: translateY(-50%);
-  padding: 5px 10px 5px 0px;
-  background-color: #000000;
-  color: #F4F4F4;
-  border: none;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
   cursor: pointer;
-  transition: all 0.2s;
-  z-index: 100;
-  writing-mode: vertical-rl;
-  text-orientation: mixed;
+  overflow-y: auto;
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
-  gap: -5px;
-  height: 200px;
+  padding: 2rem 0 2rem 0;
 }
 
-.back-button:hover {
-  background-color: #6F0000;
+.upload-word-page {
+  padding: 110px 250px 2rem 250px;
+  max-width: 1200px;
+  width: 100%;
+  background-color: #F4F4F4;
+  cursor: default;
+  pointer-events: auto;
+  margin: 0;
 }
 
-.button-chinese {
-  font-family: 'Noto Serif SC', serif;
-  font-size: 30px;
-  -webkit-text-stroke: 0.4px #F4F4F4;
-  padding: 0px 0px 0px 0px;
-  letter-spacing: 5px;
-}
-
-.button-english {
-  font-family: 'EB Garamond', serif;
-  font-size: 20px;
-  font-variant: small-caps;
-  -webkit-text-stroke: 0.4px #F4F4F4;
-  padding: 0;
-}
 
 .upload-word-page h1 {
   text-align: center;
@@ -249,11 +227,11 @@
 
 .form-buttons {
   display: flex;
+  justify-content: center;
   gap: 1rem;
 }
 
-.submit-button,
-.cancel-button {
+.submit-button {
   padding: 0.75rem 2rem;
   font-size: 1.1rem;
   font-family: 'Noto Serif SC', serif !important;
@@ -262,7 +240,6 @@
   border: none;
   border-radius: 0px !important;
   cursor: pointer;
-  flex: 1;
   box-shadow: none !important;
   transition: all 0.2s;
 }
@@ -286,16 +263,3 @@
   box-shadow: none !important;
 }
 
-.cancel-button {
-  background: #f4f4f4 !important;
-  color: #000000 !important;
-  border: 0.5px solid #000000 !important;
-  -webkit-text-stroke: 0.5px #000000;
-}
-
-.cancel-button:hover:not(:disabled) {
-  background: #000000 !important;
-  color: #f4f4f4 !important;
-  -webkit-text-stroke: 0.5px #f4f4f4;
-  box-shadow: none !important;
-}
