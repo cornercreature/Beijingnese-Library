@@ -24,7 +24,13 @@ const Header = () => {
             <p>关于我们</p>
             <p>about us</p>
           </div>
-          <img src="/images/logo-2.png" alt="北京话词库 Beijingnese Library" className="header-logo" />
+          <img
+            src="/images/logo-2.png"
+            alt="北京话词库 Beijingnese Library"
+            className="header-logo"
+            onClick={() => navigate('/')}
+            style={{ cursor: 'pointer' }}
+          />
           <div className="directinteraction">
           <div onClick={() => navigate('/upload')} className="small add-button" id="addword">
             <p>添加</p><p>add</p>

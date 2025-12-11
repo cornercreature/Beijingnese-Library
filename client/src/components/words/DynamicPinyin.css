@@ -7,7 +7,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
+  column-gap: 0.5rem;
 }
 
 .characters {
@@ -48,7 +48,7 @@
   color: #6F0000;
   letter-spacing: 0.05em;
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.3s ease, color 0.3s ease;
   -webkit-text-stroke: 0.5px #6F0000;
 }
 
@@ -58,11 +58,13 @@
 
 /* Hover effect - triggered by word card hover */
 .word-card:hover .character {
-  color: #9F0000;
+  color: #F4F4F4;
 }
 
 .word-card:hover .pinyin-line {
   opacity: 1;
+  color: #F4F4F4;
+  -webkit-text-stroke: 0.5px #F4F4F4;
 }
 
 /* Responsive sizing */
