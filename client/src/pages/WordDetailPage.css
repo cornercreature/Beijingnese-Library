@@ -123,7 +123,7 @@
 .sound-icon {
   position: absolute;
   top: 12px;
-  left: 20px;
+  left: 140px;
   width: 30px;
   height: 30px;
   cursor: pointer;
@@ -148,7 +148,7 @@
 .record-audio-button {
   position: absolute;
   top: 0px;
-  left: 90px;
+  left: 15px;
   padding: 0.5rem 1rem;
   background: #000000;
   color: #f4f4f4;
@@ -342,6 +342,38 @@
 }
 
 .export-button-char-pinyin:hover {
+  opacity: 0.7;
+}
+
+/* Export Button - Page Top Right Corner */
+.export-button-page {
+  position: fixed;
+  top: 145px;
+  right: 40px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.3s ease;
+  z-index: 200;
+}
+
+.export-button-page.hidden {
+  display: none;
+}
+
+.export-button-page img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.export-button-page:hover {
   opacity: 0.7;
 }
 
@@ -571,17 +603,23 @@
   width: 60vw;
   padding: 2rem;
   border-radius: 0px;
-  border: 0px;
+  border: 1px solid transparent;
   position: relative;
   transition: all 0.3s ease;
 }
 
 .example-box:hover {
+  background-color: #000000;
   border: 1px solid #000;
 }
 
 .example-box:hover .export-button {
   opacity: 1;
+}
+
+.example-box:hover .example-chinese,
+.example-box:hover .example-english {
+  color: #f4f4f4;
 }
 
 .export-button {
@@ -592,16 +630,19 @@
   width: 30px;
   height: 30px;
   background-color: transparent;
-  background-image: url('../assets/printicon.png');
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
   border: none;
   cursor: pointer;
   opacity: 0;
   transition: opacity 0.3s ease;
-  text-indent: -9999px;
-  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.export-button img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .export-button:hover {
@@ -639,6 +680,16 @@
   color: #000000;
   text-align: center;
   padding: 3rem;
+}
+
+.no-examples-chinese {
+  font-family: 'Noto Serif SC', serif;
+  margin-bottom: 0.5rem;
+}
+
+.no-examples-english {
+  font-family: 'EB Garamond', serif;
+  -webkit-text-stroke: 0.5px #000000;
 }
 
 .add-example-link {

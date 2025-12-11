@@ -353,6 +353,14 @@ const WordDetailPage = () => {
     <>
       <Header />
       <div className="word-detail-page">
+        {/* Export Button - Top Right Corner */}
+        <button
+          className={`export-button-page ${showSecondPage ? 'hidden' : ''}`}
+          onClick={() => handleExportToPng('characters-pinyin-export', `${word.chinese_characters}.png`)}
+        >
+          <img src="/printicon.png" alt="Export" />
+        </button>
+
         {/* Navigation buttons - Rebuilt with inline styles */}
         <button
           onClick={() => navigate('/')}
@@ -503,16 +511,6 @@ const WordDetailPage = () => {
               onClick={handleCharactersClick}
               id="characters-pinyin-export"
             >
-              {/* Export Button */}
-              <button
-                className="export-button-char-pinyin"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleExportToPng('characters-pinyin-export', `${word.chinese_characters}.png`);
-                }}
-              >
-                <img src="/images/printlogof4.png" alt="Export" />
-              </button>
               {/* Chinese Characters - Large */}
               <div className="chinese-characters">
                 {word.syllables && word.syllables.length > 0 ? (
@@ -600,7 +598,7 @@ const WordDetailPage = () => {
                         )}
                         className="export-button"
                       >
-                        Export as PNG
+                        <img src="/printlogof4.png" alt="Export" />
                       </button>
                       <div className="example-chinese">
                         {example.chinese_sentence}
@@ -615,8 +613,8 @@ const WordDetailPage = () => {
                 ))
               ) : (
                 <div className="no-examples-message">
-                  <div>暂无例句</div>
-                  <div>No example sentences yet.</div>
+                  <div className="no-examples-chinese">暂无例句</div>
+                  <div className="no-examples-english">No example sentences yet.</div>
                 </div>
               )}
             </div>
