@@ -317,8 +317,17 @@ const WordDetailPage = () => {
         {/* Navigation buttons */}
         <div className="nav-buttons">
         <button onClick={() => navigate('/')} className={`back-button ${showSecondPage ? 'switched' : ''}`}>
-          <span className="button-chinese">返回</span>
-          <span className="button-english">back</span>
+          {showSecondPage ? (
+            <>
+              <span className="button-english">back</span>
+              <span className="button-chinese">返回</span>
+            </>
+          ) : (
+            <>
+              <span className="button-chinese">返回</span>
+              <span className="button-english">back</span>
+            </>
+          )}
         </button>
         <button onClick={togglePage} className={`toggle-page-button ${showSecondPage ? 'switched' : ''}`}>
           {showSecondPage ? (
@@ -355,7 +364,7 @@ const WordDetailPage = () => {
             onClick={toggleRecordingPanel}
             className="record-audio-button"
           >
-            <div>录音</div>
+            <div>再录个读法</div>
             <div>record</div>
           </button>
 
