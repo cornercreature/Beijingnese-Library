@@ -290,7 +290,7 @@
 
 /* Characters and Pinyin Box with Hover Effect */
 .characters-pinyin-box {
-  padding: 2rem 3rem;
+  padding: 4rem 3rem 2rem 3rem;
   border: 1px solid transparent;
   border-radius: 0px;
   cursor: pointer;
@@ -324,7 +324,7 @@
   color: #000000;
   text-align: center;
   line-height: 1;
-  margin: 0;
+  margin: 90px, 0px;
   padding: 0;
   display: flex;
   align-items: flex-start;
@@ -371,7 +371,7 @@
   color: #000000;
   font-family: 'EB Garamond', serif;
   text-align: center;
-  margin: -70px 0px 10px 0px;
+  margin: -20px 0px 10px 0px;
   padding: 0;
   letter-spacing: 0.1rem;
   -webkit-text-stroke: 1px #000000;
@@ -456,26 +456,29 @@
 .definition-text.english {
   font-size: 30px;
   font-family: 'EB Garamond', serif;
+  font-weight: 500;
+  font-variant: normal;
   margin-top: 40px;
 }
 
 .definition-text.putonghua {
-  font-size: 20px;
+  font-size: 28px;
   font-family: 'Noto Serif SC', serif;
+  font-weight: 700;
   margin-bottom: 70px;
 }
 
 /* Grammar Category Tag - Chinese */
 .grammar-tag-chinese {
   font-family: 'Noto Serif SC', serif;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 600;
   color: #000000;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   margin-bottom: -18px;
   text-align: center;
-  -webkit-text-stroke: 0.3px #000000;
+  -webkit-text-stroke: 0.5px #000000;
 }
 
 /* Grammar Category Tag */
@@ -489,7 +492,7 @@
   text-transform: uppercase;
   letter-spacing: 0.1em;
   margin-top: -20px;
-  -webkit-text-stroke: 0.3px #000000;
+  -webkit-text-stroke: 0.5px #000000;
 }
 
 /* Page Two - Examples */
