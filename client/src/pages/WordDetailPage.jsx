@@ -71,6 +71,28 @@ const WordDetailPage = () => {
     }
   }, [word?.audio_file_path]);
 
+  // Autoplay audio when page loads if recording exists
+  useEffect(() => {
+    if (word?.audio_file_path && audioRef.current && !isPlayingAudio) {
+      // Small delay to ensure audio is loaded
+      const timer = setTimeout(() => {
+        const playPromise = audioRef.current.play();
+        if (playPromise !== undefined) {
+          playPromise
+            .then(() => {
+              setIsPlayingAudio(true);
+            })
+            .catch(err => {
+              console.log('Autoplay prevented by browser:', err);
+              // Autoplay was prevented, user will need to click sound icon
+            });
+        }
+      }, 500);
+
+      return () => clearTimeout(timer);
+    }
+  }, [word?.audio_file_path]);
+
   const handleCharactersClick = () => {
     setPlayAnimation(false);
     setTimeout(() => setPlayAnimation(true), 50);
