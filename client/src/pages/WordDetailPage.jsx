@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import wordService from '../services/wordService';
 import Header from '../components/Header';
 import AudioRecorder from '../components/AudioRecorder';
+import SplashScreen from '../components/SplashScreen';
 import html2canvas from 'html2canvas';
 import './WordDetailPage.css';
 
@@ -323,9 +324,10 @@ const WordDetailPage = () => {
 
   if (loading) {
     return (
-      <div className="word-detail-page">
-        <div className="loading">Loading...</div>
-      </div>
+      <>
+        <SplashScreen show={true} duration={3500} />
+        <Header />
+      </>
     );
   }
 

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import WordCard from '../components/words/WordCard';
 import Header from '../components/Header';
+import SplashScreen from '../components/SplashScreen';
 import wordService from '../services/wordService';
 import './GalleryPage.css';
 
@@ -21,7 +22,7 @@ const GalleryPage = () => {
     // Hide splash screen after animation completes
     const timer = setTimeout(() => {
       setShowSplash(false);
-    }, 4500); // 4.5 seconds total animation time
+    }, 3500); // 3.5 seconds total animation time
     return () => clearTimeout(timer);
   }, []);
 
@@ -92,10 +93,8 @@ const GalleryPage = () => {
   if (loading) {
     return (
       <>
+        <SplashScreen show={true} duration={3500} />
         <Header />
-        <div className="gallery-page">
-          <div className="loading">Loading words...</div>
-        </div>
       </>
     );
   }
@@ -129,18 +128,7 @@ const GalleryPage = () => {
 
   return (
     <>
-      {/* Splash Screen */}
-      {showSplash && (
-        <div className="splash-screen">
-          <div className="splash-content">
-            <img src="/bei.png" alt="bei" className="splash-char splash-bei" />
-            <img src="/jing.png" alt="jing" className="splash-char splash-jing" />
-            <img src="/hua.png" alt="hua" className="splash-char splash-hua" />
-            <img src="/ku.png" alt="ku" className="splash-char splash-ku" />
-          </div>
-        </div>
-      )}
-
+      <SplashScreen show={showSplash} duration={3500} />
       <Header />
       <div className="gallery-page">
         {/* Left Sidebar - Chinese */}

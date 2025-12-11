@@ -108,20 +108,26 @@
 }
 
 .add-button {
-  padding: 0px;
+  padding: 8px 12px;
   font-size: 18px;
   cursor: pointer;
   border: none;
   background: transparent;
   color: black;
-  transition: all 0.2s;
+  transition: background-color 0.3s ease, color 0.3s ease;
   font-weight: 500;
   font-family: 'EB Garamond', serif;
   font-variant: small-caps;
 }
 
 .add-button:hover {
-  opacity: 0.7;
+  background-color: #000000;
+  color: #f4f4f4;
+}
+
+.add-button:hover p {
+  color: #f4f4f4;
+  -webkit-text-stroke: 0.5px #f4f4f4;
 }
 
 .dropdown-item {
@@ -221,10 +227,19 @@
 
 #aboutus {
   cursor: pointer;
+  padding: 8px 12px;
+  background: transparent;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 #aboutus:hover {
-  opacity: 0.7;
+  background-color: #000000;
+  color: #f4f4f4;
+}
+
+#aboutus:hover p {
+  color: #f4f4f4;
+  -webkit-text-stroke: 0.5px #f4f4f4;
 }
 
 /* Share Panel */
@@ -301,10 +316,19 @@
 
 #share {
   cursor: pointer;
+  padding: 8px 12px;
+  background: transparent;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 #share:hover {
-  opacity: 0.7;
+  background-color: #000000;
+  color: #f4f4f4;
+}
+
+#share:hover p {
+  color: #f4f4f4;
+  -webkit-text-stroke: 0.5px #f4f4f4;
 }
 
 /* Download Envelope Button */
