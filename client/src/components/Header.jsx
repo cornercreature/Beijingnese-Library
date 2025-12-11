@@ -44,10 +44,10 @@ const Header = () => {
       </header>
 
       {/* About Us Dropdown Panel */}
-      <div className={`about-panel ${isAboutOpen ? 'open' : ''}`}>
+      <div className={`about-panel ${isAboutOpen ? 'open' : ''}`} onClick={toggleAbout}>
         <div className="about-content">
-          <button className="close-about" onClick={toggleAbout}>×</button>
-          <h2>关于我们<br></br>about us</h2>
+          <h1>关于我们</h1>
+          <h2>about us</h2>
           <p>
             北京话库 
 是一个收集和记录北京话的双语项目。<br></br>
@@ -75,8 +75,6 @@ we hope this brings you closer to beijing.
         />
       )}
 
-      {/* Backdrop */}
-      {isAboutOpen && <div className="about-backdrop" onClick={toggleAbout} />}
     </>
   );
 };
