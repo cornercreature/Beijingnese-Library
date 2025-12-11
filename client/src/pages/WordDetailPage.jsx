@@ -96,6 +96,21 @@ const WordDetailPage = () => {
   const handleCharactersClick = () => {
     setPlayAnimation(false);
     setTimeout(() => setPlayAnimation(true), 50);
+
+    // Play audio if available
+    if (audioRef.current && word?.audio_file_path) {
+      audioRef.current.currentTime = 0; // Reset to start
+      const playPromise = audioRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            setIsPlayingAudio(true);
+          })
+          .catch(err => {
+            console.error('Error playing audio on click:', err);
+          });
+      }
+    }
   };
 
   const togglePage = () => {
@@ -480,35 +495,37 @@ const WordDetailPage = () => {
               </div>
             </div>
 
-            {/* Chinese Characters - Large */}
+            {/* Chinese Characters and Pinyin Box with Hover Effect */}
             <div
-              className="chinese-characters"
+              className="characters-pinyin-box"
               onClick={handleCharactersClick}
-              style={{ cursor: 'pointer' }}
             >
-              {word.syllables && word.syllables.length > 0 ? (
-                word.syllables
-                  .sort((a, b) => a.position - b.position)
-                  .map((syl, idx) => (
-                    <span
-                      key={idx}
-                      className={`character-detail tone-${syl.tone_number} ${playAnimation ? 'animate-shrink' : ''}`}
-                      style={{
-                        fontSize: syl.tone_number === 0 ? '0.65em' : '1em',
-                        display: 'inline-block'
-                      }}
-                    >
-                      {syl.character}
-                    </span>
-                  ))
-              ) : (
-                word.chinese_characters
-              )}
-            </div>
+              {/* Chinese Characters - Large */}
+              <div className="chinese-characters">
+                {word.syllables && word.syllables.length > 0 ? (
+                  word.syllables
+                    .sort((a, b) => a.position - b.position)
+                    .map((syl, idx) => (
+                      <span
+                        key={idx}
+                        className={`character-detail tone-${syl.tone_number} ${playAnimation ? 'animate-shrink' : ''}`}
+                        style={{
+                          fontSize: syl.tone_number === 0 ? '0.65em' : '1em',
+                          display: 'inline-block'
+                        }}
+                      >
+                        {syl.character}
+                      </span>
+                    ))
+                ) : (
+                  word.chinese_characters
+                )}
+              </div>
 
-            {/* Pinyin */}
-            <div className="pinyin-display">
-              {renderPinyin()}
+              {/* Pinyin */}
+              <div className="pinyin-display">
+                {renderPinyin()}
+              </div>
             </div>
 
             {/* Audio Element - Always rendered but hidden */}
