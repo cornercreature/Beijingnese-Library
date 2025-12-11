@@ -314,35 +314,85 @@ const WordDetailPage = () => {
     <>
       <Header />
       <div className="word-detail-page">
-        {/* Navigation buttons */}
-        <div className="nav-buttons">
-        <button onClick={() => navigate('/')} className={`back-button ${showSecondPage ? 'switched' : ''}`}>
+        {/* Navigation buttons - Rebuilt with inline styles */}
+        <button
+          onClick={() => navigate('/')}
+          style={{
+            position: 'fixed',
+            top: '50%',
+            left: showSecondPage ? 'auto' : '0',
+            right: showSecondPage ? '0' : 'auto',
+            transform: 'translateY(-50%)',
+            width: '80px',
+            height: '200px',
+            backgroundColor: '#000000',
+            color: '#f4f4f4',
+            border: 'none',
+            cursor: 'pointer',
+            zIndex: 100,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '0',
+            padding: '10px 5px',
+            writingMode: 'vertical-rl',
+            transition: 'background-color 0.2s ease'
+          }}
+          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#6f0000'}
+          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#000000'}
+        >
           {showSecondPage ? (
             <>
-              <span className="button-english">back</span>
-              <span className="button-chinese">返回</span>
+              <span style={{ fontFamily: 'EB Garamond, serif', fontSize: '20px', fontVariant: 'small-caps', WebkitTextStroke: '0.5px #f4f4f4' }}>back</span>
+              <span style={{ fontFamily: 'Noto Serif SC, serif', fontSize: '30px', WebkitTextStroke: '0.5px #f4f4f4', letterSpacing: '5px' }}>返回</span>
             </>
           ) : (
             <>
-              <span className="button-chinese">返回</span>
-              <span className="button-english">back</span>
+              <span style={{ fontFamily: 'Noto Serif SC, serif', fontSize: '30px', WebkitTextStroke: '0.5px #f4f4f4', letterSpacing: '5px' }}>返回</span>
+              <span style={{ fontFamily: 'EB Garamond, serif', fontSize: '20px', fontVariant: 'small-caps', WebkitTextStroke: '0.5px #f4f4f4' }}>back</span>
             </>
           )}
         </button>
-        <button onClick={togglePage} className={`toggle-page-button ${showSecondPage ? 'switched' : ''}`}>
+        <button
+          onClick={togglePage}
+          style={{
+            position: 'fixed',
+            top: '50%',
+            left: showSecondPage ? '0' : 'auto',
+            right: showSecondPage ? 'auto' : '0',
+            transform: 'translateY(-50%)',
+            width: '80px',
+            height: '200px',
+            backgroundColor: '#000000',
+            color: '#f4f4f4',
+            border: 'none',
+            cursor: 'pointer',
+            zIndex: 100,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '0',
+            padding: '10px 5px 10px 15px',
+            writingMode: 'vertical-rl',
+            transition: 'background-color 0.2s ease'
+          }}
+          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#6f0000'}
+          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#000000'}
+        >
           {showSecondPage ? (
             <>
-              <span className="button-chinese">看看词</span>
-              <span className="button-english">term</span>
+              <span style={{ fontFamily: 'Noto Serif SC, serif', fontSize: '30px', WebkitTextStroke: '0.5px #f4f4f4', letterSpacing: '5px' }}>看看词</span>
+              <span style={{ fontFamily: 'EB Garamond, serif', fontSize: '20px', fontVariant: 'small-caps', WebkitTextStroke: '0.5px #f4f4f4' }}>term</span>
             </>
           ) : (
             <>
-              <span className="button-english">examples</span>
-              <span className="button-chinese">看看例子</span>
+              <span style={{ fontFamily: 'EB Garamond, serif', fontSize: '20px', fontVariant: 'small-caps', WebkitTextStroke: '0.5px #f4f4f4' }}>examples</span>
+              <span style={{ fontFamily: 'Noto Serif SC, serif', fontSize: '30px', WebkitTextStroke: '0.5px #f4f4f4', letterSpacing: '5px' }}>看看例子</span>
             </>
           )}
         </button>
-      </div>
 
       {/* Two-page sliding container */}
       <div

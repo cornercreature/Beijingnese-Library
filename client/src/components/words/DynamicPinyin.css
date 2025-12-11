@@ -18,6 +18,8 @@
   font-size: 56px;
   font-weight: 500;
   line-height: 1;
+  color: #000000;
+  transition: color 0.3s ease;
 }
 
 .character {
@@ -57,6 +59,10 @@
 }
 
 /* Hover effect - triggered by word card hover */
+.word-card:hover .characters {
+  color: #F4F4F4;
+}
+
 .word-card:hover .character {
   color: #F4F4F4;
 }
