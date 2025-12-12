@@ -1,14 +1,18 @@
 .envelope-canvas {
   width: 100%;
-  height: 100vh;
+  height: 1000px;
   position: relative;
   overflow: hidden;
+}
+
+.envelope-canvas-area {
+  height:900px;
 }
 
 .envelope-canvas-inner {
   position: relative;
   min-width: 800px;
-  min-height: 600px;
+  max-height: 800px;
   background: #ffffff;
 }
 
@@ -56,7 +60,7 @@
   left: calc(100% - 91px - 290px);
   top: 265px;
   width: 290px;
-  height: 440px;
+  height: 400px;
 }
 
 .boundary-label {
