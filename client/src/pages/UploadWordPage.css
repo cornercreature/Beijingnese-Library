@@ -1,6 +1,6 @@
 .upload-word-page-overlay {
   position: fixed;
-  margin-top: -30px;
+  margin-top: -40px;
   top: 0;
   left: 0;
   width: 100vw;
@@ -12,11 +12,11 @@
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  padding: 2rem 0 2rem 0;
+  padding: 2.2rem 0 2rem 0;
 }
 
 .upload-word-page {
-  padding: 110px 250px 2rem 250px;
+  padding: 130px 250px 120px 250px;
   max-width: 1200px;
   width: 100%;
   background-color: #F4F4F4;

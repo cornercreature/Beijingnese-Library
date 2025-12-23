@@ -1,0 +1,10 @@
+.share-page {
+  min-height: 100vh;
+  background-color: #F4F4F4;
+}
+
+.share-page-content {
+  padding-top: 80px;
+  width: 100%;
+  min-height: calc(100vh - 80px);
+}
