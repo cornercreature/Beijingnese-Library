@@ -149,32 +149,22 @@
   position: absolute;
   top: 0px;
   left: 15px;
-  padding: 0.5rem 1rem;
-  background: #000000;
-  color: #f4f4f4;
+  padding: 0;
+  background: transparent;
   border: none;
-  border-radius: 0px;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: opacity 0.2s;
   z-index: 10;
-  font-family: 'Noto Serif SC', serif;
 }
 
-.record-audio-button div:first-child {
-  font-family: 'Noto Serif SC', serif;
-  font-size: 0.9rem;
-  -webkit-text-stroke: 0.5px #f4f4f4;
-}
-
-.record-audio-button div:last-child {
-  font-family: 'EB Garamond', serif;
-  font-variant: small-caps;
-  font-size: 0.8rem;
-  -webkit-text-stroke: 0.5px #f4f4f4;
+.record-audio-button img {
+  width: 40px;
+  height: auto;
+  display: block;
 }
 
 .record-audio-button:hover {
-  background: #6F0000;
+  opacity: 0.7;
 }
 
 /* Recording Panel */
@@ -432,7 +422,7 @@
   color: #000000;
   font-family: 'EB Garamond', serif;
   text-align: center;
-  margin: -20px 0px 10px 0px;
+  margin: -20px 0px 0px 0px;
   padding: 0;
   letter-spacing: 0.1rem;
   -webkit-text-stroke: 1px #000000;
@@ -515,18 +505,19 @@
 }
 
 .definition-text.english {
-  font-size: 30px;
+  font-size: 26px;
   font-family: 'EB Garamond', serif;
   font-weight: 500;
+  line-height: 1.5;
   font-variant: normal;
   margin-top: 40px;
 }
 
 .definition-text.putonghua {
-  font-size: 28px;
+  font-size: 24px;
   font-family: 'Noto Serif SC', serif;
   font-weight: 700;
-  margin-bottom: 70px;
+  margin-bottom: 40px;
 }
 
 /* Grammar Category Tag - Chinese */
@@ -547,7 +538,7 @@
   padding: 0rem 2rem 0rem 2rem;
   background-color: transparent;
   border-radius: 0px;
-  font-size: 16px;
+  font-size: 12px;
   font-weight: 600;
   color: #000000;
   text-transform: uppercase;

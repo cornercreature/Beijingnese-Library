@@ -461,8 +461,7 @@ const WordDetailPage = () => {
             onClick={toggleRecordingPanel}
             className="record-audio-button"
           >
-            <div>再录个读法</div>
-            <div>record</div>
+            <img src="/mic.png" alt="Record audio" />
           </button>
 
           {/* Recording Panel */}
