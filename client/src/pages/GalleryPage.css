@@ -148,8 +148,7 @@
 .gallery-content {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 2rem;
-  padding-bottom: 80vh;
+  padding: 2rem 2rem 80vh 2rem;
 }
 
 .category-section {
@@ -162,7 +161,7 @@
   font-weight: 600;
   color: #F4F4F4;
   background-color: #000000;
-  margin: 0 -16px 70px -16px;
+  margin: 0 -16px 16px -16px;
   padding: 8px 0px 6px 0px;
   border-bottom: 1px solid #000000;
   line-height: 0.8;
@@ -183,8 +182,8 @@
 .words-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  column-gap: 0.5rem;
-  row-gap:50px;
+  column-gap: 10px;
+  row-gap:20px;
 }
 
 .loading, .error, .empty-state {
