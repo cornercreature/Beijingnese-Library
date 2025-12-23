@@ -8,7 +8,7 @@
 /* Scroll Sidebars */
 .scroll-sidebar {
   position: fixed;
-  top: 200px;
+  top: 160px;
   padding:0px 0px 0px 0px;
   height: 70vh;
   display: flex;
@@ -146,14 +146,14 @@
 }
 
 .gallery-content {
-  max-width: 1400px;
+  max-width: 1320px;
   margin: 0 auto;
-  padding: 2rem 2rem 80vh 2rem;
+  padding: 4.5rem 2rem 80vh 2rem;
 }
 
 .category-section {
   margin-bottom: 4rem;
-  scroll-margin-top: 105.8px;
+  scroll-margin-top: 135.8px;
 }
 
 .category-title {
@@ -165,6 +165,7 @@
   padding: 24px 0px 0px 0px;
   line-height: 0.8;
   -webkit-text-stroke: 0.4px #000000;
+  display: none;
 }
 
 .category-title {
@@ -176,13 +177,14 @@
   font-family: 'EB Garamond', serif;
   font-variant: small-caps;
   font-weight: 500;
+  display: none;
 }
 
 .words-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(var(--word-card-width, 300px), 1fr));
   column-gap: 40px;
-  row-gap:24px;
+  row-gap:80px;
 }
 
 /* Gallery-specific word card styling */
