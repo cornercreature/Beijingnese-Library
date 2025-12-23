@@ -11,12 +11,12 @@
 }
 
 .characters {
-  margin-top: 30px;
+  margin-top: 18px;
   display: flex;
   align-items: baseline;
   gap: 0px;
   font-family: 'NZGR Kangxi', serif;
-  font-size: 60px;
+  font-size: 56px;
   font-weight: 500;
   line-height: 1;
   color: #000000;

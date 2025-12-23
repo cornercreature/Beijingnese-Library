@@ -1,3 +1,4 @@
+
 .header-backdrop {
   position: fixed;
   top: 0;
@@ -24,7 +25,7 @@
   padding: 10px 0px;
   background: #F4F4F4;
   border-bottom: 1px solid black;
-  height: 120vh;
+  height: 122vh;
   transition: top 0.6s ease;
   pointer-events: none;
 }
@@ -74,7 +75,7 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: 10px 10px 10px 10px;
+  padding: 10px 10px 20px 10px;
   height: 9vh;
   justify-content: space-between;
 }
@@ -82,7 +83,7 @@
 .header-logo {
   position: fixed;
   left: 50%;
-  top: 17px;
+  top: 24px;
   transform: translateX(-50%);
   z-index: 1002;
 }

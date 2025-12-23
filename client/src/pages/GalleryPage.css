@@ -2,7 +2,7 @@
   min-height: 100vh;
   background: #F4F4F4;
   position: relative;
-  padding-top: 74px;
+  padding-top: 93px;
 }
 
 /* Scroll Sidebars */
@@ -161,8 +161,8 @@
   font-weight: 600;
   color: #F4F4F4;
   background-color: #000000;
-  margin: 0 -16px 16px -16px;
-  padding: 8px 0px 6px 0px;
+  margin: 0 -16px 26px -16px;
+  padding: 9px 0px 8px 0px;
   border-bottom: 1px solid #000000;
   line-height: 0.8;
   -webkit-text-stroke: 0.4px #F4F4F4;
@@ -181,9 +181,14 @@
 
 .words-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  column-gap: 10px;
-  row-gap:20px;
+  grid-template-columns: repeat(auto-fill, minmax(var(--word-card-width, 300px), 1fr));
+  column-gap: 0px;
+  row-gap:24px;
+}
+
+/* Gallery-specific word card styling */
+.gallery-page .word-card {
+  width: 100%;
 }
 
 .loading, .error, .empty-state {
