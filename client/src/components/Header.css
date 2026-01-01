@@ -95,17 +95,33 @@
   gap: 0;
 }
 
-.small p:first-child {
-  font-family: 'Noto Serif SC', serif;
+.small {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .small p {
+  margin: 0;
   font-size: 18px;
   -webkit-text-stroke: 0.8px black;
 }
 
-.app-header p {
-  margin: -5px;
+.small p:first-child {
+  font-family: 'Noto Serif SC', serif;
+}
+
+/* Individual control for each nav item */
+#aboutus p:first-child {
+  margin-bottom: -3px;
+}
+
+#addword p:first-child {
+  margin-bottom: -3px;
+}
+
+#share p:first-child {
+  margin-bottom: -3px;
 }
 
 .add-button {

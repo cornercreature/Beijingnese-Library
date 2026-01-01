@@ -67,23 +67,33 @@
 
 /* Individual English category adjustments */
 .sidebar-nav-item.english-all {
-  padding: 0;
+  padding: 4px;
 }
 
 .sidebar-nav-item.english-noun {
-  padding-top: 14px;
+  padding-top: 16px;
+  height:54px;
+  padding-bottom: 0px;
 }
 
 .sidebar-nav-item.english-verb {
-  padding-top: 14px;
+  padding-top: 16px;
+  height:54px;
+  margin-bottom: -6px;
 }
 
 .sidebar-nav-item.english-adjective {
   padding-top:8px;
+  height:78px;
+  margin-bottom: 12px;
+
 }
 
-.sidebar-nav-item.english-saying {
-  padding-top:24px;
+.sidebar-nav-item.english-sayings {
+  padding-top:30px;
+  height:67px;
+  padding-bottom: 0px;
+
 }
 
 .sidebar-nav-item.english-images {
@@ -104,7 +114,8 @@
 }
 
 .sidebar-nav-item.chinese-adjective {
-  padding: 0;
+  padding-bottom: 14px;
+  margin-bottom: 20px;
 }
 
 .sidebar-nav-item.chinese-saying {
