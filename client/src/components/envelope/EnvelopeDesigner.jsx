@@ -28,10 +28,10 @@ const EnvelopeDesigner = () => {
         const containerHeight = canvasRef.current.offsetHeight;
 
         // Percentage-based positioning to match template red area A-g
-        const leftPercent = 0.73;
-        const topPercent = 0.31;
-        const rightPercent = 0.04;
-        const bottomPercent = 0.08;
+        const leftPercent = 0.618;
+        const topPercent = 0.307;
+        const rightPercent = 0.172;
+        const bottomPercent = 0.186;
 
         setPhotoWindowBounds({
           x: containerWidth * leftPercent,
