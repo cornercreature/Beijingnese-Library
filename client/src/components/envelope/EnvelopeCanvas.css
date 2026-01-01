@@ -106,6 +106,7 @@
   top: var(--flap-area-top);
   width: var(--flap-area-width);
   height: var(--flap-area-height);
+  display: none;
 }
 
 .photo-drop-zone {
