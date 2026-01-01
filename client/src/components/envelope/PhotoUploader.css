@@ -1,7 +1,12 @@
+:root {
+  --envelope-button-width: 100%;
+}
+
 .photo-uploader {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  align-items: center;
 }
 
 .upload-button {
@@ -15,7 +20,7 @@
   font-family: 'EB Garamond', serif;
   font-variant: small-caps;
   font-weight: 600;
-  width: 100%;
+  width: var(--envelope-button-width);
   transition: all 0.3s ease;
   display: flex;
   flex-direction: column;
