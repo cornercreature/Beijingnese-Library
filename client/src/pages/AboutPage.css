@@ -73,4 +73,13 @@
   font-family: 'EB Garamond', serif;
   font-variant: small-caps;
   font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.colophonheader div:first-child {
+  font-family: 'Noto Serif SC', serif;
+  font-variant: normal;
+  font-size: 15px;
 }

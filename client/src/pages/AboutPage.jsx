@@ -30,13 +30,22 @@ We hope this brings you closer to beijing.
           </span>
         </div>
         <div className="colophon">
-          <div className="colophonheader">made by</div>
-          Nicole Sun
+          <div className="colophonheader">
+            <div>设计师/开发者</div>
+            <div>made by</div>
+          </div>
+          Nicole 嘉蔚 Sun 
           <br></br><br></br>
-          <div className="colophonheader">advised by</div>
-          Qingyang Chen
+          <div className="colophonheader">
+            <div>项目导师</div>
+            <div>advised by</div>
+          </div>
+          Pouya Ahmadi
           <br></br><br></br>
-          <div className="colophonheader">special thanks to</div>
+          <div className="colophonheader">
+            <div>特别感谢</div>
+            <div>special thanks to</div>
+          </div>
           Adonis<br></br>
           Chijun <br></br>
           Claire<br></br>
