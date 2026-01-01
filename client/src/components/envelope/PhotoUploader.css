@@ -61,4 +61,13 @@
 
 .upload-hint small {
   font-size: 11px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.upload-hint small div:first-child {
+  font-family: 'Noto Serif SC', serif;
+  font-variant: normal;
+  font-size: 10px;
 }

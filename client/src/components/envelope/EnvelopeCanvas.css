@@ -139,6 +139,15 @@
   text-align: center;
   padding: 1rem;
   font-variant: small-caps;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.drop-hint div:first-child,
+.drop-hint-active div:first-child {
+  font-family: 'Noto Serif SC', serif;
+  font-variant: normal;
 }
 
 .drop-hint-active {

@@ -463,7 +463,7 @@ const EnvelopeCanvas = ({
 
         <div className="placeholder-message">
           <p>Add <strong>templatepublic-01.png</strong> and <strong>templatepublic-02.png</strong> to the <code>/client/public/</code> folder</p>
-          <p style={{fontSize: '14px', marginTop: '10px'}}>The envelope designer is ready! Just add your envelope images.</p>
+          <p style={{fontSize: '14px', marginTop: '10px'}}>the envelope designer is ready! Just add your envelope images.</p>
         </div>
 
         {/* Photo window boundary indicator */}
@@ -484,10 +484,16 @@ const EnvelopeCanvas = ({
           onDrop={handleDrop}
         >
           {photos.length === 0 && !isDragOver && (
-            <span className="drop-hint">Drop photos here or use upload button</span>
+            <span className="drop-hint">
+              <div>拖放照片到此处或使用上传按钮</div>
+              <div>drop photos here or use upload button</div>
+            </span>
           )}
           {isDragOver && (
-            <span className="drop-hint-active">Release to upload</span>
+            <span className="drop-hint-active">
+              <div>释放以上传</div>
+              <div>release to upload</div>
+            </span>
           )}
 
           {/* Render photos inside drop zone for overflow clipping */}

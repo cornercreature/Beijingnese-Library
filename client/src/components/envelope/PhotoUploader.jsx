@@ -77,7 +77,10 @@ const PhotoUploader = ({ onAddPhotos }) => {
       </button>
 
       <p className="upload-hint">
-        <small>JPG, PNG, or WebP • Max 5MB each</small>
+        <small>
+          <div>支持小于5MB的JPG、PNG和WEBp格式图片</div>
+          <div>jpg, png, or webp｜max 5mb each</div>
+        </small>
       </p>
     </div>
   );
