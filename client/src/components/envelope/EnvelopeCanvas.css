@@ -55,7 +55,7 @@
   pointer-events: none;
   object-fit: contain;
   z-index: 1;
-  opacity: 1;
+  opacity: 0;
 }
 
 .placeholder-message {

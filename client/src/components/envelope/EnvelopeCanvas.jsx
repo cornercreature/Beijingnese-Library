@@ -183,20 +183,36 @@ const EnvelopeCanvas = ({
     const relativeX = (photoCenterX / visibleWidth - agLeft) / agWidth;
     const relativeY = (photoCenterY / visibleHeight - agTop) / agHeight;
 
-    // Map to flap coordinates (reading from CSS variables)
-    const flapLeft = 0.45;
-    const flapTop = 0.07;
-    const flapWidth = 0.25; // 70% - 45% = 25% (100% - 45% - 30%)
-    const flapHeight = 0.20; // 27% - 7% = 20% (100% - 7% - 73%)
+    // Map to flap coordinates (matching CSS variables)
+    const flapLeft = 0.384;
+    const flapTop = 0.13;
+    const flapWidth = 0.208; // 100% - 38.4% - 40.8% = 20.8%
+    const flapHeight = 0.14; // 100% - 13% - 73% = 14%
 
     const flapCenterX = (flapLeft + relativeX * flapWidth) * exportWidth;
     const flapCenterY = (flapTop + relativeY * flapHeight) * exportHeight;
 
+    // Calculate position with constraints to keep within flap bounds
+    const photoWidthScaled = photo.size.width * scaleX;
+    const photoHeightScaled = photo.size.height * scaleY;
+
+    let leftPos = flapCenterX - (photoWidthScaled / 2);
+    let topPos = flapCenterY - (photoHeightScaled / 2);
+
+    // Constrain to flap area boundaries
+    const flapLeftPx = flapLeft * exportWidth;
+    const flapTopPx = flapTop * exportHeight;
+    const flapRightPx = (flapLeft + flapWidth) * exportWidth;
+    const flapBottomPx = (flapTop + flapHeight) * exportHeight;
+
+    leftPos = Math.max(flapLeftPx, Math.min(leftPos, flapRightPx - photoWidthScaled));
+    topPos = Math.max(flapTopPx, Math.min(topPos, flapBottomPx - photoHeightScaled));
+
     return {
-      left: `${flapCenterX - (photo.size.width * scaleX / 2)}px`,
-      top: `${flapCenterY - (photo.size.height * scaleY / 2)}px`,
-      width: `${photo.size.width * scaleX}px`,
-      height: `${photo.size.height * scaleY}px`,
+      left: `${leftPos}px`,
+      top: `${topPos}px`,
+      width: `${photoWidthScaled}px`,
+      height: `${photoHeightScaled}px`,
     };
   };
 
@@ -238,17 +254,33 @@ const EnvelopeCanvas = ({
             const flapStyle = getFlapReflectionStyle(photo);
             if (!flapStyle) return null;
             return (
-              <img
-                key={`flap-${photo.id}`}
-                src={photo.url}
-                alt="Flap Reflection"
+              <div
+                key={`flap-wrapper-${photo.id}`}
                 style={{
                   position: 'absolute',
-                  ...flapStyle,
-                  transform: `rotate(${(photo.rotation || 0) + 180}deg)`,
+                  left: `${0.384 * 1632}px`,
+                  top: `${0.13 * 1056}px`,
+                  width: `${0.208 * 1632}px`,
+                  height: `${0.14 * 1056}px`,
+                  overflow: 'hidden',
                   zIndex: photo.zIndex
                 }}
-              />
+              >
+                <img
+                  key={`flap-${photo.id}`}
+                  src={photo.url}
+                  alt="Flap Reflection"
+                  style={{
+                    position: 'absolute',
+                    left: `${parseFloat(flapStyle.left) - (0.384 * 1632)}px`,
+                    top: `${parseFloat(flapStyle.top) - (0.13 * 1056)}px`,
+                    width: flapStyle.width,
+                    height: flapStyle.height,
+                    transform: `rotate(${(photo.rotation || 0) + 180}deg)`,
+                    transformOrigin: 'center center'
+                  }}
+                />
+              </div>
             );
           })}
         </div>
