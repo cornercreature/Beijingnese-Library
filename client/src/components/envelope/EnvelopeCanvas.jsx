@@ -328,23 +328,38 @@ const EnvelopeCanvas = ({
           }}
         />
         <div className="photo-container-export">
-          {/* Render photos in main A-g area */}
-          {photos.map(photo => {
-            const style = getExportPhotoStyle(photo);
-            return (
-              <img
-                key={photo.id}
-                src={photo.url}
-                alt="Uploaded"
-                style={{
-                  position: 'absolute',
-                  ...style,
-                  transform: `rotate(${photo.rotation || 0}deg)`,
-                  zIndex: photo.zIndex
-                }}
-              />
-            );
-          })}
+          {/* Main photo area with overflow clipping */}
+          <div
+            style={{
+              position: 'absolute',
+              left: `${0.618 * 1632}px`,
+              top: `${0.307 * 1056}px`,
+              width: `${0.21 * 1632}px`,
+              height: `${0.507 * 1056}px`,
+              overflow: 'hidden'
+            }}
+          >
+            {/* Render photos in main A-g area */}
+            {photos.map(photo => {
+              const style = getExportPhotoStyle(photo);
+              return (
+                <img
+                  key={photo.id}
+                  src={photo.url}
+                  alt="Uploaded"
+                  style={{
+                    position: 'absolute',
+                    left: `${parseFloat(style.left) - (0.618 * 1632)}px`,
+                    top: `${parseFloat(style.top) - (0.307 * 1056)}px`,
+                    width: style.width,
+                    height: style.height,
+                    transform: `rotate(${photo.rotation || 0}deg)`,
+                    zIndex: photo.zIndex
+                  }}
+                />
+              );
+            })}
+          </div>
 
           {/* Render reflected photos in flap area */}
           {photos.filter(photo => shouldReflectToFlap(photo)).map(photo => {
