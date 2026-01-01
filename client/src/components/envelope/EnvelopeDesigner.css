@@ -51,8 +51,10 @@
   overflow: hidden;
   position: relative;
   border-radius: 0px;
-  width: 1100px;
-  height: calc(100vh - 104.8px - 4rem - 44px);
+  width: 100%;
+  max-width: var(--canvas-max-width);
+  aspect-ratio: var(--canvas-aspect-ratio);
+  height: auto;
 }
 
 /* Responsive */
