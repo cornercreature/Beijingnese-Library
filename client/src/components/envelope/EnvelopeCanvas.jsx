@@ -19,6 +19,16 @@ const EnvelopeCanvas = ({
     initialPosition: { x: 0, y: 0 }
   });
 
+  const resizeState = useRef({
+    isResizing: false,
+    photoId: null,
+    corner: null,
+    startX: 0,
+    startY: 0,
+    initialSize: { width: 0, height: 0 },
+    initialPosition: { x: 0, y: 0 }
+  });
+
   const handleMouseDown = (photoId, e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -66,8 +76,95 @@ const EnvelopeCanvas = ({
 
   const handleMouseUp = () => {
     dragState.current.isDragging = false;
+    resizeState.current.isResizing = false;
     document.removeEventListener('mousemove', handleMouseMove);
     document.removeEventListener('mouseup', handleMouseUp);
+    document.removeEventListener('mousemove', handleResizeMove);
+    document.removeEventListener('mouseup', handleResizeUp);
+  };
+
+  const handleResizeMouseDown = (photoId, corner, e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const photo = photos.find(p => p.id === photoId);
+    if (!photo) return;
+
+    onSelectPhoto(photoId);
+
+    resizeState.current = {
+      isResizing: true,
+      photoId,
+      corner,
+      startX: e.clientX,
+      startY: e.clientY,
+      initialSize: { ...photo.size },
+      initialPosition: { ...photo.position }
+    };
+
+    document.addEventListener('mousemove', handleResizeMove);
+    document.addEventListener('mouseup', handleResizeUp);
+  };
+
+  const handleResizeMove = (e) => {
+    if (!resizeState.current.isResizing) return;
+
+    const deltaX = e.clientX - resizeState.current.startX;
+    const deltaY = e.clientY - resizeState.current.startY;
+
+    const photo = photos.find(p => p.id === resizeState.current.photoId);
+    if (!photo) return;
+
+    const corner = resizeState.current.corner;
+    const aspectRatio = resizeState.current.initialSize.width / resizeState.current.initialSize.height;
+
+    let newWidth = resizeState.current.initialSize.width;
+    let newHeight = resizeState.current.initialSize.height;
+    let newX = resizeState.current.initialPosition.x;
+    let newY = resizeState.current.initialPosition.y;
+
+    // Calculate size changes based on corner
+    if (corner.includes('e')) {
+      newWidth = resizeState.current.initialSize.width + deltaX;
+    }
+    if (corner.includes('w')) {
+      newWidth = resizeState.current.initialSize.width - deltaX;
+      newX = resizeState.current.initialPosition.x + deltaX;
+    }
+    if (corner.includes('s')) {
+      newHeight = resizeState.current.initialSize.height + deltaY;
+    }
+    if (corner.includes('n')) {
+      newHeight = resizeState.current.initialSize.height - deltaY;
+      newY = resizeState.current.initialPosition.y + deltaY;
+    }
+
+    // Maintain aspect ratio
+    if (corner === 'nw' || corner === 'ne' || corner === 'sw' || corner === 'se') {
+      newHeight = newWidth / aspectRatio;
+      if (corner === 'nw' || corner === 'ne') {
+        newY = resizeState.current.initialPosition.y + (resizeState.current.initialSize.height - newHeight);
+      }
+    }
+
+    // Constrain minimum size
+    newWidth = Math.max(50, newWidth);
+    newHeight = Math.max(50, newHeight);
+
+    // Constrain to photo window bounds
+    newX = Math.max(photoWindowBounds.x, Math.min(newX, photoWindowBounds.x + photoWindowBounds.width - newWidth));
+    newY = Math.max(photoWindowBounds.y, Math.min(newY, photoWindowBounds.y + photoWindowBounds.height - newHeight));
+
+    onUpdatePhoto(resizeState.current.photoId, {
+      size: { width: newWidth, height: newHeight },
+      position: { x: newX, y: newY }
+    });
+  };
+
+  const handleResizeUp = () => {
+    resizeState.current.isResizing = false;
+    document.removeEventListener('mousemove', handleResizeMove);
+    document.removeEventListener('mouseup', handleResizeUp);
   };
 
   const handleCanvasClick = (e) => {
@@ -347,30 +444,38 @@ const EnvelopeCanvas = ({
           {isDragOver && (
             <span className="drop-hint-active">Release to upload</span>
           )}
-        </div>
 
-        {/* Render photos */}
-        {photos.map(photo => (
-          <div
-            key={photo.id}
-            className={`photo-item ${selectedPhotoId === photo.id ? 'selected' : ''}`}
-            style={{
-              left: `${photo.position.x}px`,
-              top: `${photo.position.y}px`,
-              width: `${photo.size.width}px`,
-              height: `${photo.size.height}px`,
-              transform: `rotate(${photo.rotation || 0}deg)`,
-              zIndex: photo.zIndex + 10
-            }}
-            onMouseDown={(e) => handleMouseDown(photo.id, e)}
-          >
-            <img
-              src={photo.url}
-              alt="Uploaded"
-              draggable={false}
-            />
-          </div>
-        ))}
+          {/* Render photos inside drop zone for overflow clipping */}
+          {photos.map(photo => (
+            <div
+              key={photo.id}
+              className={`photo-item ${selectedPhotoId === photo.id ? 'selected' : ''}`}
+              style={{
+                left: `${photo.position.x - photoWindowBounds.x}px`,
+                top: `${photo.position.y - photoWindowBounds.y}px`,
+                width: `${photo.size.width}px`,
+                height: `${photo.size.height}px`,
+                transform: `rotate(${photo.rotation || 0}deg)`,
+                zIndex: photo.zIndex + 10
+              }}
+              onMouseDown={(e) => handleMouseDown(photo.id, e)}
+            >
+              <img
+                src={photo.url}
+                alt="Uploaded"
+                draggable={false}
+              />
+              {selectedPhotoId === photo.id && (
+                <>
+                  <div className="resize-handle nw" onMouseDown={(e) => handleResizeMouseDown(photo.id, 'nw', e)} />
+                  <div className="resize-handle ne" onMouseDown={(e) => handleResizeMouseDown(photo.id, 'ne', e)} />
+                  <div className="resize-handle sw" onMouseDown={(e) => handleResizeMouseDown(photo.id, 'sw', e)} />
+                  <div className="resize-handle se" onMouseDown={(e) => handleResizeMouseDown(photo.id, 'se', e)} />
+                </>
+              )}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
