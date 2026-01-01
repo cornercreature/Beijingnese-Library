@@ -238,7 +238,7 @@ const EnvelopeCanvas = ({
               width: `${photo.size.width}px`,
               height: `${photo.size.height}px`,
               transform: `rotate(${photo.rotation || 0}deg)`,
-              zIndex: photo.zIndex
+              zIndex: photo.zIndex + 10
             }}
             onMouseDown={(e) => handleMouseDown(photo.id, e)}
           >
