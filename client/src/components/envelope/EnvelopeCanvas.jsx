@@ -204,8 +204,11 @@ const EnvelopeCanvas = ({
   // Export render dimensions: 1632 × 1056 (tabloid landscape at 96 DPI)
   // Visible canvas dimensions: dynamic based on container
   const getExportPhotoStyle = (photo) => {
+    const exportWidth = 1632;
+    const exportHeight = 1056;
+
     if (!canvasInnerRef.current) {
-      // Fallback if ref not ready
+      console.warn('canvasInnerRef not available, using 1:1 scale');
       return {
         left: `${photo.position.x}px`,
         top: `${photo.position.y}px`,
@@ -216,17 +219,43 @@ const EnvelopeCanvas = ({
 
     const visibleWidth = canvasInnerRef.current.offsetWidth;
     const visibleHeight = canvasInnerRef.current.offsetHeight;
-    const exportWidth = 1632;
-    const exportHeight = 1056;
+
+    // Adjust photo position to be relative to photo-drop-zone (same as visible rendering)
+    const relativeX = photo.position.x - photoWindowBounds.x;
+    const relativeY = photo.position.y - photoWindowBounds.y;
+
+    console.log('Export scale calculation:', {
+      visibleWidth,
+      visibleHeight,
+      exportWidth,
+      exportHeight,
+      photoPosition: photo.position,
+      photoWindowBounds,
+      relativePosition: { x: relativeX, y: relativeY },
+      photoSize: photo.size
+    });
+
+    // Safeguard against invalid dimensions
+    if (visibleWidth === 0 || visibleHeight === 0) {
+      console.error('Canvas has zero dimensions!', { visibleWidth, visibleHeight });
+      return {
+        left: `${relativeX}px`,
+        top: `${relativeY}px`,
+        width: `${photo.size.width}px`,
+        height: `${photo.size.height}px`,
+      };
+    }
 
     // Calculate scale factors for both dimensions
     const scaleX = exportWidth / visibleWidth;
     const scaleY = exportHeight / visibleHeight;
 
-    // Scale all photo properties
+    console.log('Scale factors:', { scaleX, scaleY });
+
+    // Scale all photo properties using relative positions
     return {
-      left: `${photo.position.x * scaleX}px`,
-      top: `${photo.position.y * scaleY}px`,
+      left: `${relativeX * scaleX}px`,
+      top: `${relativeY * scaleY}px`,
       width: `${photo.size.width * scaleX}px`,
       height: `${photo.size.height * scaleY}px`,
     };
@@ -244,10 +273,10 @@ const EnvelopeCanvas = ({
     const photoCenterX = (photo.position.x + photo.size.width / 2) / visibleWidth;
     const photoCenterY = (photo.position.y + photo.size.height / 2) / visibleHeight;
 
-    // Check if photo is in the upper portion of A-g area that corresponds to flap
+    // Check if photo is in A-g area (entire area reflects to flap)
     const inFlapCorrespondingRegion =
-      photoCenterX >= 0.618 && photoCenterX <= 0.828 && // Within A-g horizontal bounds
-      photoCenterY >= 0.307 && photoCenterY <= 0.45;    // Upper portion only
+      photoCenterX >= 0.618 && photoCenterX <= 0.828 && // Within A-g horizontal bounds (61.8% - 82.8%)
+      photoCenterY >= 0.307 && photoCenterY <= 0.814;   // Within A-g vertical bounds (30.7% - 81.4%)
 
     return inFlapCorrespondingRegion;
   };
@@ -272,7 +301,7 @@ const EnvelopeCanvas = ({
     const agLeft = 0.618;
     const agTop = 0.307;
     const agWidth = 0.21; // 82.8% - 61.8%
-    const agHeight = 0.138; // 44.5% - 30.7%
+    const agHeight = 0.507; // 81.4% - 30.7%
 
     const photoCenterX = photo.position.x + photo.size.width / 2;
     const photoCenterY = photo.position.y + photo.size.height / 2;
@@ -349,11 +378,12 @@ const EnvelopeCanvas = ({
                   alt="Uploaded"
                   style={{
                     position: 'absolute',
-                    left: `${parseFloat(style.left) - (0.618 * 1632)}px`,
-                    top: `${parseFloat(style.top) - (0.307 * 1056)}px`,
+                    left: style.left,
+                    top: style.top,
                     width: style.width,
                     height: style.height,
                     transform: `rotate(${photo.rotation || 0}deg)`,
+                    transformOrigin: 'center center',
                     zIndex: photo.zIndex
                   }}
                 />
