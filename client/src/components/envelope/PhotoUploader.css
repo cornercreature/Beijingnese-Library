@@ -9,7 +9,7 @@
   font-size: 14px;
   background-color: #000000;
   color: #f4f4f4;
-  border: 0px solid #000000;
+  border: none;
   border-radius: 0px;
   cursor: pointer;
   font-family: 'EB Garamond', serif;
@@ -27,9 +27,13 @@
   font-size: 16px;
   font-family: 'Noto Serif SC', serif;
   font-variant: normal;
-  -webkit-text-stroke: 0.3px #000;
+  -webkit-text-stroke: 0.3px #f4f4f4;
   margin-top: 3px;
   margin-bottom: -3px;
+}
+
+.upload-button div:last-child {
+  -webkit-text-stroke: 0px;
 }
 
 .upload-button:hover {

@@ -6,5 +6,7 @@
   height: calc(100vh - 104.8px);
   background: #F4F4F4;
   z-index: 10;
-  overflow: hidden;
+  overflow: auto;
+  padding: 30px 44px;
+  box-sizing: border-box;
 }
