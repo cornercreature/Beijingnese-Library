@@ -14,8 +14,10 @@ const GalleryPage = () => {
 
   const leftIndicatorRef = useRef(null);
   const rightIndicatorRef = useRef(null);
+  const ticking = useRef(false);
 
   const categories = ['Noun', 'Verb', 'Adjective', 'Sayings', 'Images'];
+  const sections = ['all-words', ...categories.map(c => c.toLowerCase())];
 
   useEffect(() => {
     fetchAllWords();
@@ -28,49 +30,56 @@ const GalleryPage = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ['all-words', ...categories.map(c => c.toLowerCase())];
-      const scrollPosition = window.scrollY + window.innerHeight / 3;
+      if (!ticking.current) {
+        window.requestAnimationFrame(() => {
+          const scrollPosition = window.scrollY + window.innerHeight / 3;
 
-      let currentSection = 'all-words';
-      for (const sectionId of sections) {
-        const element = document.getElementById(sectionId);
-        if (element) {
-          const { offsetTop } = element;
-          if (scrollPosition >= offsetTop) {
-            currentSection = sectionId;
-          }
-        }
-      }
-
-      setActiveSection(currentSection);
-
-      // Position indicator at the active category button
-      const activeIndex = sections.indexOf(currentSection);
-
-      if (activeIndex !== -1) {
-        const sidebarNav = document.querySelector('.sidebar-nav');
-        if (sidebarNav) {
-          const navItems = sidebarNav.querySelectorAll('.sidebar-nav-item');
-          if (navItems[activeIndex]) {
-            const activeButton = navItems[activeIndex];
-            const buttonOffsetTop = activeButton.offsetTop;
-
-            if (leftIndicatorRef.current) {
-              leftIndicatorRef.current.style.top = `${buttonOffsetTop}px`;
-            }
-            if (rightIndicatorRef.current) {
-              rightIndicatorRef.current.style.top = `${buttonOffsetTop}px`;
+          let currentSection = 'all-words';
+          for (const sectionId of sections) {
+            const element = document.getElementById(sectionId);
+            if (element) {
+              const { offsetTop } = element;
+              if (scrollPosition >= offsetTop) {
+                currentSection = sectionId;
+              }
             }
           }
-        }
+
+          setActiveSection(currentSection);
+
+          // Position indicator at the active category button
+          const activeIndex = sections.indexOf(currentSection);
+
+          if (activeIndex !== -1) {
+            const sidebarNav = document.querySelector('.sidebar-nav');
+            if (sidebarNav) {
+              const navItems = sidebarNav.querySelectorAll('.sidebar-nav-item');
+              if (navItems[activeIndex]) {
+                const activeButton = navItems[activeIndex];
+                const buttonOffsetTop = activeButton.offsetTop;
+
+                if (leftIndicatorRef.current) {
+                  leftIndicatorRef.current.style.top = `${buttonOffsetTop}px`;
+                }
+                if (rightIndicatorRef.current) {
+                  rightIndicatorRef.current.style.top = `${buttonOffsetTop}px`;
+                }
+              }
+            }
+          }
+
+          ticking.current = false;
+        });
+
+        ticking.current = true;
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll();
 
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [categories]);
+  }, []);
 
   const fetchAllWords = async () => {
     try {
