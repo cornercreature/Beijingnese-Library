@@ -125,10 +125,32 @@ router.post(
 
 /**
  * @swagger
+ * /api/words/{id}/recordings:
+ *   get:
+ *     summary: Get all recordings for a word
+ *     tags: [Words]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Word ID
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved recordings
+ *       404:
+ *         description: Word not found
+ */
+router.get('/:id/recordings', wordController.getRecordings);
+
+/**
+ * @swagger
  * /api/words/{id}/audio:
  *   post:
- *     summary: Upload audio for an existing word
+ *     summary: Upload audio recording for an existing word
  *     tags: [Words]
+ *     description: Creates a new recording for the word with auto-incrementing order
  *     parameters:
  *       - in: path
  *         name: id

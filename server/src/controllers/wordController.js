@@ -27,6 +27,12 @@ exports.getAllWords = async (req, res) => {
         {
           model: db.ExampleSentence,
           as: 'examples'
+        },
+        {
+          model: db.WordRecording,
+          as: 'recordings',
+          separate: true,
+          order: [['recording_order', 'ASC']]
         }
       ],
       limit: parseInt(limit),
@@ -74,6 +80,12 @@ exports.getWordById = async (req, res) => {
         {
           model: db.ExampleSentence,
           as: 'examples'
+        },
+        {
+          model: db.WordRecording,
+          as: 'recordings',
+          separate: true,
+          order: [['recording_order', 'ASC']]
         }
       ]
     });
@@ -218,6 +230,12 @@ exports.createWord = async (req, res) => {
         {
           model: db.ExampleSentence,
           as: 'examples'
+        },
+        {
+          model: db.WordRecording,
+          as: 'recordings',
+          separate: true,
+          order: [['recording_order', 'ASC']]
         }
       ]
     });
@@ -319,7 +337,7 @@ exports.deleteWord = async (req, res) => {
 };
 
 /**
- * Upload audio for an existing word
+ * Upload audio for an existing word (creates a new recording)
  * POST /api/words/:id/audio
  */
 exports.uploadAudio = async (req, res) => {
@@ -344,27 +362,67 @@ exports.uploadAudio = async (req, res) => {
       });
     }
 
-    // Update word with audio file information
-    await word.update({
+    // Get the next recording order number
+    const maxOrder = await db.WordRecording.max('recording_order', {
+      where: { word_id: id }
+    });
+    const nextOrder = (maxOrder || 0) + 1;
+
+    // Create new recording
+    const recording = await db.WordRecording.create({
+      word_id: id,
       audio_file_path: `/uploads/audio/${req.file.filename}`,
       audio_file_size: req.file.size,
-      audio_mime_type: req.file.mimetype
+      audio_mime_type: req.file.mimetype,
+      recording_order: nextOrder
     });
 
     res.json({
       success: true,
       message: 'Audio uploaded successfully',
-      data: {
-        audio_file_path: word.audio_file_path,
-        audio_file_size: word.audio_file_size,
-        audio_mime_type: word.audio_mime_type
-      }
+      data: recording
     });
   } catch (error) {
     console.error('Error uploading audio:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to upload audio'
+    });
+  }
+};
+
+/**
+ * Get all recordings for a word
+ * GET /api/words/:id/recordings
+ */
+exports.getRecordings = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Verify word exists
+    const word = await db.Word.findByPk(id);
+    if (!word) {
+      return res.status(404).json({
+        success: false,
+        error: 'Word not found'
+      });
+    }
+
+    // Get all recordings for this word
+    const recordings = await db.WordRecording.findAll({
+      where: { word_id: id },
+      order: [['recording_order', 'ASC']]
+    });
+
+    res.json({
+      success: true,
+      data: recordings
+    });
+  } catch (error) {
+    console.error('Error fetching recordings:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to fetch recordings'
     });
   }
 };

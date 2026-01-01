@@ -84,6 +84,13 @@ module.exports = (sequelize, DataTypes) => {
       as: 'examples',
       onDelete: 'CASCADE'
     });
+
+    // Word has many WordRecordings
+    Word.hasMany(models.WordRecording, {
+      foreignKey: 'word_id',
+      as: 'recordings',
+      onDelete: 'CASCADE'
+    });
   };
 
   return Word;

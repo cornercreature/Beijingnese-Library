@@ -119,16 +119,21 @@
   position: relative;
 }
 
-/* Sound Icon - Top Right Corner */
-.sound-icon {
+/* Sound Icon Container - Top Right Corner */
+.sound-icon-container {
   position: absolute;
   top: 12px;
-  left: 140px;
+  left: 70px;
+  z-index: 10;
+}
+
+/* Sound Icon - Top Right Corner */
+.sound-icon {
   width: 30px;
   height: 30px;
   cursor: pointer;
   transition: opacity 0.2s;
-  z-index: 10;
+  display: block;
 }
 
 .sound-icon:hover {
@@ -147,7 +152,7 @@
 /* Record Audio Button - Top Left Corner */
 .record-audio-button {
   position: absolute;
-  top: 0px;
+  top: 12px;
   left: 15px;
   padding: 0;
   background: transparent;
@@ -158,8 +163,7 @@
 }
 
 .record-audio-button img {
-  width: 40px;
-  height: auto;
+  height: 30px;
   display: block;
 }
 
@@ -1002,4 +1006,65 @@
     font-size: 1rem;
     padding: 0.75rem 1.5rem;
   }
+}
+
+/* Recordings Popup */
+.recordings-popup {
+  position: absolute;
+  top: 45px;
+  left: 0;
+  background: #ffffff;
+  border: 2px solid #000000;
+  border-radius: 0px;
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  z-index: 20;
+  min-width: 80px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.recording-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.6rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.recording-item:hover {
+  background-color: #f4f4f4;
+  border-color: #000000;
+}
+
+.recording-item.playing {
+  background-color: #6F0000;
+  border-color: #6F0000;
+}
+
+.recording-item.playing .recording-label {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.recording-icon-small {
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+
+.recording-item.playing .recording-icon-small {
+  filter: brightness(0) invert(1);
+}
+
+.recording-label {
+  font-family: 'EB Garamond', serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #000000;
+  min-width: 20px;
+  text-align: center;
 }

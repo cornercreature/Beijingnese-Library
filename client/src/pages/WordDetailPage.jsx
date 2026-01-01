@@ -26,8 +26,11 @@ const WordDetailPage = () => {
   const [isRecordingAudio, setIsRecordingAudio] = useState(false);
   const [recordedAudioBlob, setRecordedAudioBlob] = useState(null);
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
+  const [showRecordingsPopup, setShowRecordingsPopup] = useState(false);
+  const [currentlyPlayingIndex, setCurrentlyPlayingIndex] = useState(null);
   const audioRef = useRef(null);
   const containerRef = useRef(null);
+  const recordingsPopupRef = useRef(null);
 
   // Grammar category mapping - English to Chinese
   const grammarCategoryMap = {
@@ -51,6 +54,8 @@ const WordDetailPage = () => {
         const response = await wordService.getWordById(id);
         // API returns { success: true, data: {...} }
         const wordData = response.data || response;
+        console.log('Word data fetched:', wordData);
+        console.log('Recordings:', wordData.recordings);
         setWord(wordData);
         // Trigger animation on initial load
         setTimeout(() => setPlayAnimation(true), 100);
@@ -64,17 +69,17 @@ const WordDetailPage = () => {
     fetchWord();
   }, [id]);
 
-  // Reload audio element when audio_file_path changes
+  // Reload audio element when recordings change
   useEffect(() => {
-    if (audioRef.current && word?.audio_file_path) {
+    if (audioRef.current && word?.recordings && word.recordings.length > 0) {
       audioRef.current.load();
       setIsPlayingAudio(false); // Reset playing state when new audio is loaded
     }
-  }, [word?.audio_file_path]);
+  }, [word?.recordings]);
 
-  // Autoplay audio when page loads if recording exists
+  // Autoplay first recording when page loads if recording exists
   useEffect(() => {
-    if (word?.audio_file_path && audioRef.current && !isPlayingAudio) {
+    if (word?.recordings && word.recordings.length > 0 && audioRef.current && !isPlayingAudio) {
       // Small delay to ensure audio is loaded
       const timer = setTimeout(() => {
         const playPromise = audioRef.current.play();
@@ -82,6 +87,7 @@ const WordDetailPage = () => {
           playPromise
             .then(() => {
               setIsPlayingAudio(true);
+              setCurrentlyPlayingIndex(0);
             })
             .catch(err => {
               console.log('Autoplay prevented by browser:', err);
@@ -92,20 +98,41 @@ const WordDetailPage = () => {
 
       return () => clearTimeout(timer);
     }
-  }, [word?.audio_file_path]);
+  }, [word?.recordings]);
+
+  // Close popup when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (recordingsPopupRef.current && !recordingsPopupRef.current.contains(event.target)) {
+        const soundIcon = document.querySelector('.sound-icon');
+        if (soundIcon && !soundIcon.contains(event.target)) {
+          setShowRecordingsPopup(false);
+        }
+      }
+    };
+
+    if (showRecordingsPopup) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showRecordingsPopup]);
 
   const handleCharactersClick = () => {
     setPlayAnimation(false);
     setTimeout(() => setPlayAnimation(true), 50);
 
-    // Play audio if available
-    if (audioRef.current && word?.audio_file_path) {
+    // Play first recording if available
+    if (audioRef.current && word?.recordings && word.recordings.length > 0) {
       audioRef.current.currentTime = 0; // Reset to start
       const playPromise = audioRef.current.play();
       if (playPromise !== undefined) {
         playPromise
           .then(() => {
             setIsPlayingAudio(true);
+            setCurrentlyPlayingIndex(0);
           })
           .catch(err => {
             console.error('Error playing audio on click:', err);
@@ -118,28 +145,33 @@ const WordDetailPage = () => {
     setShowSecondPage(!showSecondPage);
   };
 
-  const handleAudioPlay = () => {
+  const toggleRecordingsPopup = () => {
+    setShowRecordingsPopup(!showRecordingsPopup);
+  };
+
+  const playRecording = (recording, index) => {
     if (audioRef.current) {
+      // Stop currently playing audio if any
       if (isPlayingAudio) {
         audioRef.current.pause();
         setIsPlayingAudio(false);
-      } else {
-        // Ensure audio is loaded before playing
-        const playPromise = audioRef.current.play();
-        if (playPromise !== undefined) {
-          playPromise
-            .then(() => {
-              setIsPlayingAudio(true);
-            })
-            .catch(err => {
-              console.error('Error playing audio:', err);
-              // Try loading and playing again
-              audioRef.current.load();
-              audioRef.current.play()
-                .then(() => setIsPlayingAudio(true))
-                .catch(err2 => console.error('Retry failed:', err2));
-            });
-        }
+      }
+
+      // Update audio source
+      audioRef.current.src = `http://localhost:3001${recording.audio_file_path}`;
+      audioRef.current.load();
+
+      // Play the recording
+      const playPromise = audioRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            setIsPlayingAudio(true);
+            setCurrentlyPlayingIndex(index);
+          })
+          .catch(err => {
+            console.error('Error playing recording:', err);
+          });
       }
     }
   };
@@ -259,17 +291,10 @@ const WordDetailPage = () => {
       const result = await response.json();
       console.log('Upload result:', result);
 
-      // Update word with new audio path
-      setWord(prev => {
-        const updated = {
-          ...prev,
-          audio_file_path: result.data.audio_file_path,
-          audio_file_size: result.data.audio_file_size,
-          audio_mime_type: result.data.audio_mime_type
-        };
-        console.log('Updated word state:', updated);
-        return updated;
-      });
+      // Refetch word data to get updated recordings
+      const wordResponse = await wordService.getWordById(id);
+      const wordData = wordResponse.data || wordResponse;
+      setWord(wordData);
 
       // Close recording panel
       setIsRecordingAudio(false);
@@ -449,12 +474,37 @@ const WordDetailPage = () => {
         {/* First Page - Main Word Display */}
         <div className="page page-one">
           {/* Sound Icon - Top Right */}
-          <img
-            src="/soundicon.png"
-            alt="Play sound"
-            className={`sound-icon ${!word.audio_file_path ? 'disabled' : ''}`}
-            onClick={word.audio_file_path ? handleAudioPlay : null}
-          />
+          <div className="sound-icon-container">
+            <img
+              src="/soundicon.png"
+              alt="Play sound"
+              className={`sound-icon ${!word.recordings || word.recordings.length === 0 ? 'disabled' : ''}`}
+              onClick={(e) => {
+                console.log('Sound icon clicked');
+                console.log('word.recordings:', word.recordings);
+                console.log('Has recordings:', word.recordings && word.recordings.length > 0);
+                if (word.recordings && word.recordings.length > 0) {
+                  toggleRecordingsPopup();
+                }
+              }}
+            />
+
+            {/* Recordings Popup */}
+            {showRecordingsPopup && word.recordings && word.recordings.length > 0 && (
+              <div ref={recordingsPopupRef} className="recordings-popup">
+                {word.recordings.map((recording, index) => (
+                  <div
+                    key={recording.id}
+                    className={`recording-item ${currentlyPlayingIndex === index && isPlayingAudio ? 'playing' : ''}`}
+                    onClick={() => playRecording(recording, index)}
+                  >
+                    <img src="/soundicon.png" alt="Play" className="recording-icon-small" />
+                    <span className="recording-label">{index + 1}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
 
           {/* Record Audio Button - Always visible */}
           <button
@@ -539,10 +589,10 @@ const WordDetailPage = () => {
             </div>
 
             {/* Audio Element - Always rendered but hidden */}
-            {word.audio_file_path && (
+            {word.recordings && word.recordings.length > 0 && (
               <audio
                 ref={audioRef}
-                src={`http://localhost:3001${word.audio_file_path}`}
+                src={`http://localhost:3001${word.recordings[0].audio_file_path}`}
                 preload="metadata"
                 style={{ display: 'none' }}
                 onEnded={handleAudioEnded}
@@ -550,13 +600,10 @@ const WordDetailPage = () => {
                   console.error('Audio element error:', e);
                   console.error('Audio error code:', e.target.error?.code);
                   console.error('Audio error message:', e.target.error?.message);
-                  console.error('Audio src:', `http://localhost:3001${word.audio_file_path}`);
-                  console.error('Full word object:', word);
                 }}
                 onCanPlay={() => console.log('Audio can play')}
                 onLoadedData={() => {
                   console.log('Audio loaded data');
-                  console.log('Audio src:', `http://localhost:3001${word.audio_file_path}`);
                 }}
               />
             )}
