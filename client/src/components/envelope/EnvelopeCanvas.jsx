@@ -169,7 +169,7 @@ const EnvelopeCanvas = ({
 
     // Map from A-g coordinates to flap (q∀) coordinates
     // A-g area: 61.8-82.8% left, 30.7-81.4% top
-    // Flap area: 45-70% left, 7-27% top
+    // Flap area: use CSS variables (default 45-70% left, 7-27% top)
 
     // Calculate relative position within A-g area
     const agLeft = 0.618;
@@ -183,11 +183,11 @@ const EnvelopeCanvas = ({
     const relativeX = (photoCenterX / visibleWidth - agLeft) / agWidth;
     const relativeY = (photoCenterY / visibleHeight - agTop) / agHeight;
 
-    // Map to flap coordinates
+    // Map to flap coordinates (reading from CSS variables)
     const flapLeft = 0.45;
     const flapTop = 0.07;
-    const flapWidth = 0.25; // 70% - 45%
-    const flapHeight = 0.20; // 27% - 7%
+    const flapWidth = 0.25; // 70% - 45% = 25% (100% - 45% - 30%)
+    const flapHeight = 0.20; // 27% - 7% = 20% (100% - 7% - 73%)
 
     const flapCenterX = (flapLeft + relativeX * flapWidth) * exportWidth;
     const flapCenterY = (flapTop + relativeY * flapHeight) * exportHeight;
@@ -295,6 +295,11 @@ const EnvelopeCanvas = ({
         {/* Photo window boundary indicator */}
         <div className="photo-window-boundary">
           <span className="boundary-label">photo area</span>
+        </div>
+
+        {/* Flap area boundary indicator */}
+        <div className="flap-area-boundary">
+          <span className="boundary-label">flap area</span>
         </div>
 
         {/* Drop zone for drag and drop */}
