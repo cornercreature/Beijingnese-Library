@@ -26,11 +26,18 @@ const EnvelopeDesigner = () => {
       const updateBounds = () => {
         const containerWidth = canvasRef.current.offsetWidth;
         const containerHeight = canvasRef.current.offsetHeight;
+
+        // Percentage-based positioning to match template red area A-g
+        const leftPercent = 0.73;
+        const topPercent = 0.31;
+        const rightPercent = 0.04;
+        const bottomPercent = 0.08;
+
         setPhotoWindowBounds({
-          x: 40,
-          y: 40,
-          width: containerWidth - 80,
-          height: containerHeight - 80
+          x: containerWidth * leftPercent,
+          y: containerHeight * topPercent,
+          width: containerWidth * (1 - leftPercent - rightPercent),
+          height: containerHeight * (1 - topPercent - bottomPercent)
         });
       };
       updateBounds();
@@ -53,6 +60,26 @@ const EnvelopeDesigner = () => {
     }));
 
     setPhotos(prev => [...prev, ...photosWithDefaults]);
+  };
+
+  const handleAddPhotosFromFiles = (files) => {
+    // Convert File objects to data URLs
+    const promises = files.map(file => {
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          resolve({
+            url: e.target.result,
+            name: file.name
+          });
+        };
+        reader.readAsDataURL(file);
+      });
+    });
+
+    Promise.all(promises).then(photosData => {
+      handleAddPhotos(photosData);
+    });
   };
 
   const handleDeletePhoto = (photoId) => {
@@ -95,6 +122,7 @@ const EnvelopeDesigner = () => {
             photoWindowBounds={photoWindowBounds}
             onSelectPhoto={handleSelectPhoto}
             onUpdatePhoto={handleUpdatePhoto}
+            onAddPhotos={handleAddPhotosFromFiles}
           />
         </div>
 

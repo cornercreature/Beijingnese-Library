@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import './EnvelopeCanvas.css';
 
 const EnvelopeCanvas = ({
@@ -6,9 +6,11 @@ const EnvelopeCanvas = ({
   selectedPhotoId,
   photoWindowBounds,
   onSelectPhoto,
-  onUpdatePhoto
+  onUpdatePhoto,
+  onAddPhotos
 }) => {
   const canvasInnerRef = useRef(null);
+  const [isDragOver, setIsDragOver] = useState(false);
   const dragState = useRef({
     isDragging: false,
     photoId: null,
@@ -72,6 +74,32 @@ const EnvelopeCanvas = ({
     // Deselect if clicking on empty canvas area
     if (e.target.classList.contains('envelope-canvas-inner')) {
       onSelectPhoto(null);
+    }
+  };
+
+  // Drag and drop handlers for file upload
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragOver(true);
+  };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragOver(false);
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragOver(false);
+
+    const files = Array.from(e.dataTransfer.files);
+    const imageFiles = files.filter(f => f.type.startsWith('image/'));
+
+    if (imageFiles.length > 0 && onAddPhotos) {
+      onAddPhotos(imageFiles);
     }
   };
 
@@ -166,6 +194,14 @@ const EnvelopeCanvas = ({
           }}
         />
 
+        {/* Training overlay */}
+        <img
+          src="/training.png"
+          alt="Training Overlay"
+          className="training-overlay"
+          draggable={false}
+        />
+
         <div className="placeholder-message">
           <p>Add <strong>templatepublic-01.png</strong> and <strong>templatepublic-02.png</strong> to the <code>/client/public/</code> folder</p>
           <p style={{fontSize: '14px', marginTop: '10px'}}>The envelope designer is ready! Just add your envelope images.</p>
@@ -174,6 +210,21 @@ const EnvelopeCanvas = ({
         {/* Photo window boundary indicator */}
         <div className="photo-window-boundary">
           <span className="boundary-label">photo area</span>
+        </div>
+
+        {/* Drop zone for drag and drop */}
+        <div
+          className={`photo-drop-zone ${isDragOver ? 'drag-over' : ''}`}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
+        >
+          {photos.length === 0 && !isDragOver && (
+            <span className="drop-hint">Drop photos here or use upload button</span>
+          )}
+          {isDragOver && (
+            <span className="drop-hint-active">Release to upload</span>
+          )}
         </div>
 
         {/* Render photos */}
