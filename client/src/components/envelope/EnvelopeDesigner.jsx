@@ -2,22 +2,22 @@ import React, { useState, useEffect } from 'react';
 import EnvelopeCanvas from './EnvelopeCanvas';
 import PhotoUploader from './PhotoUploader';
 import PhotoEditor from './PhotoEditor';
+import PhotoList from './PhotoList';
 import EnvelopeExportButton from './EnvelopeExportButton';
 import './EnvelopeDesigner.css';
 
-const EnvelopeDesigner = ({ wordData, onClose }) => {
+const EnvelopeDesigner = () => {
   const [photos, setPhotos] = useState([]);
   const [selectedPhotoId, setSelectedPhotoId] = useState(null);
 
   // Photo window bounds - matches CSS in EnvelopeCanvas.css (.photo-window-boundary)
-  // CSS uses: left: calc(100% - 91px - 290px), top: 265px, width: 290px, height: 440px
-  // Using a ref to calculate actual position dynamically
+  // Expanded to nearly full canvas for maximum creative freedom
   const canvasRef = React.useRef(null);
   const [photoWindowBounds, setPhotoWindowBounds] = useState({
-    x: 819,      // Default: approx 1200px container - 91px - 290px
-    y: 265,      // Top position (matches CSS)
-    width: 290,  // Width of photo window (matches CSS)
-    height: 440  // Height of photo window (matches CSS)
+    x: 40,       // Left offset
+    y: 40,       // Top offset
+    width: 800,  // Default width (will be recalculated)
+    height: 600  // Default height (will be recalculated)
   });
 
   // Calculate actual photo window bounds after canvas mounts
@@ -25,65 +25,19 @@ const EnvelopeDesigner = ({ wordData, onClose }) => {
     if (canvasRef.current) {
       const updateBounds = () => {
         const containerWidth = canvasRef.current.offsetWidth;
-        setPhotoWindowBounds(prev => ({
-          ...prev,
-          x: containerWidth - 91 - 290
-        }));
+        const containerHeight = canvasRef.current.offsetHeight;
+        setPhotoWindowBounds({
+          x: 40,
+          y: 40,
+          width: containerWidth - 80,
+          height: containerHeight - 80
+        });
       };
       updateBounds();
       window.addEventListener('resize', updateBounds);
       return () => window.removeEventListener('resize', updateBounds);
     }
   }, []);
-
-  // Handle background click to close modal
-  const handleBackgroundClick = (e) => {
-    const target = e.target;
-    // Check if the click is on an interactive element or its child
-    const isInteractive = target.tagName === 'BUTTON' ||
-                         target.tagName === 'INPUT' ||
-                         target.tagName === 'TEXTAREA' ||
-                         target.tagName === 'SELECT' ||
-                         target.tagName === 'LABEL' ||
-                         target.closest('button') ||
-                         target.closest('input') ||
-                         target.closest('textarea') ||
-                         target.closest('select') ||
-                         target.closest('label') ||
-                         target.closest('.envelope-sidebar') ||
-                         target.closest('.photo-uploader') ||
-                         target.closest('.photo-editor') ||
-                         target.closest('.draggable-photo') ||
-                         target.classList.contains('envelope-canvas-area');
-
-    if (!isInteractive) {
-      onClose();
-    }
-  };
-
-  // Handle ESC key to close modal
-  useEffect(() => {
-    const handleEscape = (e) => {
-      if (e.key === 'Escape') {
-        onClose();
-      }
-    };
-
-    document.addEventListener('keydown', handleEscape);
-    return () => document.removeEventListener('keydown', handleEscape);
-  }, [onClose]);
-
-  // Handle Delete key to remove selected photo
-  useEffect(() => {
-    const handleDelete = (e) => {
-      if (e.key === 'Delete' && selectedPhotoId) {
-        handleDeletePhoto(selectedPhotoId);
-      }
-    };
-
-    document.addEventListener('keydown', handleDelete);
-    return () => document.removeEventListener('keydown', handleDelete);
-  }, [selectedPhotoId]);
 
   const handleAddPhotos = (newPhotos) => {
     const photosWithDefaults = newPhotos.map((photo, index) => ({
@@ -94,6 +48,7 @@ const EnvelopeDesigner = ({ wordData, onClose }) => {
         y: photoWindowBounds.y + 20 + (index * 20)
       },
       size: { width: 200, height: 150 },
+      rotation: 0,
       zIndex: photos.length + index
     }));
 
@@ -132,9 +87,8 @@ const EnvelopeDesigner = ({ wordData, onClose }) => {
   const selectedPhoto = photos.find(p => p.id === selectedPhotoId);
 
   return (
-    <div className="envelope-designer-modal">
-      <div className="envelope-designer-content" onClick={handleBackgroundClick}>
-        <div className="envelope-canvas-area" ref={canvasRef}>
+    <div className="envelope-designer-content">
+      <div className="envelope-canvas-area" ref={canvasRef}>
           <EnvelopeCanvas
             photos={photos}
             selectedPhotoId={selectedPhotoId}
@@ -152,6 +106,13 @@ const EnvelopeDesigner = ({ wordData, onClose }) => {
 
           <PhotoUploader onAddPhotos={handleAddPhotos} />
 
+          <PhotoList
+            photos={photos}
+            selectedPhotoId={selectedPhotoId}
+            onSelectPhoto={handleSelectPhoto}
+            onDeletePhoto={handleDeletePhoto}
+          />
+
           <EnvelopeExportButton photos={photos} photoWindowBounds={photoWindowBounds} />
 
           {selectedPhoto && (
@@ -166,7 +127,6 @@ const EnvelopeDesigner = ({ wordData, onClose }) => {
           )}
         </div>
       </div>
-    </div>
   );
 };
 

@@ -7,11 +7,9 @@ const EnvelopeExportButton = ({ photos, photoWindowBounds }) => {
   const [isExporting, setIsExporting] = useState(false);
 
   const handleExport = async () => {
-    console.log('🚀 Export PDF button clicked!');
     setIsExporting(true);
 
     try {
-      console.log('📄 Creating PDF instance...');
       // Create PDF instance (tabloid size)
       const pdf = new jsPDF({
         orientation: 'landscape',
@@ -20,61 +18,44 @@ const EnvelopeExportButton = ({ photos, photoWindowBounds }) => {
       });
 
       // Page 1: Front envelope (with photos)
-      console.log('🔍 Looking for envelope-front-render...');
       const frontElement = document.getElementById('envelope-front-render');
-      console.log('Front element found:', frontElement);
 
       if (frontElement) {
-        console.log('📸 Rendering front page with html2canvas...');
         const frontCanvas = await html2canvas(frontElement, {
-          scale: 2,
+          scale: 3,
           backgroundColor: '#ffffff',
-          logging: true,
+          logging: false,
           useCORS: true
         });
-        console.log('✅ Front canvas rendered:', frontCanvas.width, 'x', frontCanvas.height);
 
         const frontImgData = frontCanvas.toDataURL('image/png');
         pdf.addImage(frontImgData, 'PNG', 0, 0, 431.8, 279.4);
-        console.log('✅ Front page added to PDF');
-      } else {
-        console.error('❌ Front element not found!');
       }
 
       // Page 2: Back envelope (without photos)
-      console.log('➕ Adding second page...');
       pdf.addPage();
 
-      console.log('🔍 Looking for envelope-back-render...');
       const backElement = document.getElementById('envelope-back-render');
-      console.log('Back element found:', backElement);
 
       if (backElement) {
-        console.log('📸 Rendering back page with html2canvas...');
         const backCanvas = await html2canvas(backElement, {
-          scale: 2,
+          scale: 3,
           backgroundColor: '#ffffff',
-          logging: true,
+          logging: false,
           useCORS: true
         });
-        console.log('✅ Back canvas rendered:', backCanvas.width, 'x', backCanvas.height);
 
         const backImgData = backCanvas.toDataURL('image/png');
         pdf.addImage(backImgData, 'PNG', 0, 0, 431.8, 279.4);
-        console.log('✅ Back page added to PDF');
-      } else {
-        console.error('❌ Back element not found!');
       }
 
       // Download PDF
       const timestamp = new Date().getTime();
-      console.log('💾 Saving PDF as envelope-' + timestamp + '.pdf');
       pdf.save(`envelope-${timestamp}.pdf`);
-      console.log('✅ PDF export completed successfully!');
 
     } catch (error) {
-      console.error('❌ Error generating PDF:', error);
-      alert('Failed to generate PDF. Please try again. Check console for details.');
+      console.error('Error generating PDF:', error);
+      alert('Failed to generate PDF. Please try again.');
     } finally {
       setIsExporting(false);
     }

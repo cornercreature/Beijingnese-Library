@@ -1,0 +1,10 @@
+.envelope-page {
+  position: fixed;
+  top: 104.8px;
+  left: 0;
+  width: 100%;
+  height: calc(100vh - 104.8px);
+  background: #F4F4F4;
+  z-index: 10;
+  overflow: hidden;
+}

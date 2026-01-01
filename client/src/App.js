@@ -7,6 +7,7 @@ import WordDetailPage from './pages/WordDetailPage';
 import AddExamplePage from './pages/AddExamplePage';
 import AboutPage from './pages/AboutPage';
 import SharePage from './pages/SharePage';
+import EnvelopePage from './pages/EnvelopePage';
 import TestWordDetailPage from './pages/TestWordDetailPage';
 import TestAddExamplePage from './pages/TestAddExamplePage';
 import './App.css';
@@ -21,6 +22,7 @@ function App() {
           <Route path="/upload-image" element={<UploadImagePage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/share" element={<SharePage />} />
+          <Route path="/envelope" element={<EnvelopePage />} />
           <Route path="/words/:id" element={<WordDetailPage />} />
           <Route path="/words/:id/add-example" element={<AddExamplePage />} />
           {/* Test routes */}

@@ -15,10 +15,10 @@ const Header = () => {
   };
 
   const handleShareClick = () => {
-    if (location.pathname === '/share') {
+    if (location.pathname === '/envelope') {
       navigate('/');
     } else {
-      navigate('/share');
+      navigate('/envelope');
     }
   };
 

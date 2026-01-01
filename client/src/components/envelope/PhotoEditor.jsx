@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './PhotoEditor.css';
 
 const PhotoEditor = ({
@@ -9,6 +9,9 @@ const PhotoEditor = ({
   onSendToBack,
   windowBounds
 }) => {
+  const [lockAspectRatio, setLockAspectRatio] = useState(false);
+  const aspectRatio = photo.size.width / photo.size.height;
+
   const handlePositionChange = (axis, value) => {
     const numValue = parseInt(value) || 0;
 
@@ -29,11 +32,23 @@ const PhotoEditor = ({
     if (dimension === 'width') {
       const maxWidth = windowBounds.width;
       const constrainedWidth = Math.max(50, Math.min(numValue, maxWidth));
-      onUpdate({ size: { ...photo.size, width: constrainedWidth } });
+
+      if (lockAspectRatio) {
+        const newHeight = Math.round(constrainedWidth / aspectRatio);
+        onUpdate({ size: { width: constrainedWidth, height: newHeight } });
+      } else {
+        onUpdate({ size: { ...photo.size, width: constrainedWidth } });
+      }
     } else {
       const maxHeight = windowBounds.height;
       const constrainedHeight = Math.max(50, Math.min(numValue, maxHeight));
-      onUpdate({ size: { ...photo.size, height: constrainedHeight } });
+
+      if (lockAspectRatio) {
+        const newWidth = Math.round(constrainedHeight * aspectRatio);
+        onUpdate({ size: { width: newWidth, height: constrainedHeight } });
+      } else {
+        onUpdate({ size: { ...photo.size, height: constrainedHeight } });
+      }
     }
   };
 
@@ -69,7 +84,17 @@ const PhotoEditor = ({
       </div>
 
       <div className="editor-section">
-        <label className="editor-label">大小 / size</label>
+        <div className="section-header-with-toggle">
+          <label className="editor-label">大小 / size</label>
+          <label className="aspect-ratio-lock">
+            <input
+              type="checkbox"
+              checked={lockAspectRatio}
+              onChange={(e) => setLockAspectRatio(e.target.checked)}
+            />
+            <span>锁定比例 / lock ratio</span>
+          </label>
+        </div>
         <div className="input-group">
           <div className="input-field">
             <label>w</label>
@@ -89,6 +114,29 @@ const PhotoEditor = ({
               className="number-input"
             />
           </div>
+        </div>
+      </div>
+
+      <div className="editor-section">
+        <label className="editor-label">旋转 / rotation</label>
+        <div className="rotation-control">
+          <input
+            type="range"
+            min="0"
+            max="360"
+            value={photo.rotation || 0}
+            onChange={(e) => onUpdate({ rotation: parseInt(e.target.value) })}
+            className="rotation-slider"
+          />
+          <input
+            type="number"
+            min="0"
+            max="360"
+            value={Math.round(photo.rotation || 0)}
+            onChange={(e) => onUpdate({ rotation: parseInt(e.target.value) || 0 })}
+            className="rotation-number"
+          />
+          <span className="rotation-unit">°</span>
         </div>
       </div>
 
