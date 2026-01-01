@@ -135,6 +135,71 @@ const EnvelopeCanvas = ({
     };
   };
 
+  // Check if photo should be reflected to flap area
+  // Photos in upper portion of A-g area (61.8-82.8% left, 30.7-45% top) map to flap
+  const shouldReflectToFlap = (photo) => {
+    if (!canvasInnerRef.current) return false;
+
+    const visibleWidth = canvasInnerRef.current.offsetWidth;
+    const visibleHeight = canvasInnerRef.current.offsetHeight;
+
+    // Calculate photo center position as percentage
+    const photoCenterX = (photo.position.x + photo.size.width / 2) / visibleWidth;
+    const photoCenterY = (photo.position.y + photo.size.height / 2) / visibleHeight;
+
+    // Check if photo is in the upper portion of A-g area that corresponds to flap
+    const inFlapCorrespondingRegion =
+      photoCenterX >= 0.618 && photoCenterX <= 0.828 && // Within A-g horizontal bounds
+      photoCenterY >= 0.307 && photoCenterY <= 0.45;    // Upper portion only
+
+    return inFlapCorrespondingRegion;
+  };
+
+  // Calculate flap reflection position for a photo
+  const getFlapReflectionStyle = (photo) => {
+    if (!canvasInnerRef.current) return null;
+
+    const visibleWidth = canvasInnerRef.current.offsetWidth;
+    const visibleHeight = canvasInnerRef.current.offsetHeight;
+    const exportWidth = 1632;
+    const exportHeight = 1056;
+
+    const scaleX = exportWidth / visibleWidth;
+    const scaleY = exportHeight / visibleHeight;
+
+    // Map from A-g coordinates to flap (q∀) coordinates
+    // A-g area: 61.8-82.8% left, 30.7-81.4% top
+    // Flap area: 45-70% left, 7-27% top
+
+    // Calculate relative position within A-g area
+    const agLeft = 0.618;
+    const agTop = 0.307;
+    const agWidth = 0.21; // 82.8% - 61.8%
+    const agHeight = 0.138; // 44.5% - 30.7%
+
+    const photoCenterX = photo.position.x + photo.size.width / 2;
+    const photoCenterY = photo.position.y + photo.size.height / 2;
+
+    const relativeX = (photoCenterX / visibleWidth - agLeft) / agWidth;
+    const relativeY = (photoCenterY / visibleHeight - agTop) / agHeight;
+
+    // Map to flap coordinates
+    const flapLeft = 0.45;
+    const flapTop = 0.07;
+    const flapWidth = 0.25; // 70% - 45%
+    const flapHeight = 0.20; // 27% - 7%
+
+    const flapCenterX = (flapLeft + relativeX * flapWidth) * exportWidth;
+    const flapCenterY = (flapTop + relativeY * flapHeight) * exportHeight;
+
+    return {
+      left: `${flapCenterX - (photo.size.width * scaleX / 2)}px`,
+      top: `${flapCenterY - (photo.size.height * scaleY / 2)}px`,
+      width: `${photo.size.width * scaleX}px`,
+      height: `${photo.size.height * scaleY}px`,
+    };
+  };
+
   return (
     <div className="envelope-canvas">
       {/* Hidden render divs for export */}
@@ -150,6 +215,7 @@ const EnvelopeCanvas = ({
           }}
         />
         <div className="photo-container-export">
+          {/* Render photos in main A-g area */}
           {photos.map(photo => {
             const style = getExportPhotoStyle(photo);
             return (
@@ -161,6 +227,25 @@ const EnvelopeCanvas = ({
                   position: 'absolute',
                   ...style,
                   transform: `rotate(${photo.rotation || 0}deg)`,
+                  zIndex: photo.zIndex
+                }}
+              />
+            );
+          })}
+
+          {/* Render reflected photos in flap area */}
+          {photos.filter(photo => shouldReflectToFlap(photo)).map(photo => {
+            const flapStyle = getFlapReflectionStyle(photo);
+            if (!flapStyle) return null;
+            return (
+              <img
+                key={`flap-${photo.id}`}
+                src={photo.url}
+                alt="Flap Reflection"
+                style={{
+                  position: 'absolute',
+                  ...flapStyle,
+                  transform: `rotate(${(photo.rotation || 0) + 180}deg)`,
                   zIndex: photo.zIndex
                 }}
               />
