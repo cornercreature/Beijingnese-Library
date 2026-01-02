@@ -25,6 +25,15 @@ const WordCard = ({ word }) => {
     }
   };
 
+  // Helper to get the correct audio URL
+  const getAudioUrl = (audioPath) => {
+    if (!audioPath) return '';
+    // If it's already a full URL (Cloudinary), use it directly
+    if (audioPath.startsWith('http')) return audioPath;
+    // Otherwise, prepend API_BASE for local paths
+    return `${API_BASE}${audioPath}`;
+  };
+
   return (
     <Link to={`/words/${word.id}`} className="word-card">
       <div className="word-card-content">
@@ -34,7 +43,7 @@ const WordCard = ({ word }) => {
           <>
             <audio
               ref={audioRef}
-              src={`${API_BASE}${word.audio_file_path}`}
+              src={getAudioUrl(word.audio_file_path)}
               preload="none"
             />
           </>

@@ -35,6 +35,15 @@ const WordDetailPage = () => {
   const containerRef = useRef(null);
   const recordingsPopupRef = useRef(null);
 
+  // Helper to get the correct audio URL
+  const getAudioUrl = (audioPath) => {
+    if (!audioPath) return '';
+    // If it's already a full URL (Cloudinary), use it directly
+    if (audioPath.startsWith('http')) return audioPath;
+    // Otherwise, prepend API_BASE for local paths
+    return `${API_BASE}${audioPath}`;
+  };
+
   // Grammar category mapping - English to Chinese
   const grammarCategoryMap = {
     'Noun': '名词',
@@ -161,7 +170,7 @@ const WordDetailPage = () => {
       }
 
       // Update audio source
-      audioRef.current.src = `${API_BASE}${recording.audio_file_path}`;
+      audioRef.current.src = getAudioUrl(recording.audio_file_path);
       audioRef.current.load();
 
       // Play the recording
@@ -595,7 +604,7 @@ const WordDetailPage = () => {
             {word.recordings && word.recordings.length > 0 && (
               <audio
                 ref={audioRef}
-                src={`${API_BASE}${word.recordings[0].audio_file_path}`}
+                src={getAudioUrl(word.recordings[0].audio_file_path)}
                 preload="metadata"
                 style={{ display: 'none' }}
                 onEnded={handleAudioEnded}
