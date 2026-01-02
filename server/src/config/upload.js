@@ -2,21 +2,35 @@ const multer = require('multer');
 const path = require('path');
 const crypto = require('crypto');
 const fs = require('fs');
+const cloudinary = require('cloudinary').v2;
+const { Readable } = require('stream');
 
-// Ensure upload directories exist
+// Configure Cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
+// Use Cloudinary in production, local storage in development
+const USE_CLOUDINARY = process.env.NODE_ENV === 'production' && process.env.CLOUDINARY_CLOUD_NAME;
+
+// Ensure upload directories exist (for local development)
 const uploadDirs = {
   audio: path.join(__dirname, '../../uploads/audio'),
   images: path.join(__dirname, '../../uploads/images')
 };
 
-Object.values(uploadDirs).forEach(dir => {
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true });
-  }
-});
+if (!USE_CLOUDINARY) {
+  Object.values(uploadDirs).forEach(dir => {
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+  });
+}
 
 // Storage configuration for audio files
-const audioStorage = multer.diskStorage({
+const audioStorage = USE_CLOUDINARY ? multer.memoryStorage() : multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, uploadDirs.audio);
   },
@@ -29,7 +43,7 @@ const audioStorage = multer.diskStorage({
 });
 
 // Storage configuration for image files
-const imageStorage = multer.diskStorage({
+const imageStorage = USE_CLOUDINARY ? multer.memoryStorage() : multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, uploadDirs.images);
   },
@@ -113,9 +127,33 @@ const uploadAudioOptional = multer({
   }
 }).any(); // Use .any() to parse FormData fields even when no files are present
 
+// Helper function to upload buffer to Cloudinary
+const uploadToCloudinary = (buffer, folder, resourceType = 'auto') => {
+  return new Promise((resolve, reject) => {
+    const uploadStream = cloudinary.uploader.upload_stream(
+      {
+        folder: `beijingnese-library/${folder}`,
+        resource_type: resourceType,
+        use_filename: true,
+        unique_filename: true
+      },
+      (error, result) => {
+        if (error) reject(error);
+        else resolve(result);
+      }
+    );
+
+    const readableStream = Readable.from(buffer);
+    readableStream.pipe(uploadStream);
+  });
+};
+
 module.exports = {
   uploadAudio,
   uploadAudioOptional,
   uploadImage,
-  uploadDirs
+  uploadDirs,
+  uploadToCloudinary,
+  USE_CLOUDINARY,
+  cloudinary
 };

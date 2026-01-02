@@ -6,6 +6,8 @@ import './UploadWordPage.css';
 
 const UploadWordPage = () => {
   const navigate = useNavigate();
+  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
+
   const [characterInputs, setCharacterInputs] = useState([
     { character: '', syllable: '', toneNumber: 1, position: 0 }
   ]);
@@ -146,7 +148,7 @@ const UploadWordPage = () => {
       formDataToSend.append('syllables', JSON.stringify(validCharacters));
 
       // First request: Create the word with audio
-      const response = await fetch('http://localhost:3001/api/words', {
+      const response = await fetch(`${API_URL}/words`, {
         method: 'POST',
         body: formDataToSend
         // Note: Don't set Content-Type header - browser will set it with boundary for FormData
@@ -162,7 +164,7 @@ const UploadWordPage = () => {
 
       // Second request: Add example sentence if provided (same pattern as AddExamplePage)
       if (formData.exampleSentence && formData.exampleSentence.trim()) {
-        const exampleResponse = await fetch(`http://localhost:3001/api/words/${createdWordId}/examples`, {
+        const exampleResponse = await fetch(`${API_URL}/words/${createdWordId}/examples`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'

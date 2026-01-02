@@ -1,6 +1,7 @@
 const db = require('../../models');
 const { parsePinyin } = require('../utils/pinyinToneParser');
 const { Op } = require('sequelize');
+const { uploadToCloudinary, USE_CLOUDINARY } = require('../config/upload');
 
 /**
  * Get all words with optional filtering
@@ -152,13 +153,25 @@ exports.createWord = async (req, res) => {
     // Create the word
     // With uploadAudioOptional (.any()), files are in req.files array
     const audioFile = req.files && req.files.length > 0 ? req.files.find(f => f.fieldname === 'audio') : null;
+
+    // Upload audio to Cloudinary if in production
+    let audioFilePath = null;
+    if (audioFile) {
+      if (USE_CLOUDINARY) {
+        const result = await uploadToCloudinary(audioFile.buffer, 'audio', 'video');
+        audioFilePath = result.secure_url;
+      } else {
+        audioFilePath = `/uploads/audio/${audioFile.filename}`;
+      }
+    }
+
     const word = await db.Word.create({
       chinese_characters,
       pinyin,
       english_definition,
       putonghua_definition,
       grammar_category,
-      audio_file_path: audioFile ? `/uploads/audio/${audioFile.filename}` : null,
+      audio_file_path: audioFilePath,
       audio_file_size: audioFile ? audioFile.size : null,
       audio_mime_type: audioFile ? audioFile.mimetype : null
     }, { transaction });
@@ -368,10 +381,19 @@ exports.uploadAudio = async (req, res) => {
     });
     const nextOrder = (maxOrder || 0) + 1;
 
+    // Upload to Cloudinary if in production, otherwise use local path
+    let audioFilePath;
+    if (USE_CLOUDINARY) {
+      const result = await uploadToCloudinary(req.file.buffer, 'audio', 'video');
+      audioFilePath = result.secure_url;
+    } else {
+      audioFilePath = `/uploads/audio/${req.file.filename}`;
+    }
+
     // Create new recording
     const recording = await db.WordRecording.create({
       word_id: id,
-      audio_file_path: `/uploads/audio/${req.file.filename}`,
+      audio_file_path: audioFilePath,
       audio_file_size: req.file.size,
       audio_mime_type: req.file.mimetype,
       recording_order: nextOrder

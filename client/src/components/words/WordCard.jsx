@@ -9,6 +9,7 @@ import './WordCard.css';
  */
 const WordCard = ({ word }) => {
   const audioRef = useRef(null);
+  const API_BASE = process.env.REACT_APP_API_URL?.replace('/api', '') || 'http://localhost:3001';
 
   const handleAudioClick = (e) => {
     e.preventDefault(); // Prevent navigation to detail page
@@ -33,7 +34,7 @@ const WordCard = ({ word }) => {
           <>
             <audio
               ref={audioRef}
-              src={`http://localhost:3001${word.audio_file_path}`}
+              src={`${API_BASE}${word.audio_file_path}`}
               preload="none"
             />
           </>

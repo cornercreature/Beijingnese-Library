@@ -6,6 +6,8 @@ import './AddExamplePage.css';
 const AddExamplePage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
+
   const [word, setWord] = useState(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
@@ -55,7 +57,7 @@ const AddExamplePage = () => {
 
     try {
       // Call API to add example
-      const response = await fetch(`http://localhost:3001/api/words/${id}/examples`, {
+      const response = await fetch(`${API_URL}/words/${id}/examples`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

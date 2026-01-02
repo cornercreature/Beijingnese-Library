@@ -10,6 +10,9 @@ import './WordDetailPage.css';
 const WordDetailPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
+  const API_BASE = process.env.REACT_APP_API_URL?.replace('/api', '') || 'http://localhost:3001';
+
   const [word, setWord] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -158,7 +161,7 @@ const WordDetailPage = () => {
       }
 
       // Update audio source
-      audioRef.current.src = `http://localhost:3001${recording.audio_file_path}`;
+      audioRef.current.src = `${API_BASE}${recording.audio_file_path}`;
       audioRef.current.load();
 
       // Play the recording
@@ -207,7 +210,7 @@ const WordDetailPage = () => {
     }
 
     try {
-      const response = await fetch(`http://localhost:3001/api/words/${id}/examples`, {
+      const response = await fetch(`${API_URL}/words/${id}/examples`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -279,7 +282,7 @@ const WordDetailPage = () => {
       const formData = new FormData();
       formData.append('audio', recordedAudioBlob, `recording.${extension}`);
 
-      const response = await fetch(`http://localhost:3001/api/words/${id}/audio`, {
+      const response = await fetch(`${API_URL}/words/${id}/audio`, {
         method: 'POST',
         body: formData
       });
@@ -592,7 +595,7 @@ const WordDetailPage = () => {
             {word.recordings && word.recordings.length > 0 && (
               <audio
                 ref={audioRef}
-                src={`http://localhost:3001${word.recordings[0].audio_file_path}`}
+                src={`${API_BASE}${word.recordings[0].audio_file_path}`}
                 preload="metadata"
                 style={{ display: 'none' }}
                 onEnded={handleAudioEnded}
