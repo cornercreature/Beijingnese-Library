@@ -22,7 +22,6 @@ exports.getAllWords = async (req, res) => {
         {
           model: db.PinyinSyllable,
           as: 'syllables',
-          separate: true,
           order: [['position', 'ASC']]
         },
         {
@@ -32,13 +31,14 @@ exports.getAllWords = async (req, res) => {
         {
           model: db.WordRecording,
           as: 'recordings',
-          separate: true,
           order: [['recording_order', 'ASC']]
         }
       ],
       limit: parseInt(limit),
       offset: parseInt(offset),
-      order: [['created_at', 'DESC']]
+      order: [['created_at', 'DESC']],
+      subQuery: false,
+      distinct: true
     });
 
     const totalCount = await db.Word.count({ where: whereClause });
@@ -75,7 +75,6 @@ exports.getWordById = async (req, res) => {
         {
           model: db.PinyinSyllable,
           as: 'syllables',
-          separate: true,
           order: [['position', 'ASC']]
         },
         {
@@ -85,7 +84,6 @@ exports.getWordById = async (req, res) => {
         {
           model: db.WordRecording,
           as: 'recordings',
-          separate: true,
           order: [['recording_order', 'ASC']]
         }
       ]
@@ -237,7 +235,6 @@ exports.createWord = async (req, res) => {
         {
           model: db.PinyinSyllable,
           as: 'syllables',
-          separate: true,
           order: [['position', 'ASC']]
         },
         {
@@ -247,7 +244,6 @@ exports.createWord = async (req, res) => {
         {
           model: db.WordRecording,
           as: 'recordings',
-          separate: true,
           order: [['recording_order', 'ASC']]
         }
       ]

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import WordCard from '../components/words/WordCard';
 import Header from '../components/Header';
 import SplashScreen from '../components/SplashScreen';
@@ -84,7 +84,7 @@ const GalleryPage = () => {
   const fetchAllWords = async () => {
     try {
       setLoading(true);
-      const response = await wordService.getAllWords();
+      const response = await wordService.getAllWords({ limit: 500 });
       setAllWords(response.data);
       setError(null);
     } catch (err) {
@@ -95,9 +95,14 @@ const GalleryPage = () => {
     }
   };
 
-  const filterWordsByCategory = (category) => {
-    return allWords.filter(word => word.grammar_category === category);
-  };
+  const wordsByCategory = useMemo(() => {
+    const map = {};
+    for (const word of allWords) {
+      if (!map[word.grammar_category]) map[word.grammar_category] = [];
+      map[word.grammar_category].push(word);
+    }
+    return map;
+  }, [allWords]);
 
   if (loading) {
     return (
@@ -150,7 +155,7 @@ const GalleryPage = () => {
               {categoryLabels['all-words'].chinese}
             </button>
             {categories.map(category => {
-              const categoryWords = filterWordsByCategory(category);
+              const categoryWords = wordsByCategory[category] || [];
               if (categoryWords.length === 0) return null;
               return (
                 <button
@@ -176,7 +181,7 @@ const GalleryPage = () => {
               {categoryLabels['all-words'].english}
             </button>
             {categories.map(category => {
-              const categoryWords = filterWordsByCategory(category);
+              const categoryWords = wordsByCategory[category] || [];
               if (categoryWords.length === 0) return null;
               return (
                 <button
@@ -208,7 +213,7 @@ const GalleryPage = () => {
 
         {/* Category Sections */}
         {categories.map(category => {
-          const categoryWords = filterWordsByCategory(category);
+          const categoryWords = wordsByCategory[category] || [];
           if (categoryWords.length === 0) return null;
 
           return (

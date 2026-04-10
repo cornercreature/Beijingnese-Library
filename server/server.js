@@ -96,11 +96,13 @@ app.get('/api-docs', (req, res) => {
   `);
 });
 
-// Disable caching for all API routes (industry standard for dynamic data)
+// Allow short-term caching for GET requests; disable for mutations
 app.use('/api', (req, res, next) => {
-  res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
-  res.set('Pragma', 'no-cache');
-  res.set('Expires', '0');
+  if (req.method === 'GET') {
+    res.set('Cache-Control', 'public, max-age=30, stale-while-revalidate=60');
+  } else {
+    res.set('Cache-Control', 'no-store');
+  }
   next();
 });
 
